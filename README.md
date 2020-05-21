@@ -61,4 +61,4 @@ Schedules and availability
 #
 
 ## Prototype 
-![Prototype](aww-board_(1).png)
+![Prototype](https://github.com/JimmyRowland/team_sporty/blob/master/aww-board%20(1).png?raw=true)
