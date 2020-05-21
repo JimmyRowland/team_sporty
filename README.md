@@ -61,4 +61,4 @@ Schedules and availability
 #
 
 ## Prototype 
-![Prototype](aww-board_(1).png?raw=true)
+![Prototype](aww-board_(1).png)
