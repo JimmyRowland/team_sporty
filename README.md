@@ -1,32 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+# Team Sporty or whatever
 
-## Team Sporty or whatever
+## Team Name
+SeeGeeDoubleYu
 
-Best platform to connect with your team members.
+## Team Members
+Collin Eng, William Ji, Geordie Parappilly , Yu Tian
 
-First, run the development server:
+## App Name
+undecided
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Target Audience:
+managers, coaches, players, sport-replated public
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-## Learn More
+## Project Description
+The target audience for this project is aimed at the sports-reltaed public, such as managers, coaches, and players. The goal is to design a web app that allows individuals to manage their teams/sports organization, and also allow users to connect with other users within their own team or with teams outside of their own. Most of the data will be all user-inputted data such as schedules, rosters, informations, etc. With this data, we aim to make it easier for users to stay in touch and be updated with their team. Some addition features that we potenitally aim to accomplish is also create a recruiting portal and a social feed, to make it possible for users to look at or follow things outside of their own team. 
 
-To learn more about Next.js, take a look at the following resources:
+#
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Task Requirements
 
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
+Minimal Requirements
 
-## Deploy on Vercel
+- Create, view, and manage teams
+- Manage schedules and availiability
+- Customized Home pages for the individual
+- Team message board
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Standard Requirements
+- Search function for teams / players
+- Direct messages to individuals
+- Add Google calendar support (using Google Calendar API)
+- Recruiting / team portal
+- Sprucing up the team page, announcements on team page
+- 
+
+Stretch
+- Managing Clubs (can have more than one team in a club)
+- Social media feeds
+- Sports Statistics (individual and team)
+
+#
+
+## 2 minimal requirements broken down
+
+Create, view, manage teams:
+- Creating a team page (logos, introduction, member list)
+- Managing players (adding / removing from the team)
+- Be able to pull contact info from roster list
+
+Schedules and availability
+- Putting in events (with a time and date)
+- Players can set their own availability for the events
+- Write a comment about attendance
+- See which players are available for a specific event
+- Calculate sum of all users who can attend
+
+#
+
+## Prototype 
+
