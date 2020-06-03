@@ -1,8 +1,8 @@
-import React from "react";
-import "./App.css";
-import { createBrowserHistory, History } from "history";
-import { Router, Route, Switch } from "react-router-dom";
-import DefaultPage from "./views/App/App";
+import React from 'react';
+import './App.css';
+import { createBrowserHistory, History } from 'history';
+import { Router, Route, Switch } from 'react-router-dom';
+import DefaultPage from './views/App/App';
 
 const hist: History = createBrowserHistory();
 
