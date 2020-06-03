@@ -17,8 +17,7 @@ const useStyles = makeStyles({
     backgroundColor: '#aed581',
   },
   paper: {
-    width: '50%',
-    height: '30px',
+    width: '100%',
   },
 });
 export function ColoredPaper({ color, children }: { color: Colors; children?: ReactNode }) {
