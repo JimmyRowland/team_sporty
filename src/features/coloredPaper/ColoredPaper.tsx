@@ -22,20 +22,9 @@ const useStyles = makeStyles({
 });
 export function ColoredPaper({ color, children }: { color: Colors; children?: ReactNode }) {
   const classes = useStyles();
-  const style = (color: Colors) => {
-    if (color === 'red') {
-      return classes.red;
-    }
-    if (color === 'blue') {
-      return classes.blue;
-    }
-    if (color === 'indigo') {
-      return classes.indigo;
-    }
-    return classes.green;
-  };
+  const map = { red: classes.red, blue: classes.blue, indigo: classes.indigo, green: classes.green };
   return (
-    <Paper elevation={2} className={classnames(style(color), classes.paper)}>
+    <Paper elevation={5} className={classnames(map[color], classes.paper)}>
       {children}
     </Paper>
   );
