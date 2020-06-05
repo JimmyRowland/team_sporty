@@ -8,13 +8,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { EventList } from '../../features/eventList/EventList';
 import { EventListItemType, monthArray } from '../../interface/Interface';
+import PersonalInfoTab from '../../features/PersonalInfoTab/PersonalInfoTab';
 const useStyles = makeStyles({
   container: {
     width: '90%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 'auto',
+    margin: '40px auto 0 auto',
+    maxWidth: 1000,
   },
   columnContainer: {
     width: '47%',
@@ -32,12 +34,15 @@ function TestPage() {
     events.push(event);
   }
   return (
-    <div className={classes.container}>
-      <div className={classes.columnContainer}>
-        <EventList events={events} />
-      </div>
-      <div className={classes.columnContainer}>
-        <EventList events={events} />
+    <div>
+      <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
+      <div className={classes.container}>
+        <div className={classes.columnContainer}>
+          <EventList events={events} />
+        </div>
+        <div className={classes.columnContainer}>
+          <EventList events={events} />
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@
 
 }
 
-.Tab .Cover {
+.Cover {
     width: 90vw;
     height:20vh;
     min-width: 400px;
@@ -28,7 +28,7 @@
     background-color: black;
 }
 
-.Tab #TempIcon {
+.TempIcon {
     position: absolute;
     left:0;
     right:0;
@@ -43,7 +43,7 @@
     z-index: 1;
 }
 
-.Tab .Pcontainer {
+.Pcontainer {
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -52,7 +52,7 @@
 
 }
 
-.Tab .Edit{
+.Edit{
     position: absolute;
     right:1em;
     bottom: 1em;
@@ -63,12 +63,12 @@
     border-radius: 15px;
 }
 
-.Tab .Edit:hover{
+.Edit:hover{
     background-color: #D1D1D1;
 }
 
 
-.Pcontainer .Name {
+.Name {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -76,7 +76,7 @@
     text-align: center;
 }
 
-.Pcontainer .Info{
+.Info{
     word-break: break-word;
     padding-left: 10px;
     padding-right: 10px;
@@ -84,7 +84,7 @@
     margin-right: auto;
     margin-top: 1em;
     font-style: normal;
-    font-weight: light;
+    font-weight: lighter;
     font-size: 16px;
     line-height: 14px;
     text-align: center;

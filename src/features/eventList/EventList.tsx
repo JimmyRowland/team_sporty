@@ -7,6 +7,7 @@ import { EventListItem } from './EventListItem';
 const useStyles = makeStyles({
   card: {
     width: '100%',
+    borderRadius: '1rem',
   },
   eventItemContainer: {
     minHeight: 350,
