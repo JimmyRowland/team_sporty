@@ -1,22 +1,24 @@
 import React from 'react';
-import styles from './PersonalInfoTab.module.css';
+import styles from './PersonalInfoTab.module.css'
+import EditPopUp from "./EditPopUp/EditPopUp";
 
-function PersonalInfoTab({ name, info }: { name: string; info: string }) {
-  return (
-    <div className={styles.Tab}>
-      <div className={styles.Cover} />
-      <div id="TempIcon" className={styles.TempIcon} />
-      <div className={styles.Pcontainer}>
-        <p>
-          <div className={styles.Name}> {name} </div>
-        </p>
-        <p>
-          <div className={styles.Info}> {info} </div>
-        </p>
-      </div>
-      <button className={styles.Edit}> Edit</button>
-    </div>
-  );
+export default function PersonalInfoTab (props:{ name: string, info: string, imgurl: string}) {
+
+    return (
+        <div className={styles.Tab}>
+            <img className={styles.Cover} />
+            <div id={styles.TempIcon}/>
+            <div className={styles.Pcontainer}>
+                <p>
+                    <div className={styles.Name}> {props.name} </div>
+                </p>
+                <p>
+                    <div className={styles.Info}> {props.info} </div>
+                </p>
+            </div>
+            <div className={styles.Edit}>
+                <EditPopUp />
+            </div>
+        </div>
+    );
 }
-
-export default PersonalInfoTab;
