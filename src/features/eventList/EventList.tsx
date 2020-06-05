@@ -5,10 +5,6 @@ import { EventListItemType } from '../../interface/Interface';
 import { Card, CardHeader } from '@material-ui/core';
 import { EventListItem } from './EventListItem';
 const useStyles = makeStyles({
-  card: {
-    width: '100%',
-    borderRadius: '1rem',
-  },
   eventItemContainer: {
     minHeight: 350,
     display: 'flex',
@@ -20,13 +16,10 @@ const useStyles = makeStyles({
 export function EventList({ events }: { events: EventListItemType[] }) {
   const classes = useStyles();
   return (
-    <Card raised={true} className={classes.card}>
-      <CardHeader action={<Typography>View All</Typography>} title="UPCOMMING..." />
-      <div className={classes.eventItemContainer}>
-        {events.map((event, index) => {
-          return <EventListItem event={event} key={index} />;
-        })}
-      </div>
-    </Card>
+        <div className={classes.eventItemContainer}>
+          {events.map((event, index) => {
+            return <EventListItem event={event} key={index} />;
+          })}
+        </div>
   );
 }

@@ -5,7 +5,7 @@ h2 {
     text-shadow: 1px 1px white;
 }
 
-.teamlist {
+.teamlistContainer {
     width: 40%;
     margin: 1%;
     padding: 1%;
@@ -14,7 +14,7 @@ h2 {
     border-radius: 1%;
   }
   
-#team-list {
+.teamlist {
     list-style-type: none;
     margin-right: 0;
     padding: 0;
