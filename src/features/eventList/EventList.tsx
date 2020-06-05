@@ -16,10 +16,10 @@ const useStyles = makeStyles({
 export function EventList({ events }: { events: EventListItemType[] }) {
   const classes = useStyles();
   return (
-        <div className={classes.eventItemContainer}>
-          {events.map((event, index) => {
-            return <EventListItem event={event} key={index} />;
-          })}
-        </div>
+    <div className={classes.eventItemContainer}>
+      {events.map((event, index) => {
+        return <EventListItem event={event} key={index} />;
+      })}
+    </div>
   );
 }

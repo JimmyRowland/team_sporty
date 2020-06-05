@@ -10,7 +10,7 @@ import { EventList } from '../../features/eventList/EventList';
 import { EventListItemType, monthArray } from '../../interface/Interface';
 import PersonalInfoTab from '../../features/PersonalInfoTab/PersonalInfoTab';
 import TeamList from '../../features/teamList/TeamList';
-import CardPersonalPage from "../../features/cardPersonalPage/CardPersonalPage";
+import CardPersonalPage from '../../features/cardPersonalPage/CardPersonalPage';
 const useStyles = makeStyles({
   container: {
     width: '90%',
@@ -41,19 +41,19 @@ function PersonalPage() {
     events.push(event);
   }
   return (
-      <div>
-        <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
-        <div className={classes.container}>
-          <div className={classes.columnContainer}>
-            <CardPersonalPage title="UPCOMING..." >
-              <EventList events={events} />
-            </CardPersonalPage>
-          </div>
-          <div className={classes.columnContainer}>
-            <TeamList teamlist={teamlist} />
-          </div>
+    <div>
+      <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
+      <div className={classes.container}>
+        <div className={classes.columnContainer}>
+          <CardPersonalPage title="UPCOMING...">
+            <EventList events={events} />
+          </CardPersonalPage>
+        </div>
+        <div className={classes.columnContainer}>
+          <TeamList teamlist={teamlist} />
         </div>
       </div>
+    </div>
   );
 }
 

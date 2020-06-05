@@ -1,7 +1,7 @@
-import React, {ReactNode} from 'react';
-import {Card, CardHeader} from '@material-ui/core';
+import React, { ReactNode } from 'react';
+import { Card, CardHeader } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   card: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-function CardPersonalPage({children, title, link}: {children?: ReactNode, title:string, link?: string}) {
+function CardPersonalPage({ children, title, link }: { children?: ReactNode; title: string; link?: string }) {
   const classes = useStyles();
   return (
     <Card raised={true} className={classes.card}>

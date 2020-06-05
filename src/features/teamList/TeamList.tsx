@@ -1,12 +1,11 @@
 import React from 'react';
 import TeamItem from './TeamItem';
-import {Card, CardHeader} from '@material-ui/core';
+import { Card, CardHeader } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from "@material-ui/core/Typography";
-import CardPersonalPage from "../cardPersonalPage/CardPersonalPage";
+import Typography from '@material-ui/core/Typography';
+import CardPersonalPage from '../cardPersonalPage/CardPersonalPage';
 
 const useStyles = makeStyles({
-
   head2: {
     textAlign: 'left',
     color: 'black',
@@ -32,14 +31,14 @@ const useStyles = makeStyles({
 function TeamList(props: { teamlist: any[] }) {
   const classes = useStyles();
   return (
-      <CardPersonalPage title="&nbsp; Your Teams" >
-        <ul className={classes.teamlist}>
-          {props.teamlist.map((c) => (
-              <TeamItem key={c.id} name={c.name} />
-          ))}
-          <li> &nbsp; </li>
-        </ul>
-      </CardPersonalPage>
+    <CardPersonalPage title="&nbsp; Your Teams">
+      <ul className={classes.teamlist}>
+        {props.teamlist.map((c) => (
+          <TeamItem key={c.id} name={c.name} />
+        ))}
+        <li> &nbsp; </li>
+      </ul>
+    </CardPersonalPage>
   );
 }
 export default TeamList;
