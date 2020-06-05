@@ -61,6 +61,9 @@ Schedules and availability
 #
 
 ## Prototype 
+<<<<<<< HEAD
+![Protocol](https://raw.githubusercontent.com/JimmyRowland/team_sporty/geordie/2020_05_21%2015_23%20Office%20Lens.jpg?token=AD26HRZIDQVWZ2C4QGB3B3S6Y4A2G)
+=======
 ![Prototype](public/aww-board%20(1).png?raw=true)
 
 
@@ -106,3 +109,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+>>>>>>> dev
