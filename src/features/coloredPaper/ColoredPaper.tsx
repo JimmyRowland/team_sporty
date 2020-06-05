@@ -18,6 +18,7 @@ const useStyles = makeStyles({
   },
   paper: {
     width: '100%',
+    borderRadius: '1rem',
   },
 });
 export function ColoredPaper({ color, children }: { color: Colors; children?: ReactNode }) {

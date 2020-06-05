@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     width: '70px',
     height: '70px',
     backgroundColor: 'white',
+    margin: '7px 0 7px 7px',
   },
   container: {
     width: '100%',
@@ -21,11 +22,16 @@ const useStyles = makeStyles({
   },
   month: {
     fontSize: '0.7rem',
-    color: 'black',
+    color: secondary,
+    justifyContent: 'center',
+    display: 'flex',
   },
   date: {
     fontSize: '1.5rem',
-    color: secondary,
+    color: 'black',
+    fontWeight: 900,
+    justifyContent: 'center',
+    display: 'flex',
   },
 });
 // TODO: Find a dateTime object.
