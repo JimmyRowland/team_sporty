@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './PersonalInfoTab.module.css'
 import EditPopUp from './EditPopUp/EditPopUp';
 
-export default function PersonalInfoTab (props:{ name: string, info: string}) {
+export default function PersonalInfoTab(props: { name: string; info: string }) {
 
     return (
         <div className={styles.Tab}>
-            <div className={styles.Cover}></div>
+            <div className={styles.Cover} />
             <div id={styles.TempIcon}/>
             <div className={styles.Pcontainer}>
                 <p>
