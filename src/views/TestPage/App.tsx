@@ -4,6 +4,13 @@ import { Counter } from '../../features/counter/Counter';
 import './App.css';
 import { ColoredPaper } from '../../features/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../../features/DateAvatar/DateAvatar';
+import TeamList from '../TeamPage/TeamList';
+
+const teamlist = [
+  { id: 1, name: "Richmond FC" },
+  { id: 2, name: "Richmond Raiders" },
+  { id: 3, name: "Richmond CSGO" }
+];
 
 function TestPage() {
   return (
@@ -14,6 +21,7 @@ function TestPage() {
       <ColoredPaper color={'blue'}>
         <h3>head</h3>
       </ColoredPaper>
+      <TeamList teamlist={teamlist} />
     </div>
   );
 }
