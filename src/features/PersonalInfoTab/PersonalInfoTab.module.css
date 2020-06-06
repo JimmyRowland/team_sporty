@@ -1,14 +1,13 @@
-
 .Tab {
     flex: 1;
     position: relative;
-    width: 90vw;
-    height: 47vh;
+    width: 90%;
+    height: 40%;
     min-width: 400px;
     min-height: 300px;
     max-width: 1000px;
     max-height: 700px;
-    margin: 0px auto;
+    margin: 50px auto;
     background-color: #FEFEFE;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
@@ -16,19 +15,21 @@
 
 }
 
-.Cover {
-    width: 90vw;
-    height:27vh;
+.Tab .Cover {
+    width: 90%;
+    height:50%;
     min-width: 400px;
     min-height: 150px;
     max-width: 1000px;
-    max-height: 350px;
+    max-height: 450px;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
     background-color: black;
+    margin-left:auto;
+    margin-right: auto;
 }
 
-.TempIcon {
+.Tab #TempIcon {
     position: absolute;
     left:0;
     right:0;
@@ -43,7 +44,7 @@
     z-index: 1;
 }
 
-.Pcontainer {
+.Tab .Pcontainer {
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
@@ -52,23 +53,17 @@
 
 }
 
-.Edit{
+.Tab .Edit{
     position: absolute;
     right:1em;
     bottom: 1em;
     width: 100px;
     height: 30px;
     border: none;
-    background: #E1E1E1;
-    border-radius: 15px;
-}
-
-.Edit:hover{
-    background-color: #D1D1D1;
 }
 
 
-.Name {
+.Pcontainer .Name {
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -76,7 +71,7 @@
     text-align: center;
 }
 
-.Info{
+.Pcontainer .Info{
     word-break: break-word;
     padding-left: 10px;
     padding-right: 10px;
@@ -84,7 +79,7 @@
     margin-right: auto;
     margin-top: 1em;
     font-style: normal;
-    font-weight: lighter;
+    font-weight: light;
     font-size: 16px;
     line-height: 14px;
     text-align: center;
