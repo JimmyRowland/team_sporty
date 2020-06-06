@@ -6,7 +6,7 @@ import { ColoredPaper } from '../../features/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../../features/DateAvatar/DateAvatar';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { EventList } from '../../features/eventList/EventList';
+import { EventList } from '../../features/eventlist/EventList';
 import { EventListItemType, monthArray } from '../../interface/Interface';
 import PersonalInfoTab from '../../features/PersonalInfoTab/PersonalInfoTab';
 import TeamList from '../../features/teamList/TeamList';
