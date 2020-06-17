@@ -2,11 +2,11 @@ import React from 'react';
 import logo from '../../logo.svg';
 import { Counter } from '../../features/counter/Counter';
 import './App.css';
-import { ColoredPaper } from '../../features/coloredPaper/ColoredPaper';
+import { ColoredPaper } from '../../features/components/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../../features/DateAvatar/DateAvatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Card, Avatar } from '@material-ui/core';
-import { EventList } from '../../features/eventlist/EventList';
+import { EventList } from '../../features/eventList/EventList';
 import { EventListItemType, monthArray } from '../../interface/Interface';
 import PersonalInfoTab from '../../features/PersonalInfoTab/PersonalInfoTab';
 import TeamList from '../../features/teamList/TeamList';
@@ -92,7 +92,7 @@ function TeamPage() {
       </div>
       <div className={classes.rightColumn}>
         <div className={classes.columnItem}>
-          <Post />
+          <Post index={0} />
         </div>
         <div className={classes.columnItem}>
           <Card>
@@ -113,7 +113,7 @@ function TeamPage() {
         {posts.map((post, index) => {
           return (
             <div key={index} className={classes.columnItem}>
-              <Post />
+              <Post index={index} />
             </div>
           );
         })}

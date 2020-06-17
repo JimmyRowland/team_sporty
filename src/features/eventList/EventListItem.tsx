@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ColoredPaper } from '../coloredPaper/ColoredPaper';
+import { ColoredPaper } from '../components/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../DateAvatar/DateAvatar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';

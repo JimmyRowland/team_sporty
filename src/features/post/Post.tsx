@@ -15,6 +15,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { commentAsync, selectPosts } from './postSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,10 +50,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function Post() {
+export default function Post({ index }: { index: number }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -79,8 +82,8 @@ export default function Post() {
       {/*/>*/}
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of
-          frozen peas along with the mussels, if you like.
+          {index} This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1
+          cup of frozen peas along with the mussels, if you like.
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -98,10 +101,32 @@ export default function Post() {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <ExpandMoreIcon
+            onClick={() => {
+              dispatch(commentAsync(index));
+            }}
+          />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
+        {posts[index].comments.map((comment: string, key: number) => {
+          return (
+            <CardContent key={key}>
+              <div className={classes.commentContainer}>
+                <div>
+                  {' '}
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    {key}
+                  </Avatar>
+                </div>
+                <div className={classes.comment}>
+                  {' '}
+                  <Typography paragraph>{comment}</Typography>
+                </div>
+              </div>
+            </CardContent>
+          );
+        })}
         <CardContent>
           <div className={classes.commentContainer}>
             <div>

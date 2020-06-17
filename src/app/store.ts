@@ -1,5 +1,6 @@
 import { configureStore, ThunkAction, Action, getDefaultMiddleware } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
+import postReducer from '../features/post/postSlice';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 const logger = createLogger({
@@ -11,6 +12,7 @@ export const store = configureStore({
   middleware,
   reducer: {
     counter: counterReducer,
+    posts: postReducer,
   },
   devTools: dev,
 });
