@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action, getDefaultMiddleware } from '@redu
 import counterReducer from '../features/counter/counterSlice';
 import postReducer from '../features/post/postSlice';
 import eventReducer from '../features/eventList/eventSlice';
+import personalinfoReducer from '../features/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice'
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 const logger = createLogger({
@@ -15,6 +16,7 @@ export const store = configureStore({
     counter: counterReducer,
     posts: postReducer,
     events: eventReducer,
+    PersonalInfo: personalinfoReducer,
   },
   devTools: dev,
 });
