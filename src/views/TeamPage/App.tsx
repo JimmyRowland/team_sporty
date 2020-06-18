@@ -69,7 +69,7 @@ function TeamPage() {
     date.setDate(date.getDate() + i * 4);
     const title = `Event ${i}`;
     const detail = `sdofhsepohgr;kdznfbo ${i}`;
-    const event: EventListItemType = { date: date, title: title, detail: detail };
+    const event: EventListItemType = { date: date, title: title, body: detail };
     events.push(event);
   }
   return (
@@ -85,7 +85,7 @@ function TeamPage() {
             </div>
             <div>
               <Typography variant={'h5'}>UPCOMING...</Typography>
-              <EventList events={events} />
+              <EventList />
             </div>
           </div>
         </Card>

@@ -70,7 +70,7 @@ export function EventListItem({ event }: { event: EventListItemType }) {
           </div>
           <div className={classes.detailContainer}>
             <Typography variant={'subtitle1'} className={classes.detail}>
-              {event.detail}
+              {event.body}
             </Typography>
           </div>
         </div>

@@ -31,22 +31,22 @@ const teamlist = [
 ];
 function PersonalPage() {
   const classes = useStyles();
-  const events = [];
-  for (let i = 0; i < 3; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() + i * 4);
-    const title = `Event ${i}`;
-    const detail = `sdofhsepohgr;kdznfbo ${i}`;
-    const event: EventListItemType = { date: date, title: title, detail: detail };
-    events.push(event);
-  }
+  // const events = [];
+  // for (let i = 0; i < 3; i++) {
+  //   const date = new Date();
+  //   date.setDate(date.getDate() + i * 4);
+  //   const title = `Event ${i}`;
+  //   const detail = `sdofhsepohgr;kdznfbo ${i}`;
+  //   const event: EventListItemType = { date: date, title: title, detail: detail };
+  //   events.push(event);
+  // }
   return (
     <div>
       <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
       <div className={classes.container}>
         <div className={classes.columnContainer}>
           <CardPersonalPage title="UPCOMING...">
-            <EventList events={events} />
+            <EventList />
           </CardPersonalPage>
         </div>
         <div className={classes.columnContainer}>

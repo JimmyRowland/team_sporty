@@ -69,55 +69,55 @@ function TestPage() {
     date.setDate(date.getDate() + i * 4);
     const title = `Event ${i}`;
     const detail = `sdofhsepohgr;kdznfbo ${i}`;
-    const event: EventListItemType = { date: date, title: title, detail: detail };
+    const event: EventListItemType = { date: date, title: title, body: detail };
     events.push(event);
   }
   return (
     <div className={classes.container}>
-      <div className={classes.leftColumn}>
-        <Card raised={true}>
-          <div className={classes.leftInnerContainer}>
-            <div className={classes.teamContainer}>
-              <Avatar className={classes.avatar}>T</Avatar>
-              <Typography variant={'h4'}>Team name</Typography>
-              <Typography variant={'subtitle1'}>something</Typography>
-              <Typography variant={'subtitle2'}>somethingElse</Typography>
-            </div>
-            <div>
-              <Typography variant={'h5'}>UPCOMING...</Typography>
-              <EventList events={events} />
-            </div>
-          </div>
-        </Card>
-      </div>
-      <div className={classes.rightColumn}>
-        <div className={classes.columnItem}>
-          <Post index={0} />
-        </div>
-        <div className={classes.columnItem}>
-          <Card>
-            <div className={classes.rosterText}>
-              <Typography variant={'h5'}>Roster</Typography>
-            </div>
-            <div className={classes.rosterContainer}>
-              {posts.map((name, index) => {
-                return (
-                  <div key={index} className={classes.rosterAvatar}>
-                    <Avatar key={index}>{name}</Avatar>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-        </div>
-        {posts.map((post, index) => {
-          return (
-            <div key={index} className={classes.columnItem}>
-              <Post index={index} />
-            </div>
-          );
-        })}
-      </div>
+      {/*<div className={classes.leftColumn}>*/}
+      {/*  <Card raised={true}>*/}
+      {/*    <div className={classes.leftInnerContainer}>*/}
+      {/*      <div className={classes.teamContainer}>*/}
+      {/*        <Avatar className={classes.avatar}>T</Avatar>*/}
+      {/*        <Typography variant={'h4'}>Team name</Typography>*/}
+      {/*        <Typography variant={'subtitle1'}>something</Typography>*/}
+      {/*        <Typography variant={'subtitle2'}>somethingElse</Typography>*/}
+      {/*      </div>*/}
+      {/*      <div>*/}
+      {/*        <Typography variant={'h5'}>UPCOMING...</Typography>*/}
+      {/*        <EventList events={events} />*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </Card>*/}
+      {/*</div>*/}
+      {/*<div className={classes.rightColumn}>*/}
+      {/*  <div className={classes.columnItem}>*/}
+      {/*    <Post index={0} />*/}
+      {/*  </div>*/}
+      {/*  <div className={classes.columnItem}>*/}
+      {/*    <Card>*/}
+      {/*      <div className={classes.rosterText}>*/}
+      {/*        <Typography variant={'h5'}>Roster</Typography>*/}
+      {/*      </div>*/}
+      {/*      <div className={classes.rosterContainer}>*/}
+      {/*        {posts.map((name, index) => {*/}
+      {/*          return (*/}
+      {/*            <div key={index} className={classes.rosterAvatar}>*/}
+      {/*              <Avatar key={index}>{name}</Avatar>*/}
+      {/*            </div>*/}
+      {/*          );*/}
+      {/*        })}*/}
+      {/*      </div>*/}
+      {/*    </Card>*/}
+      {/*  </div>*/}
+      {/*  {posts.map((post, index) => {*/}
+      {/*    return (*/}
+      {/*      <div key={index} className={classes.columnItem}>*/}
+      {/*        <Post index={index} />*/}
+      {/*      </div>*/}
+      {/*    );*/}
+      {/*  })}*/}
+      {/*</div>*/}
     </div>
   );
 }
