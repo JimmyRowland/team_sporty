@@ -1,55 +1,43 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '../../app/store';
 import ts from 'typescript/lib/protocol';
+import { addEvents } from '../eventList/eventSlice';
 
 interface Comment {
   comment: string;
 }
 
-interface Post {
+export interface PostInterface {
   user: User;
   timeStamp: Date;
   comments: Array<string>;
+  title: string;
+  body: string;
 }
 
 interface User {
+  id: number;
   avatarUrl: string;
   profileUrl: string;
 }
 
-const initialState: Array<Post> = [
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT0', 'cOMMENT 2'] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT1', 'cOMMENT 2'] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT2', 'cOMMENT 2'] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT3', 'cOMMENT 2'] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT4', 'cOMMENT 2'] },
-  { user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: ['COMMENT5', 'cOMMENT 2'] },
-];
+const initialState: Array<PostInterface> = [];
 
 export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.push({ user: { avatarUrl: 'url1', profileUrl: 'url2' }, timeStamp: new Date(), comments: [] });
-    },
     addComment: (state, action: PayloadAction<{ id: number; comment: string }>) => {
       state[action.payload.id].comments.push(action.payload.comment);
+    },
+    loadPosts: (state, action: PayloadAction<Array<PostInterface>>) => {
+      state = state.concat(action.payload);
+      return state;
     },
   },
 });
 
-export const { increment, addComment } = postSlice.actions;
+export const { addComment, loadPosts } = postSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -81,6 +69,34 @@ export const commentAsync = (id: number): AppThunk => (dispatch, getState) => {
   }
 };
 
+export const postAsync = (): AppThunk => (dispatch, getState) => {
+  console.log('postAsync');
+  const { posts } = getState();
+  console.log('postAsync');
+  if (posts.length === 0) {
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        return json.map((value: any) => {
+          console.log(value);
+          return {
+            user: { avatarUrl: '', profileUrl: '', id: value.userId },
+            timeStamp: new Date(),
+            comments: [],
+            title: value.title,
+            body: value.body,
+          };
+        });
+      })
+      .then((resPosts: Array<PostInterface>) => {
+        console.log(resPosts);
+        dispatch(loadPosts(resPosts));
+      });
+  }
+};
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`

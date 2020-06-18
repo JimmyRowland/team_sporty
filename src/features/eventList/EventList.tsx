@@ -20,13 +20,13 @@ export function EventList() {
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log('on load');
+    // console.log('on load');
     dispatch(eventAsync());
   }, []);
   return (
     <div className={classes.eventItemContainer}>
       {events.map((event, index) => {
-        return <EventListItem event={event} key={index} />;
+        return index < 3 ? <EventListItem event={event} key={index} /> : null;
       })}
     </div>
   );

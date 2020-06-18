@@ -19,7 +19,7 @@ export const EventSlice = createSlice({
       for (const value of action.payload) {
         state.push(value);
       }
-      console.log(state);
+      // console.log(state);
     },
   },
 });
@@ -41,7 +41,7 @@ export const eventAsync = (): AppThunk => (dispatch, getState) => {
       })
       .then((json) => {
         return json.map((value: any) => {
-          console.log(value);
+          // console.log(value);
           return {
             title: value.title,
             body: value.body,
@@ -50,7 +50,7 @@ export const eventAsync = (): AppThunk => (dispatch, getState) => {
         });
       })
       .then((resEvents) => {
-        console.log(resEvents);
+        // console.log(resEvents);
         dispatch(addEvents(resEvents));
       });
   }
