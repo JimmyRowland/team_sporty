@@ -42,7 +42,7 @@ function PersonalPage() {
   // }
   return (
     <div>
-      <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
+      <PersonalInfoTab />
       <div className={classes.container}>
         <div className={classes.columnContainer}>
           <CardPersonalPage title="UPCOMING...">
