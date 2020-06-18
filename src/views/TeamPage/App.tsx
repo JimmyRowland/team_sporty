@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from '../../logo.svg';
 import { Counter } from '../../features/counter/Counter';
 import './App.css';
-import { ColoredPaper } from '../../features/coloredPaper/ColoredPaper';
+import { ColoredPaper } from '../../features/components/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../../features/DateAvatar/DateAvatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Card, Avatar } from '@material-ui/core';
@@ -12,6 +12,8 @@ import PersonalInfoTab from '../../features/PersonalInfoTab/PersonalInfoTab';
 import TeamList from '../../features/teamList/TeamList';
 import Post from '../../features/post/Post';
 import CardPersonalPage from '../../features/cardPersonalPage/CardPersonalPage';
+import { selectPosts, postAsync, PostInterface } from '../../features/post/postSlice';
+import { useSelector, useDispatch } from 'react-redux';
 const useStyles = makeStyles({
   container: {
     paddingTop: 90,
@@ -64,14 +66,20 @@ const posts = ['e', 'e', 'dfg'];
 function TeamPage() {
   const classes = useStyles();
   const events = [];
-  for (let i = 0; i < 3; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() + i * 4);
-    const title = `Event ${i}`;
-    const detail = `sdofhsepohgr;kdznfbo ${i}`;
-    const event: EventListItemType = { date: date, title: title, detail: detail };
-    events.push(event);
-  }
+  // for (let i = 0; i < 3; i++) {
+  //   const date = new Date();
+  //   date.setDate(date.getDate() + i * 4);
+  //   const title = `Event ${i}`;
+  //   const detail = `sdofhsepohgr;kdznfbo ${i}`;
+  //   const event: EventListItemType = { date: date, title: title, body: detail };
+  //   events.push(event);
+  // }
+  const posts1 = useSelector(selectPosts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log('load posts');
+    dispatch(postAsync());
+  }, []);
   return (
     <div className={classes.container}>
       <div className={classes.leftColumn}>
@@ -85,15 +93,13 @@ function TeamPage() {
             </div>
             <div>
               <Typography variant={'h5'}>UPCOMING...</Typography>
-              <EventList events={events} />
+              <EventList />
             </div>
           </div>
         </Card>
       </div>
       <div className={classes.rightColumn}>
-        <div className={classes.columnItem}>
-          <Post />
-        </div>
+        <div className={classes.columnItem}>{posts1.length > 0 ? <Post index={0} post={posts1[0]} /> : null}</div>
         <div className={classes.columnItem}>
           <Card>
             <div className={classes.rosterText}>
@@ -110,10 +116,10 @@ function TeamPage() {
             </div>
           </Card>
         </div>
-        {posts.map((post, index) => {
+        {posts1.map((post: PostInterface, index) => {
           return (
             <div key={index} className={classes.columnItem}>
-              <Post />
+              <Post index={index} post={post} />
             </div>
           );
         })}

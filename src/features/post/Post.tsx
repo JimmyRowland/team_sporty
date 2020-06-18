@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -15,6 +15,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { commentAsync, PostInterface, selectPosts } from './postSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,10 +50,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function Post() {
+export default function Post({ index, post }: { index: number; post: PostInterface }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -61,7 +64,7 @@ export default function Post() {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            R
+            {post.user.id}
           </Avatar>
         }
         action={
@@ -69,7 +72,7 @@ export default function Post() {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
+        title={post.title}
         subheader="September 14, 2016"
       />
       {/*<CardMedia*/}
@@ -79,8 +82,7 @@ export default function Post() {
       {/*/>*/}
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of
-          frozen peas along with the mussels, if you like.
+          {post.body}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -98,10 +100,34 @@ export default function Post() {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <ExpandMoreIcon
+            onClick={() => {
+              dispatch(commentAsync(index));
+            }}
+          />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
+        {posts.length > 0
+          ? posts[index].comments.map((comment: string, key: number) => {
+              return (
+                <CardContent key={key}>
+                  <div className={classes.commentContainer}>
+                    <div>
+                      {' '}
+                      <Avatar aria-label="recipe" className={classes.avatar}>
+                        {key}
+                      </Avatar>
+                    </div>
+                    <div className={classes.comment}>
+                      {' '}
+                      <Typography paragraph>{comment}</Typography>
+                    </div>
+                  </div>
+                </CardContent>
+              );
+            })
+          : null}
         <CardContent>
           <div className={classes.commentContainer}>
             <div>

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Paper from '@material-ui/core/Paper';
-import { Colors } from '../../interface/Interface';
+import { Colors } from '../../../interface/Interface';
 import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({

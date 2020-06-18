@@ -45,7 +45,7 @@ function App() {
           <Switch location={location}>
             <Route path="/personal" component={PersonalPage} />
             <Route path="/team" component={TeamPage} />
-            <Route path="/" component={TestPage} />
+            <Route path="/" component={TeamPage} />
           </Switch>
         </animated.div>
       ))}

@@ -5,5 +5,5 @@ export const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'A
 export interface EventListItemType {
   date: Date;
   title: string;
-  detail: string;
+  body: string;
 }

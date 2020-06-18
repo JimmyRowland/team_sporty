@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ColoredPaper } from '../coloredPaper/ColoredPaper';
+import { ColoredPaper } from '../components/coloredPaper/ColoredPaper';
 import { DateAvatar } from '../DateAvatar/DateAvatar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -70,7 +70,7 @@ export function EventListItem({ event }: { event: EventListItemType }) {
           </div>
           <div className={classes.detailContainer}>
             <Typography variant={'subtitle1'} className={classes.detail}>
-              {event.detail}
+              {event.body}
             </Typography>
           </div>
         </div>
