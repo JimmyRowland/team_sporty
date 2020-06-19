@@ -28,7 +28,7 @@ const initialState: Array<PostInterface> = [
 ];
 
 let newpostid = 0;
-const CreateNewPost = (message:string) => {
+const CreateNewPost = (message: string) => {
   newpostid++;
   const newpost = {
     id: newpostid,
@@ -117,6 +117,7 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
       .then((resPosts: Array<PostInterface>) => {
         // console.log(resPosts);
         // Temp limiting posts
+        resPosts = resPosts.slice(0, 5);
         dispatch(loadPosts(resPosts));
       });
   }
