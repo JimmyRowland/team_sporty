@@ -5,6 +5,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { IconButton } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPersonal, changeintro } from './EditPersonalInfoSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,6 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 15,
       resize: 'none',
       margin: 'auto',
+      padding: '1em',
       marginTop: '2em',
       fontSize: 18,
     },
@@ -79,6 +82,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function EditPopUp() {
+  const info = useSelector(selectPersonal);
+  const dispatch = useDispatch();
+  let intro = info.intro;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -90,11 +96,19 @@ export default function EditPopUp() {
     setOpen(false);
   };
 
+  const onintroChange = (e: any) => {
+    intro = e.target.value;
+  };
+
+  const handleSubmit = () => {
+    handleClose();
+    dispatch(changeintro(intro));
+  };
   const body = (
     <div className={classes.paper}>
       <div className={classes.closecontainer}>
-        <IconButton aria-label="close" className={classes.close}>
-          <CloseIcon onClick={handleClose} />
+        <IconButton aria-label="close" className={classes.close} onClick={handleClose}>
+          <CloseIcon />
         </IconButton>
       </div>
       <div className={classes.container}>
@@ -107,9 +121,15 @@ export default function EditPopUp() {
       </div>
       <div className={classes.container}>
         <div className={classes.title}>Personal Info</div>
-        <textarea className={classes.field} />
+        <textarea
+          className={classes.field}
+          placeholder={info.intro}
+          onChange={(e) => {
+            onintroChange(e);
+          }}
+        />
       </div>
-      <Button variant="contained" color="primary" disableElevation className={classes.edit} onClick={handleClose}>
+      <Button variant="contained" color="primary" disableElevation className={classes.edit} onClick={handleSubmit}>
         Edit
       </Button>
     </div>

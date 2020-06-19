@@ -14,6 +14,8 @@ import Post from '../../features/post/Post';
 import CardPersonalPage from '../../features/cardPersonalPage/CardPersonalPage';
 import { selectPosts, postAsync, PostInterface } from '../../features/post/postSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import PostCreator from "../../features/post/PostCreator";
+import {selectPinnedPosts} from "../../features/post/pinnedpostSlice";
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -33,11 +35,18 @@ const useStyles = makeStyles({
     padding: 7,
   },
   leftColumn: {
+    height: '80vh',
+    position: 'sticky',
+    top: '6vh',
     flexBasis: '25%',
+    maxWidth: '25vw',
   },
   rightColumn: {
     // flexGrow:1
+
+    marginLeft: '1em',
     flexBasis: '70%',
+    maxWidth: '70vw',
   },
   columnItem: {
     marginBottom: 20,
@@ -54,11 +63,19 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  rosterCard:{
+    borderRadius: '15px',
+  },
   rosterContainer: {
     display: 'flex',
+    marginLeft: '1em',
     padding: 10,
   },
   rosterText: {
+    fontWeight: 'bold',
+    fontSize: '24px',
+    marginLeft: '1em',
+    marginTop: '4px',
     padding: 7,
   },
 });
@@ -81,6 +98,7 @@ function TeamPage() {
     history.push(route);
   };
   const posts1 = useSelector(selectPosts);
+  const pinnedpost = useSelector(selectPinnedPosts);
   const dispatch = useDispatch();
   useEffect(() => {
     console.log('load posts');
@@ -105,9 +123,17 @@ function TeamPage() {
         </Card>
       </div>
       <div className={classes.rightColumn}>
-        <div className={classes.columnItem}>{posts1.length > 0 ? <Post index={0} post={posts1[0]} /> : null}</div>
+        <div className={classes.columnItem}>{pinnedpost.map((post: PostInterface, index) => {
+          return (
+              <div key={index} className={classes.columnItem}>
+                <Post index={index} post={post} />
+              </div>
+          );
+        })}</div>
+        <div className={classes.columnItem}><PostCreator />
+        </div>
         <div className={classes.columnItem}>
-          <Card>
+          <Card className={classes.rosterCard}>
             <div className={classes.rosterText}>
               <Typography variant={'h5'}>Roster</Typography>
             </div>

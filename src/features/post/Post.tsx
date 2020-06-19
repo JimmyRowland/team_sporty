@@ -17,11 +17,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { commentAsync, PostInterface, selectPosts } from './postSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { addPin, removePin } from './pinnedpostSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%',
+      maxWidth: '100%',
+      borderRadius: '15px',
     },
     media: {
       height: 0,
@@ -47,18 +51,58 @@ const useStyles = makeStyles((theme: Theme) =>
     comment: {
       paddingLeft: 10,
     },
+    body: {
+      paddingLeft: '2em',
+      paddingRight: '2em',
+      display: 'inlined-block',
+      overflowWrap: 'break-word',
+    },
   }),
 );
 
 export default function Post({ index, post }: { index: number; post: PostInterface }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const posts = useSelector(selectPosts);
   const dispatch = useDispatch();
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const pinPost = () => {
+    setAnchorEl(null);
+    dispatch(addPin(post));
+  };
+
+  const unpinPost = () => {
+    setAnchorEl(null);
+    dispatch(removePin(post.id));
+  };
+
+  const PinMenu = () => {
+    if (!post.pin) {
+      return (
+        <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+          <MenuItem onClick={pinPost}>Pin Post</MenuItem>
+        </Menu>
+      );
+    }
+    return (
+      <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={unpinPost}>Unpin Post</MenuItem>
+      </Menu>
+    );
+  };
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -68,30 +112,22 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          <div>
+            <IconButton aria-label="settings" onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+            <PinMenu />
+          </div>
         }
         title={post.title}
-        subheader="September 14, 2016"
+        subheader={post.timeStamp.toString()}
       />
-      {/*<CardMedia*/}
-      {/*    className={classes.media}*/}
-      {/*    image="/static/images/cards/paella.jpg"*/}
-      {/*    title="Paella dish"*/}
-      {/*/>*/}
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>
           {post.body}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,

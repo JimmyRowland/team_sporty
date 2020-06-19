@@ -25,10 +25,11 @@ const useStyles = makeStyles({
   },
 });
 const teamlist = [
-  { id: 1, name: 'Richmond FC' },
-  { id: 2, name: 'Richmond Raiders' },
-  { id: 3, name: 'Richmond CSGO' },
+  { id: 1, name: 'Richmond FC', record: '4-7-11' },
+  { id: 2, name: 'Richmond Raiders', record: '3-2-1' },
+  { id: 3, name: 'Richmond CSGO', record: '9-2-0' },
 ];
+
 function PersonalPage() {
   const classes = useStyles();
   // const events = [];
@@ -42,7 +43,7 @@ function PersonalPage() {
   // }
   return (
     <div>
-      <PersonalInfoTab name={'Nameless'} info={'#1 star'} />
+      <PersonalInfoTab />
       <div className={classes.container}>
         <div className={classes.columnContainer}>
           <CardPersonalPage title="UPCOMING...">

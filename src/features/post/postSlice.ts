@@ -8,11 +8,13 @@ interface Comment {
 }
 
 export interface PostInterface {
+  id: number;
   user: User;
   timeStamp: Date;
   comments: Array<string>;
   title: string;
   body: string;
+  pin: boolean;
 }
 
 interface User {
@@ -25,9 +27,23 @@ const initialState: Array<PostInterface> = [
   // { user: { id: 10, avatarUrl: '', profileUrl: '' }, timeStamp: new Date(), comments: [], title: '', body: '' },
 ];
 
+let newpostid = 0;
+const CreateNewPost = (message:string) => {
+  newpostid++;
+  const newpost = {
+    id: newpostid,
+    user: { avatarUrl: '', profileUrl: '', id: 0 },
+    timeStamp: new Date(),
+    comments: [],
+    title: 'You',
+    body: message,
+    pin: false,
+  };
+  return newpost;
+};
 export const postSlice = createSlice({
   name: 'posts',
-  initialState: initialState,
+  initialState,
   reducers: {
     addComment: (state, action: PayloadAction<{ id: number; comment: string }>) => {
       state[action.payload.id].comments.push(action.payload.comment);
@@ -36,10 +52,13 @@ export const postSlice = createSlice({
       state = state.concat(action.payload);
       return state;
     },
+    addPost: (state, action: PayloadAction<string>) => {
+      state.push(CreateNewPost(action.payload));
+    },
   },
 });
 
-export const { addComment, loadPosts } = postSlice.actions;
+export const { addComment, loadPosts, addPost } = postSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -83,17 +102,21 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
       .then((json) => {
         return json.map((value: any) => {
           // console.log(value);
+          newpostid++;
           return {
+            id: newpostid,
             user: { avatarUrl: '', profileUrl: '', id: value.userId },
             timeStamp: new Date(),
             comments: [],
             title: value.title,
             body: value.body,
+            pin: false,
           };
         });
       })
       .then((resPosts: Array<PostInterface>) => {
         // console.log(resPosts);
+        // Temp limiting posts
         dispatch(loadPosts(resPosts));
       });
   }
