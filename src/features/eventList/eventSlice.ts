@@ -16,9 +16,11 @@ export const EventSlice = createSlice({
   reducers: {
     addEvents: (state, action: PayloadAction<Event[]>) => {
       // state = state.concat(action.payload);
-      for (const value of action.payload) {
-        state.push(value);
-      }
+      // for (const value of action.payload) {
+      //   state.push(value);
+      // }
+      state = state.concat(action.payload);
+      return state;
       // console.log(state);
     },
   },

@@ -14,6 +14,8 @@ import Post from '../../features/post/Post';
 import CardPersonalPage from '../../features/cardPersonalPage/CardPersonalPage';
 import { selectPosts, postAsync, PostInterface } from '../../features/post/postSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles({
   container: {
     paddingTop: 90,
@@ -74,6 +76,10 @@ function TeamPage() {
   //   const event: EventListItemType = { date: date, title: title, body: detail };
   //   events.push(event);
   // }
+  const history = useHistory();
+  const handleRouteChange = (route: string) => {
+    history.push(route);
+  };
   const posts1 = useSelector(selectPosts);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -108,7 +114,13 @@ function TeamPage() {
             <div className={classes.rosterContainer}>
               {posts.map((name, index) => {
                 return (
-                  <div key={index} className={classes.rosterAvatar}>
+                  <div
+                    onClick={() => {
+                      handleRouteChange('personal');
+                    }}
+                    key={index}
+                    className={classes.rosterAvatar}
+                  >
                     <Avatar key={index}>{name}</Avatar>
                   </div>
                 );

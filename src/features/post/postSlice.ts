@@ -21,11 +21,13 @@ interface User {
   profileUrl: string;
 }
 
-const initialState: Array<PostInterface> = [];
+const initialState: Array<PostInterface> = [
+  // { user: { id: 10, avatarUrl: '', profileUrl: '' }, timeStamp: new Date(), comments: [], title: '', body: '' },
+];
 
 export const postSlice = createSlice({
   name: 'posts',
-  initialState,
+  initialState: initialState,
   reducers: {
     addComment: (state, action: PayloadAction<{ id: number; comment: string }>) => {
       state[action.payload.id].comments.push(action.payload.comment);
@@ -70,10 +72,9 @@ export const commentAsync = (id: number): AppThunk => (dispatch, getState) => {
 };
 
 export const postAsync = (): AppThunk => (dispatch, getState) => {
-  console.log('postAsync');
   const { posts } = getState();
-  console.log('postAsync');
   if (posts.length === 0) {
+    console.log('!!postAsync');
     const url = 'https://jsonplaceholder.typicode.com/posts';
     fetch(url)
       .then((response) => {
@@ -81,7 +82,7 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
       })
       .then((json) => {
         return json.map((value: any) => {
-          console.log(value);
+          // console.log(value);
           return {
             user: { avatarUrl: '', profileUrl: '', id: value.userId },
             timeStamp: new Date(),
@@ -92,7 +93,7 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
         });
       })
       .then((resPosts: Array<PostInterface>) => {
-        console.log(resPosts);
+        // console.log(resPosts);
         dispatch(loadPosts(resPosts));
       });
   }

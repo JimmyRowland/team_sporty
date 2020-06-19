@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { createBrowserHistory, History } from 'history';
-import { BrowserRouter, Switch, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Link, useLocation, useHistory } from 'react-router-dom';
 import DefaultPage from './views/App/App';
 import TeamPage from './views/TeamPage/App';
 import TestPage from './views/TestPage/App';
@@ -11,6 +11,7 @@ import Footer from './features/Footer/Footer';
 import PersonalPage from './views/PersonalPage/App';
 import { Button } from '@material-ui/core';
 import { useTransition, animated } from 'react-spring';
+import { Router } from '@material-ui/icons';
 
 const hist: History = createBrowserHistory();
 function App() {
@@ -40,15 +41,17 @@ function App() {
         fixed
       />
 
-      {transitions.map(({ item: location, props, key }) => (
-        <animated.div key={key} style={props}>
-          <Switch location={location}>
-            <Route path="/personal" component={PersonalPage} />
-            <Route path="/team" component={TeamPage} />
-            <Route path="/" component={TeamPage} />
-          </Switch>
-        </animated.div>
-      ))}
+      {/*{transitions.map(({ item: location, props, key }) => (*/}
+      {/*  <animated.div key={key} style={props}>*/}
+      {/*<Router history={hist}>*/}
+      <Switch location={location}>
+        <Route path="/personal" component={PersonalPage} />
+        <Route path="/team" component={TeamPage} />
+        <Route path="/" component={TeamPage} />
+      </Switch>
+      {/*</Router>*/}
+      {/*  </animated.div>*/}
+      {/*))}*/}
       {/*<Footer />*/}
     </div>
   );
