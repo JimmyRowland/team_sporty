@@ -8,11 +8,13 @@ interface Comment {
 }
 
 export interface PostInterface {
+  id: number;
   user: User;
   timeStamp: Date;
   comments: Array<string>;
   title: string;
   body: string;
+  pin: boolean;
 }
 
 interface User {
@@ -22,22 +24,38 @@ interface User {
 }
 
 const initialState: Array<PostInterface> = [];
-
+let newpostid = 0;
+const CreateNewPost = (message:string) => {
+  newpostid++;
+  const newpost = {
+    id: newpostid,
+    user: { avatarUrl: '', profileUrl: '', id: 0 },
+    timeStamp: new Date(),
+    comments: [],
+    title: 'You',
+    body: message,
+    pin: false,
+  };
+  return newpost;
+};
 export const postSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
     addComment: (state, action: PayloadAction<{ id: number; comment: string }>) => {
-      state[action.payload.id].comments.push(action.payload.comment);
+      //state[action.payload.id].comments.push(action.payload.comment);
     },
     loadPosts: (state, action: PayloadAction<Array<PostInterface>>) => {
       state = state.concat(action.payload);
       return state;
     },
+    addPost: (state, action: PayloadAction<string>) => {
+      state.push(CreateNewPost(action.payload));
+    },
   },
 });
 
-export const { addComment, loadPosts } = postSlice.actions;
+export const { addComment, loadPosts, addPost } = postSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -82,17 +100,22 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
       .then((json) => {
         return json.map((value: any) => {
           console.log(value);
+          newpostid++;
           return {
+            id: newpostid,
             user: { avatarUrl: '', profileUrl: '', id: value.userId },
             timeStamp: new Date(),
             comments: [],
             title: value.title,
             body: value.body,
+            pin: false,
           };
         });
       })
       .then((resPosts: Array<PostInterface>) => {
         console.log(resPosts);
+        // Temp limiting posts
+        resPosts = resPosts.slice(0,5);
         dispatch(loadPosts(resPosts));
       });
   }
@@ -101,5 +124,6 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectPosts = (state: RootState) => state.posts;
+
 
 export default postSlice.reducer;
