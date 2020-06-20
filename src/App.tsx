@@ -9,6 +9,7 @@ import Header from './features/Header/Header';
 import HeaderLinks from './features/Header/HeaderLinks';
 import Footer from './features/Footer/Footer';
 import PersonalPage from './views/PersonalPage/App';
+import CalendarPage from './views/CalendarPage/App';
 import { Button } from '@material-ui/core';
 import { useTransition, animated } from 'react-spring';
 
@@ -35,6 +36,9 @@ function App() {
             <Button href={'/team'} style={{ color: 'white' }}>
               Team
             </Button>
+            <Button href={'/calendar'} style={{ color: 'white' }}>
+              Calendar
+            </Button>
           </div>
         }
         fixed
@@ -45,7 +49,8 @@ function App() {
           <Switch location={location}>
             <Route path="/personal" component={PersonalPage} />
             <Route path="/team" component={TeamPage} />
-            <Route path="/" component={TeamPage} />
+            <Route path="/calendar" component={CalendarPage} />
+            <Route path="/" component={PersonalPage} />
           </Switch>
         </animated.div>
       ))}
