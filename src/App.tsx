@@ -2,13 +2,11 @@ import React from 'react';
 import './App.css';
 import { createBrowserHistory, History } from 'history';
 import { BrowserRouter, Switch, Route, Link, useLocation, useHistory } from 'react-router-dom';
-import DefaultPage from './views/App/App';
 import TeamPage from './views/TeamPage/App';
 import TestPage from './views/TestPage/App';
 import Header from './features/Header/Header';
-import HeaderLinks from './features/Header/HeaderLinks';
-import Footer from './features/Footer/Footer';
 import PersonalPage from './views/PersonalPage/App';
+import CalendarPage from './views/CalendarPage/App';
 import { Button } from '@material-ui/core';
 import { useTransition, animated } from 'react-spring';
 import { Router } from '@material-ui/icons';
@@ -31,10 +29,13 @@ function App() {
         rightLinks={
           <div>
             <Button href={'/personal'} style={{ color: 'white' }}>
-              Personal
+              Home
             </Button>
             <Button href={'/team'} style={{ color: 'white' }}>
               Team
+            </Button>
+            <Button href={'/calendar'} style={{ color: 'white' }}>
+              Calendar
             </Button>
           </div>
         }
@@ -47,7 +48,8 @@ function App() {
       <Switch location={location}>
         <Route path="/personal" component={PersonalPage} />
         <Route path="/team" component={TeamPage} />
-        <Route path="/" component={TeamPage} />
+        <Route path="/calendar" component={CalendarPage} />
+        <Route path="/" component={PersonalPage} />
       </Switch>
       {/*</Router>*/}
       {/*  </animated.div>*/}

@@ -1,6 +1,5 @@
 import React from 'react';
 import TeamItem from './TeamItem';
-import { Card, CardHeader } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CardPersonalPage from '../cardPersonalPage/CardPersonalPage';
