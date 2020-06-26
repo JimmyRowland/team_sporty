@@ -1,0 +1,24 @@
+{
+  "name": "with-apollo-and-redux",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "^3.1.5",
+    "apollo-cache-inmemory": "1.6.3",
+    "apollo-client": "2.6.4",
+    "apollo-link-http": "1.5.16",
+    "graphql": "14.5.8",
+    "graphql-tag": "2.10.1",
+    "next": "latest",
+    "prop-types": "^15.6.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "2.13.8"
+  }
+}
