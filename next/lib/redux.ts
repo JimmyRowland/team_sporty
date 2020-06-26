@@ -23,7 +23,7 @@ const initStore = (preloadedState: Record<string, unknown>) => {
     });
 };
 
-export const initializeStore = (preloadedState: Record<string, unknown>) => {
+export const initializeStore = (preloadedState: Record<string, unknown> = {}) => {
     let _store = redux ?? initStore(preloadedState);
 
     // After navigating to a page with an initial Redux state, merge that state

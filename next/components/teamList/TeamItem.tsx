@@ -5,18 +5,10 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ImageIcon from "@material-ui/icons/Image";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import Link from "next/link";
 function TeamItem(props: { name: React.ReactNode; record: React.ReactNode }) {
-    const history = useHistory();
-    const handleRouteChange = (route: string) => {
-        history.push(route);
-    };
     return (
-        <div
-            onClick={() => {
-                handleRouteChange("/team");
-            }}
-        >
+        <Link href={"/"}>
             <Button fullWidth>
                 <ListItem>
                     <ListItemAvatar>
@@ -27,7 +19,7 @@ function TeamItem(props: { name: React.ReactNode; record: React.ReactNode }) {
                     <ListItemText primary={props.name} secondary={props.record} />
                 </ListItem>
             </Button>
-        </div>
+        </Link>
     );
 }
 

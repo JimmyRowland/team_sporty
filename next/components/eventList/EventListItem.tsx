@@ -3,7 +3,8 @@ import { ColoredPaper } from "../components/coloredPaper/ColoredPaper";
 import { DateAvatar } from "../DateAvatar/DateAvatar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { EventListItemType, monthArray } from "../../interface/Interface";
+import { EventListItemType, monthArray } from "../../interfaces/Interface";
+
 const useStyles = makeStyles({
     container: {
         width: "100%",

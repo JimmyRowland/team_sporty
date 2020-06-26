@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { AppBar } from "@material-ui/core";
+import { AppBar, Toolbar, Button } from "@material-ui/core";
 
 type Props = {
     children?: ReactNode;
@@ -17,21 +17,20 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => (
         </Head>
         <header>
             <AppBar>
-                <Link href="/">
-                    <a>Team</a>
-                </Link>{" "}
-                |{" "}
-                <Link href="/profile">
-                    <a>Profile</a>
-                </Link>{" "}
-                |{" "}
-                <Link href="/team">
-                    <a>Team</a>
-                </Link>{" "}
-                |{" "}
-                <Link href="/calendar">
-                    <a>Calendar</a>
-                </Link>
+                <Toolbar>
+                    <Link href="/">
+                        <Button>Team</Button>
+                    </Link>
+                    <Link href="/profile">
+                        <Button>Profile</Button>
+                    </Link>
+                    <Link href="/team">
+                        <Button>Team</Button>
+                    </Link>
+                    <Link href="/calendar">
+                        <Button>Calendar</Button>
+                    </Link>
+                </Toolbar>
             </AppBar>
         </header>
         {children}

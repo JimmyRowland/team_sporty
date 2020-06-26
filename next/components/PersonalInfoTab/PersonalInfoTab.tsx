@@ -4,7 +4,7 @@ import EditPopUp from "./EditPopUp/EditPopUp";
 import { useSelector } from "react-redux";
 import { selectPersonal } from "./EditPopUp/EditPersonalInfoSlice";
 
-export default function PersonalInfoTab(props: {}) {
+export default function PersonalInfoTab() {
     const info = useSelector(selectPersonal);
     return (
         <div className={styles.Tab}>
