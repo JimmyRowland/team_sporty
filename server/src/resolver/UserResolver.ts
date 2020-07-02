@@ -70,7 +70,8 @@ export class UserResolver {
         @Arg("password") password: string,
         @Ctx() { res }: ResReq,
     ): Promise<LoginResponse> {
-        const user = await UserModel.findOne({ where: { email } });
+        // console.log(email);
+        const user = await UserModel.findOne({ email });
 
         if (!user) {
             res.status(401).json({ success: false, msg: "could not find user" });
@@ -97,7 +98,7 @@ export class UserResolver {
         @Arg("password") password: string,
         @Ctx() { res }: ResReq,
     ) {
-        const user = await UserModel.findOne({ where: { email } });
+        const user = await UserModel.findOne({ email });
         if (user) {
             res.status(401).json({ success: false, msg: "User already exist" });
             return false;
