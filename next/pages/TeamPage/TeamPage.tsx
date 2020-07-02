@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Card, Avatar, NoSsr } from "@material-ui/core";
+import { Typography, Card, Avatar } from "@material-ui/core";
 import { EventList } from "../../components/eventList/EventList";
 import Post from "../../components/post/Post";
 import { selectPosts, postAsync, PostInterface } from "../../components/post/postSlice";
