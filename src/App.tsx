@@ -3,6 +3,7 @@ import './App.css';
 import { createBrowserHistory, History } from 'history';
 import { BrowserRouter, Switch, Route, Link, useLocation, useHistory } from 'react-router-dom';
 import TeamPage from './views/TeamPage/App';
+import FrontPage from './views/FrontPage/App';
 import TestPage from './views/TestPage/App';
 import Header from './features/Header/Header';
 import PersonalPage from './views/PersonalPage/App';
@@ -49,7 +50,7 @@ function App() {
         <Route path="/personal" component={PersonalPage} />
         <Route path="/team" component={TeamPage} />
         <Route path="/calendar" component={CalendarPage} />
-        <Route path="/" component={PersonalPage} />
+        <Route path="/" component={FrontPage} />
       </Switch>
       {/*</Router>*/}
       {/*  </animated.div>*/}
