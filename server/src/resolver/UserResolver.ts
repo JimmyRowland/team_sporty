@@ -1,9 +1,10 @@
 // import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
 import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware } from "type-graphql";
-import { validPassword, issueJWT, sendRefreshToken, genPassword } from "../lib/utils";
+import { validPassword, createRefreshToken, sendRefreshToken, genPassword, createAccessToken } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
+import { verify } from "jsonwebtoken";
 @ObjectType()
 class LoginResponse {
     @Field()
@@ -33,30 +34,29 @@ export class UserResolver {
         return UserModel.find();
     }
     //
-    // @Query(() => User, { nullable: true })
-    // me(@Ctx() context: MyContext) {
-    //     const authorization = context.req.headers["authorization"];
+    @Query(() => User, { nullable: true })
+    me(@Ctx() context: ResReq) {
+        const authorization = context.req.headers["authorization"];
+
+        if (!authorization) {
+            return null;
+        }
+
+        try {
+            const token = authorization.split(" ")[1];
+            const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+            return UserModel.findOne(payload._id);
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
     //
-    //     if (!authorization) {
-    //         return null;
-    //     }
-    //
-    //     try {
-    //         const token = authorization.split(" ")[1];
-    //         const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-    //         return User.findOne(payload.userId);
-    //     } catch (err) {
-    //         console.log(err);
-    //         return null;
-    //     }
-    // }
-    //
-    // @Mutation(() => Boolean)
-    // async logout(@Ctx() { res }: MyContext) {
-    //     sendRefreshToken(res, "");
-    //
-    //     return true;
-    // }
+    @Mutation(() => Boolean)
+    async logout(@Ctx() { res }: ResReq) {
+        sendRefreshToken(res, "");
+        return true;
+    }
     //
     // @Mutation(() => Boolean)
     // async revokeRefreshTokensForUser(@Arg("userId", () => Int) userId: number) {
@@ -69,25 +69,30 @@ export class UserResolver {
     async login(
         @Arg("email") email: string,
         @Arg("password") password: string,
-        @Ctx() { res }: ResReq,
+        @Ctx() { res, req }: ResReq,
     ): Promise<LoginResponse> {
         // console.log(email);
         const user = await UserModel.findOne({ email });
-
+        const nullResponse: LoginResponse = { accessToken: "", user: null };
         if (!user) {
             res.status(401).json({ success: false, msg: "could not find user" });
+            return nullResponse;
+            // throw new Error("could not find user");
         } else {
             const isValid = validPassword(password, user.hash, user.salt);
 
             if (!isValid) {
                 res.status(401).json({ success: false, msg: "you entered the wrong password" });
+                return nullResponse;
+                // throw new Error("you entered the wrong password");
             } else {
-                sendRefreshToken(res, issueJWT(user));
+                sendRefreshToken(res, createRefreshToken(user));
             }
             // login successful
         }
+        console.log(req.connection.remoteAddress);
         return {
-            accessToken: issueJWT(user),
+            accessToken: createAccessToken(user!),
             user,
         };
     }

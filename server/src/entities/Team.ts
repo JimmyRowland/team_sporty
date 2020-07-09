@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop, Ref } from "@typegoose/typegoose";
+import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 @ObjectType()
 export class Team {
@@ -27,3 +27,4 @@ export class Team {
     @prop({ Ref: "User" })
     members?: Ref<User>[];
 }
+export const TeamModel = getModelForClass(Team);

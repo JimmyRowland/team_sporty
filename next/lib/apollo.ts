@@ -2,16 +2,92 @@ import { useMemo } from "react";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
+import { TokenRefreshLink } from "apollo-link-token-refresh";
+import { ApolloLink, Observable } from "apollo-link";
+import { getAccessToken, setAccessToken } from "./accessToken";
+import jwtDecode from "jwt-decode";
+import { onError } from "apollo-link-error";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+
+const requestLink = new ApolloLink(
+    (operation, forward) =>
+        new Observable((observer) => {
+            let handle: any;
+            Promise.resolve(operation)
+                .then((operation) => {
+                    const accessToken = getAccessToken();
+                    if (accessToken) {
+                        operation.setContext({
+                            headers: {
+                                authorization: `bearer ${accessToken}`,
+                            },
+                        });
+                    }
+                })
+                .then(() => {
+                    handle = forward(operation).subscribe({
+                        next: observer.next.bind(observer),
+                        error: observer.error.bind(observer),
+                        complete: observer.complete.bind(observer),
+                    });
+                })
+                .catch(observer.error.bind(observer));
+
+            return () => {
+                if (handle) handle.unsubscribe();
+            };
+        }),
+);
 
 function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === "undefined",
-        link: new HttpLink({
-            uri: "https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn", // Server URL (must be absolute)
-            credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
-        }),
+        link: ApolloLink.from([
+            new TokenRefreshLink({
+                accessTokenField: "accessToken",
+                isTokenValidOrUndefined: () => {
+                    const token = getAccessToken();
+
+                    if (!token) {
+                        return true;
+                    }
+
+                    try {
+                        const { exp } = jwtDecode(token);
+                        if (Date.now() >= exp * 1000) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    } catch {
+                        return false;
+                    }
+                },
+                fetchAccessToken: () => {
+                    return fetch("http://localhost:4000/refresh_token", {
+                        method: "POST",
+                        credentials: "include",
+                    });
+                },
+                handleFetch: (accessToken) => {
+                    setAccessToken(accessToken);
+                },
+                handleError: (err) => {
+                    console.warn("Your refresh token is invalid. Try to relogin");
+                    console.error(err);
+                },
+            }),
+            onError(({ graphQLErrors, networkError }) => {
+                console.log(graphQLErrors);
+                console.log(networkError);
+            }),
+            requestLink,
+            new HttpLink({
+                uri: "http://localhost:4000/graphql",
+                credentials: "include",
+            }),
+        ]),
         cache: new InMemoryCache(),
     });
 }

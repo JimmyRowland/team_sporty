@@ -5,6 +5,7 @@ import { join } from "path";
 import { Response } from "express";
 // import { User } from "../entities/User";
 import { salthash } from "../interfaces/interfaces";
+import { User } from "../entities/User";
 
 const pathToPrivKey = join(__dirname, "..", "id_rsa_priv.pem");
 const PRIV_KEY = readFileSync(pathToPrivKey, "utf8");
@@ -50,7 +51,7 @@ export function genPassword(password: string): salthash {
 /**
  * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
-export function issueJWT(user: any): string {
+export function createRefreshToken(user: User): string {
     const _id = user._id;
 
     const expiresIn = "7d";
@@ -72,3 +73,9 @@ export function sendRefreshToken(res: Response, token: string): void {
         path: "/refresh_token",
     });
 }
+
+export const createAccessToken = (user: User) => {
+    return sign({ sub: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
+        expiresIn: "15m",
+    });
+};

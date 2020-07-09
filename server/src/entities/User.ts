@@ -35,8 +35,17 @@ export class User {
     @prop({ required: true })
     hash: string;
 
-    @Field(() => [String], { nullable: true })
+    @Field(() => [String])
+    @prop({ default: [] })
     teamID?: string[];
+
+    // @Field(() => Int)
+    // @prop({ default: 0 })
+    // tokenVersion: number;
+
+    @Field(() => [String])
+    @prop({ default: [] })
+    ip: string[];
 }
 
 export const UserModel = getModelForClass(User);
