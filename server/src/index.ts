@@ -7,13 +7,11 @@ import { buildSchema } from "type-graphql";
 // import { createConnection } from "typeorm";
 import cookieParser from "cookie-parser";
 // import cors from "cors";
-import passport from "passport";
 // import { User } from "./models/User";
 // import { sendRefreshToken } from "./sendRefreshToken";
 // import { createAccessToken, createRefreshToken } from "./auth";
 import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
-import setPassport from "./config/passport";
 
 (async () => {
     const app = express();
@@ -25,8 +23,6 @@ import setPassport from "./config/passport";
     //     }),
     // );
     app.use(cookieParser());
-    setPassport(passport);
-    app.use(passport.initialize());
     // app.get("/", (_req, res) => res.send("hello"));
     // app.post("/refresh_token", async (req, res) => {
     //     const token = req.cookies.jid;

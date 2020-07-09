@@ -1,9 +1,9 @@
 // import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
-import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx } from "type-graphql";
+import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware } from "type-graphql";
 import { validPassword, issueJWT, sendRefreshToken, genPassword } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
-
+import { isAuth } from "../middleware/isAuth";
 @ObjectType()
 class LoginResponse {
     @Field()
@@ -28,6 +28,7 @@ export class UserResolver {
     // }
     //
     @Query(() => [User])
+    @UseMiddleware(isAuth)
     users() {
         return UserModel.find();
     }
@@ -100,7 +101,7 @@ export class UserResolver {
     ) {
         const user = await UserModel.findOne({ email });
         if (user) {
-            res.status(401).json({ success: false, msg: "User already exist" });
+            res.status(409).json({ success: false, msg: "User already exist" });
             return false;
         } else {
             const { hash, salt } = genPassword(password);

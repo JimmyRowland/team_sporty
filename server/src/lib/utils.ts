@@ -6,8 +6,8 @@ import { Response } from "express";
 // import { User } from "../entities/User";
 import { salthash } from "../interfaces/interfaces";
 
-const pathToKey = join(__dirname, "..", "id_rsa_priv.pem");
-const PRIV_KEY = readFileSync(pathToKey, "utf8");
+const pathToPrivKey = join(__dirname, "..", "id_rsa_priv.pem");
+const PRIV_KEY = readFileSync(pathToPrivKey, "utf8");
 
 /**
  * -------------- HELPER FUNCTIONS ----------------
@@ -66,6 +66,7 @@ export function issueJWT(user: any): string {
 }
 
 export function sendRefreshToken(res: Response, token: string): void {
+    // console.log("jid");
     res.cookie("jid", token, {
         httpOnly: true,
         path: "/refresh_token",
