@@ -11,7 +11,7 @@ type Props = {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         header: {
-            height: "80px",
+            // height: "80px",
         },
     }),
 );

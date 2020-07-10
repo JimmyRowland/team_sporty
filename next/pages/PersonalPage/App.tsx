@@ -1,16 +1,15 @@
 import React from "react";
 import logo from "../../logo.svg";
-import { Counter } from "../../features/counter/Counter";
-import "./App.css";
-import { ColoredPaper } from "../../features/components/coloredPaper/ColoredPaper";
-import { DateAvatar } from "../../features/DateAvatar/DateAvatar";
+import { Counter } from "../../components/counter/Counter";
+import { ColoredPaper } from "../../components/components/coloredPaper/ColoredPaper";
+import { DateAvatar } from "../../components/DateAvatar/DateAvatar";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { EventList } from "../../features/eventList/EventList";
+import { EventList } from "../../components/eventList/EventList";
 import { EventListItemType, monthArray } from "../../interface/Interface";
-import PersonalInfoTab from "../../features/PersonalInfoTab/PersonalInfoTab";
-import TeamList from "../../features/teamList/TeamList";
-import CardPersonalPage from "../../features/cardPersonalPage/CardPersonalPage";
+import PersonalInfoTab from "../../components/PersonalInfoTab/PersonalInfoTab";
+import TeamList from "../../components/teamList/TeamList";
+import CardPersonalPage from "../../components/cardPersonalPage/CardPersonalPage";
 const useStyles = makeStyles({
     container: {
         width: "90%",

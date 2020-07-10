@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
+import { useEventsQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,6 +29,20 @@ function CalendarList(props: { eventList: any[] }) {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const { data, loading, error } = useEventsQuery();
+    if (loading) {
+        return <div>loading...</div>;
+    }
+
+    if (error) {
+        console.log(error);
+        return <div>err</div>;
+    }
+
+    if (!data) {
+        return <div>no data</div>;
+    }
+    console.log(data);
     return (
         <div className={classes.root}>
             {props.eventList.map((c) => (
@@ -42,6 +57,21 @@ function CalendarList(props: { eventList: any[] }) {
                     notResponded={c.notResponded}
                 />
             ))}
+            {data.events.map((event, index) => {
+                // console.log(index, event);
+                return (
+                    <CalendarItem
+                        key={index}
+                        name={event.name}
+                        type={"Game"}
+                        date={event.startDate.toString}
+                        address={event.description}
+                        going={3}
+                        notGoing={3}
+                        notResponded={3}
+                    />
+                );
+            })}
             <br></br>
         </div>
     );

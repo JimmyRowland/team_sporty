@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import { NoSsr } from "@material-ui/core";
 import { green, purple } from "@material-ui/core/colors";
 import classNames from "classnames";
+import Router from "next/router";
 
 const theme = createMuiTheme({
     palette: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            animation: "fill 1.5s ease forwards 3s",
+            animation: "$fill 1.5s ease forwards 3s",
         },
         brand: {
             position: "absolute",
@@ -40,77 +41,89 @@ const useStyles = makeStyles((theme: Theme) =>
             left: "50%",
             transform: "translate(-50%, -50%)",
         },
-        sportIcon: { fontSize: 100, fill: "#202330" },
+        sportIcon: { fontSize: 100, fill: "rgb(32, 35, 48)" },
         soccer: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-250%, +75%)",
-            animation: "fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.5s",
         },
         basketball: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-155%, +75%)",
-            animation: "fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.5s",
         },
         baseball: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-60%, +75%)",
-            animation: "fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.5s",
         },
         football: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(+35%, +75%)",
-            animation: "fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.5s",
         },
         cricket: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(+130%, +75%)",
-            animation: "fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.5s",
         },
         buttons: {
             top: "50%",
             left: "50%",
             transform: "translate(0%, +410%)",
-            animation: "fill 0.5s ease forwards 3s",
+            animation: "$fill 0.5s ease forwards 3s",
         },
         logo_path_nth_child_1: {
             strokeDasharray: "493px",
-            // strokeDashoffset: "493px",
-            animation: "line-anim 2s ease forwards",
+            strokeDashoffset: "493px",
+            animation: "$line-anim 2s ease forwards",
         },
         logo_path_nth_child_2: {
             strokeDasharray: "310px",
             strokeDashoffset: "310px",
-            animation: "line-anim 2s ease forwards 0.3s",
+            animation: "$line-anim 2s ease forwards 0.3s",
         },
         logo_path_nth_child_3: {
             strokeDasharray: "322px",
             strokeDashoffset: "322px",
-            animation: "line-anim 2s ease forwards 0.6s",
+            animation: "$line-anim 2s ease forwards 0.6s",
         },
         logo_path_nth_child_4: {
             strokeDasharray: "408px",
             strokeDashoffset: "408px",
-            animation: "line-anim 2s ease forwards 0.9s",
+            animation: "$line-anim 2s ease forwards 0.9s",
         },
         logo_path_nth_child_5: {
             strokeDasharray: "337px",
             strokeDashoffset: "337px",
-            animation: "line-anim 2s ease forwards 1.2s",
+            animation: "$line-anim 2s ease forwards 1.2s",
         },
         logo_path_nth_child_6: {
             strokeDasharray: "373px",
             strokeDashoffset: "373px",
-            animation: "line-anim 2s ease forwards 1.5s",
+            animation: "$line-anim 2s ease forwards 1.5s",
+        },
+
+        "@keyframes line-anim": {
+            to: {
+                strokeDashoffset: 0,
+            },
+        },
+
+        "@keyframes fill": {
+            to: {
+                fill: "white",
+            },
         },
     }),
 );
@@ -171,17 +184,14 @@ function CalendarPage() {
                             strokeWidth="5"
                         />
                         <path
-                            // className={classes.logo_path_nth_child_6}
+                            className={classes.logo_path_nth_child_6}
                             d="M520.126 1.632L487.438 64.128V102H474.334V64.128L441.502 1.632H456.046L480.814 52.464L505.582 1.632H520.126Z"
                             stroke="white"
                             strokeWidth="5"
                         />
                     </svg>
 
-                    <SportsSoccerIcon
-                        className={classNames(classes.sportIcon, classes.soccer)}
-                        style={{ fontSize: 100, fill: "#202330" }}
-                    />
+                    <SportsSoccerIcon className={classNames(classes.sportIcon, classes.soccer)} />
                     <SportsBasketballIcon className={classNames(classes.sportIcon, classes.basketball)} />
                     <SportsBaseballIcon className={classNames(classes.sportIcon, classes.baseball)} />
                     <SportsFootballIcon className={classNames(classes.sportIcon, classes.football)} />
@@ -189,10 +199,25 @@ function CalendarPage() {
 
                     <div className={classes.buttons}>
                         <ThemeProvider theme={theme}>
-                            <Button variant="contained" color="primary" className={classNames(classes.margin)}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classNames(classes.margin)}
+                                onClick={() => {
+                                    Router.push("/login");
+                                }}
+                            >
                                 Login
                             </Button>
-                            <Button id="button2" variant="contained" color="secondary" className={classes.margin}>
+                            <Button
+                                id="button2"
+                                variant="contained"
+                                color="secondary"
+                                className={classes.margin}
+                                onClick={() => {
+                                    Router.push("/register");
+                                }}
+                            >
                                 Sign Up
                             </Button>
                         </ThemeProvider>

@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarList from "../../components/calendar/CalendarList";
 import { MDCRipple } from "@material/ripple";
