@@ -1,8 +1,9 @@
 import React from "react";
 import "./App.css";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import CalendarList from "../../features/calendar/CalendarList";
-import TeamDropDown from "../../features/teamDropDown/TeamDropDown";
+import CalendarList from "../../components/calendar/CalendarList";
+import { MDCRipple } from "@material/ripple";
+import TeamDropDown from "../../components/teamDropDown/TeamDropDown";
 
 const useStyles = makeStyles({
     container: {
@@ -19,6 +20,30 @@ const useStyles = makeStyles({
     avatar: {
         height: 120,
         width: 120,
+    },
+    App: {
+        textAlign: "center",
+    },
+    App_logo: {
+        height: "40vmin",
+        pointerEvents: "none",
+    },
+    "@media (prefers-reduced-motion: no-preference)": {
+        __expression__: "(prefers-reduced-motion: no-preference)",
+        App_logo: {
+            animation: "App-logo-float infinite 3s ease-in-out",
+        },
+    },
+    App_header: {
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "calc(10px + 2vmin)",
+    },
+    App_link: {
+        color: "rgb(112, 76, 182)",
     },
 });
 
@@ -79,7 +104,7 @@ function CalendarPage() {
     const classes = useStyles();
 
     return (
-        <div className="App">
+        <div className={classes.App}>
             <br></br>
             <br></br>
             <div className={classes.container}>
