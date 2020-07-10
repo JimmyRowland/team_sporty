@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 export interface ResReq {
     req: Request;
     res: Response;
-    payload?: { userId: string };
+    payload?: { _id?: string };
 }
 
 export interface salthash {

@@ -3,7 +3,6 @@ import Link from "next/link";
 import Head from "next/head";
 import { AppBar, Toolbar, Button } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
 
 type Props = {
     children?: ReactNode;

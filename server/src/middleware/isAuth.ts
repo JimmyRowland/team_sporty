@@ -11,7 +11,7 @@ import { verify } from "jsonwebtoken";
 
 export const isAuth: MiddlewareFn<ResReq> = ({ context }, next) => {
     const authorization = context.req.headers["authorization"];
-
+    // console.log(context.req);
     if (!authorization) {
         throw new Error("not authenticated header");
     }
@@ -21,11 +21,11 @@ export const isAuth: MiddlewareFn<ResReq> = ({ context }, next) => {
         //     algorithms: ["RS256"],
         // };
         const token = authorization.split(" ")[1];
-        console.log(token);
+        // console.log(token);
         // const payload = verify(token, PUB_KEY!, options);
         const payload = verify(token, process.env.ACCESS_TOKEN_SECRET!);
 
-        context.payload = payload as any;
+        context.payload = payload as { _id: string };
     } catch (err) {
         console.log(err);
         throw new Error("not authenticated");

@@ -12,6 +12,7 @@ import cors from "cors";
 // import { createAccessToken, createRefreshToken } from "./auth";
 import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
+import { EventResolver } from "./resolver/EventResolver";
 
 (async () => {
     const app = express();
@@ -26,7 +27,7 @@ import { UserResolver } from "./resolver/UserResolver";
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver],
+            resolvers: [UserResolver, EventResolver],
         }),
         context: ({ req, res }) => ({ req, res }),
     });

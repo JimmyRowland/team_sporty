@@ -11,7 +11,6 @@ class LoginResponse {
     accessToken: string;
     @Field(() => User)
     user: User | null;
-    // TODO: no password
 }
 
 @Resolver()
