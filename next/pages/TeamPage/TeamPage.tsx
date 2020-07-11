@@ -6,11 +6,14 @@ import Post from "../../components/post/Post";
 import { selectPosts, postAsync, PostInterface } from "../../components/post/postSlice";
 import { useSelector, useDispatch } from "react-redux";
 import PostCreator from "../../components/post/PostCreator";
-import { selectPinnedPosts } from "../../components/post/pinnedpostSlice";
 import Link from "next/link";
+import Button from "@material-ui/core/Button";
+import MessageBoard from "../../components/post/MessageBoard";
 
 const useStyles = makeStyles({
+
     container: {
+        backgroundColor: "#EFEFEF",
         paddingTop: 90,
         width: "100%",
         height: "100%",
@@ -30,7 +33,7 @@ const useStyles = makeStyles({
         position: "sticky",
         top: "6vh",
         flexBasis: "25%",
-        maxWidth: "25vw",
+        Width: "30vw",
     },
     rightColumn: {
         // flexGrow:1
@@ -44,15 +47,20 @@ const useStyles = makeStyles({
     },
     leftInnerContainer: {
         height: "87vh",
-        display: "flex",
+        display: "grid",
         flexDirection: "column",
         width: "100%",
         justifyContent: "space-evenly",
     },
     teamContainer: {
+        margin: "1em",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+    },
+    eventContainer:{
+        height: "50%",
+        overflowY:"scroll",
     },
     rosterCard: {
         borderRadius: "15px",
@@ -70,7 +78,7 @@ const useStyles = makeStyles({
         padding: 7,
     },
 });
-//TODO 100% height fixed column
+
 
 const posts = ["e", "e", "dfg"];
 function TeamPage() {
@@ -83,15 +91,16 @@ function TeamPage() {
     //   const event: EventListItemType = { date: date, title: title, body: detail };
     //   events.push(event);
     // }
-    const posts1 = useSelector(selectPosts);
-    const pinnedpost = useSelector(selectPinnedPosts);
     const dispatch = useDispatch();
+
     useEffect(() => {
         console.log("load posts");
         dispatch(postAsync());
     }, []);
+
+
     return (
-        // <NoSsr>
+
         <div className={classes.container}>
             <div className={classes.leftColumn}>
                 <Card raised={true}>
@@ -102,22 +111,18 @@ function TeamPage() {
                             <Typography variant={"subtitle1"}>something</Typography>
                             <Typography variant={"subtitle2"}>somethingElse</Typography>
                         </div>
-                        <div>
-                            <Typography variant={"h5"}>UPCOMING...</Typography>
+                        <Typography variant={"h5"}>UPCOMING...</Typography>
+                        <div className={classes.eventContainer}>
+
                             <EventList />
                         </div>
+                        <Button> Team Management </Button>
                     </div>
                 </Card>
             </div>
             <div className={classes.rightColumn}>
                 <div className={classes.columnItem}>
-                    {pinnedpost.map((post: PostInterface, index: number) => {
-                        return (
-                            <div key={index} className={classes.columnItem}>
-                                <Post index={index} post={post} />
-                            </div>
-                        );
-                    })}
+                    <MessageBoard pinned={true} />
                 </div>
                 <div className={classes.columnItem}>
                     <PostCreator />
@@ -140,16 +145,9 @@ function TeamPage() {
                         </div>
                     </Card>
                 </div>
-                {posts1.map((post: PostInterface, index: number) => {
-                    return (
-                        <div key={index} className={classes.columnItem}>
-                            <Post index={index} post={post} />
-                        </div>
-                    );
-                })}
+                <MessageBoard pinned={false} />
             </div>
         </div>
-        // </NoSsr>
     );
 }
 

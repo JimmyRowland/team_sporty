@@ -1,7 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from "../components/counter/counterSlice";
 import postReducer from "../components/post/postSlice";
-import pinnedpostReducer from "../components/post/pinnedpostSlice";
 import eventReducer from "../components/eventList/eventSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
 import { useMemo } from "react";
@@ -14,7 +13,6 @@ const initStore = (preloadedState: Record<string, unknown>) => {
         reducer: {
             counter: counterReducer,
             posts: postReducer,
-            pinnedposts: pinnedpostReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
         },
