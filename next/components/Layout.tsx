@@ -28,7 +28,7 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                 <AppBar>
                     <Toolbar>
                         <Link href="/">
-                            <Button>Team</Button>
+                            <Button>Home</Button>
                         </Link>
                         <Link href="/profile">
                             <Button>Profile</Button>
@@ -38,6 +38,9 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                         </Link>
                         <Link href="/calendar">
                             <Button>Calendar</Button>
+                        </Link>
+                        <Link href="/teamsearch">
+                            <Button>search</Button>
                         </Link>
                     </Toolbar>
                 </AppBar>

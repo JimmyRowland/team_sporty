@@ -9,12 +9,21 @@ const useStyles = makeStyles({
         paddingTop: 90,
         width:"100%",
         height:"100%",
+        margin: "auto",
     },
     searchbarContainer:{
-        display:"block",
-        width: "100%",
+        width: "80%",
         height: "20%",
+        margin: "auto",
 
+    },
+    teamContainer:{
+        width:"100%",
+        height:"500px",
+        overflowY:"scroll",
+    },
+    teamtabContainer:{
+        margin:"2em",
     }
 })
 
@@ -25,11 +34,28 @@ function TeamSearchPage(){
             <div className={classes.searchbarContainer}>
             <SearchBar />
             </div>
-            <div>
+            <div className={classes.teamContainer}>
+                <div className={classes.teamtabContainer}>
                 <ClubDisplayTab />
-                <ClubDisplayTab />
-                <ClubDisplayTab />
-                <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
+                <div className={classes.teamtabContainer}>
+                    <ClubDisplayTab />
+                </div>
             </div>
             <div>
                 <CreateTeamModal />

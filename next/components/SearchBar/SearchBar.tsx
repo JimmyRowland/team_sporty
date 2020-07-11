@@ -7,10 +7,7 @@ import {IconButton} from "@material-ui/core";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
-        container:{
-        },
         body: {
-
             width: "800px",
             height: "100%",
             margin:"auto",
@@ -32,7 +29,6 @@ const useStyles = makeStyles((Theme: Theme) =>
 export default function SearchBar() {
     const classes = useStyles();
     return (
-        <div className={classes.container}>
             <div className={classes.body}>
                 <div className={classes.h1}>
                 <TextField className={classes.textfield} label="Search Team" variant="outlined"/>
@@ -43,6 +39,5 @@ export default function SearchBar() {
                 </IconButton >
                 </div>
             </div>
-        </div>
     );
 }

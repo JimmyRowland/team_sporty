@@ -5,6 +5,7 @@ import TeamInfoManageTab from "../../components/TeamManagePage/TeamInfoManageTab
 import MemberManagementTab from "../../components/TeamManagePage/MemberManagementTab/MemberManagementTab";
 const useStyles = makeStyles({
     body:{
+
         paddingTop: 90,
         width:"100%",
         height:"100%"

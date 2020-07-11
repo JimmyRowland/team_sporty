@@ -116,7 +116,10 @@ function TeamPage() {
 
                             <EventList />
                         </div>
-                        <Button> Team Management </Button>
+                        <Link href="/teammanage">
+                            <Button> Team Management </Button>
+                        </Link>
+
                     </div>
                 </Card>
             </div>

@@ -12,6 +12,7 @@ const useStyles = makeStyles((Theme: Theme) =>
             borderRadius: "15px",
             boxShadow:"0px 4px 4px rgba(0, 0, 0, 0.25)",
             display: "flex",
+            margin:"auto"
         },
         clubIMGContainer: {
             height: "80%",
