@@ -29,8 +29,8 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
     const handleLogout = async () => {
         await logout();
         setAccessToken("");
-        await client?.resetStore();
         await Router.push("/");
+        await client?.resetStore();
     };
     return (
         <div>
