@@ -19,7 +19,7 @@ export default function MessageBoard({ pinned }: { pinned: boolean }) {
     return (
         <div>
             {reverseposts.map((post: PostInterface) => {
-                if(pinned === post.pin){
+                if (pinned === post.pin) {
                     return (
                         <div key={post.id} className={classes.messageItem}>
                             <Post index={post.id} post={post} />

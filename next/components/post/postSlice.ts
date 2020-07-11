@@ -4,7 +4,7 @@ import ts from "typescript/lib/protocol";
 import { addEvents } from "../eventList/eventSlice";
 import { gql } from "apollo-boost";
 import ApolloClient from "apollo-boost";
-import ObjectId from 'mongo'
+import ObjectId from "mongo";
 
 const client = new ApolloClient({
     uri: "http://localhost:4000/graphql",
@@ -63,7 +63,7 @@ export const postSlice = createSlice({
         changePin: (state, action: PayloadAction<any>) => {
             console.log(action.payload);
             state.map((post: any) => {
-                if ((post.id === action.payload.id)) {
+                if (post.id === action.payload.id) {
                     post.pin = action.payload.pin;
                 }
             });
@@ -141,14 +141,13 @@ export const postAsync = (): AppThunk => (dispatch, getState) => {
         });
 };
 
-export const changePinAsync = (id:string, pin:boolean): AppThunk => (dispatch) => {
-    const UPDATE_PIN =gql`mutation {
+export const changePinAsync = (id: string, pin: boolean): AppThunk => (dispatch) => {
+    const UPDATE_PIN = gql`mutation {
         updateMessagePin(
             _id:"${id}"
             isPined:${pin}
         )}`;
-    client.mutate({ mutation: UPDATE_PIN })
-        .then((result)=>{
+    client.mutate({ mutation: UPDATE_PIN }).then((result) => {
         console.log(result);
         dispatch(changePin({ id, pin }));
     });

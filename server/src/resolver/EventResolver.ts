@@ -14,7 +14,7 @@ class AddEventResponse {
 @Resolver()
 export class EventResolver {
     @Query(() => [Event])
-    // @UseMiddleware(isAuth)
+    @UseMiddleware(isAuth)
     events() {
         return EventModel.find();
     }

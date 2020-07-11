@@ -57,7 +57,7 @@ export function createRefreshToken(user: User): string {
     const expiresIn = "7d";
 
     const payload = {
-        sub: _id,
+        _id: _id,
         iat: Date.now(),
     };
 
@@ -75,7 +75,7 @@ export function sendRefreshToken(res: Response, token: string): void {
 }
 
 export const createAccessToken = (user: User) => {
-    return sign({ sub: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
+    return sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
         expiresIn: "15m",
     });
 };

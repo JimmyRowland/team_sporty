@@ -5,42 +5,41 @@ import ClubDisplayTab from "../../components/ClubDisplayTab/ClubDisplayTabs";
 import CreateTeamModal from "../../components/CreateTeamModal/CreateTeamModal";
 
 const useStyles = makeStyles({
-    body:{
+    body: {
         paddingTop: 90,
-        width:"100%",
-        height:"100%",
+        width: "100%",
+        height: "100%",
         margin: "auto",
     },
-    searchbarContainer:{
+    searchbarContainer: {
         width: "80%",
         height: "20%",
         margin: "auto",
+    },
+    teamContainer: {
+        marginTop: "5%",
+        width: "100%",
+        height: "600px",
+        overflowY: "scroll",
+    },
+    teamtabContainer: {
+        margin: "2em",
+    },
+    createteamContainer: {
+        marginTop: "5%",
+    },
+});
 
-    },
-    teamContainer:{
-        marginTop:"5%",
-        width:"100%",
-        height:"600px",
-        overflowY:"scroll",
-    },
-    teamtabContainer:{
-        margin:"2em",
-    },
-    createteamContainer:{
-        marginTop:"5%",
-    },
-})
-
-function TeamSearchPage(){
+function TeamSearchPage() {
     const classes = useStyles();
-    return(
+    return (
         <div className={classes.body}>
             <div className={classes.searchbarContainer}>
-            <SearchBar />
+                <SearchBar />
             </div>
             <div className={classes.teamContainer}>
                 <div className={classes.teamtabContainer}>
-                <ClubDisplayTab />
+                    <ClubDisplayTab />
                 </div>
                 <div className={classes.teamtabContainer}>
                     <ClubDisplayTab />

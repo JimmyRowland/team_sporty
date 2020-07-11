@@ -1,30 +1,30 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {SearchBar} from "../../components/SearchBar/SearchBar"
+import { SearchBar } from "../../components/SearchBar/SearchBar";
 import TeamInfoManageTab from "../../components/TeamManagePage/TeamInfoManageTab/TeamInfoManageTab";
 import MemberManagementTab from "../../components/TeamManagePage/MemberManagementTab/MemberManagementTab";
 const useStyles = makeStyles({
-    body:{
+    body: {
         paddingTop: 90,
 
-        width:"100%",
-        height:"100%"
+        width: "100%",
+        height: "100%",
     },
-    membertab:{
-        marginTop:"5%",
-        marginBottom:"5%"
-    }
-})
+    membertab: {
+        marginTop: "5%",
+        marginBottom: "5%",
+    },
+});
 
-function TeamManagePage(){
+function TeamManagePage() {
     const classes = useStyles();
-    return(
+    return (
         <div className={classes.body}>
             <div>
-            <TeamInfoManageTab />
+                <TeamInfoManageTab />
             </div>
             <div className={classes.membertab}>
-            <MemberManagementTab />
+                <MemberManagementTab />
             </div>
         </div>
     );

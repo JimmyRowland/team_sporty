@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
             outline: "none",
             borderRadius: 15,
         },
-        allcontainer:{
+        allcontainer: {
             marginTop: "3em",
         },
         container: {
             height: "20%",
             width: "100%",
             margin: "auto",
-            padding:"1em",
+            padding: "1em",
         },
 
         closecontainer: {
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: "1em",
         },
         edit: {
-            marginTop:"1em",
+            marginTop: "1em",
             textAlign: "center",
             display: "flex",
             margin: "auto",
@@ -69,9 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 200,
             height: 30,
         },
-        buttoncontainer:{
-            marginBottom:"5px",
-        }
+        buttoncontainer: {
+            marginBottom: "5px",
+        },
     }),
 );
 
@@ -87,8 +87,7 @@ export default function CreateTeamModal() {
         setOpen(false);
     };
 
-    const onintroChange = (e: any) => {
-    };
+    const onintroChange = (e: any) => {};
 
     const handleSubmit = () => {
         handleClose();
@@ -102,45 +101,45 @@ export default function CreateTeamModal() {
             </div>
             <Typography variant={"h6"}> Create Team </Typography>
             <div className={classes.allcontainer}>
-            <div className={classes.container}>
-                <input
-                    className={classes.field}
-                    placeholder={"Club name"}
-                    onChange={(e) => {
-                        onintroChange(e);
-                    }}
-                />
-            </div>
-            <div className={classes.container}>
-                <input
-                    className={classes.field}
-                    placeholder={"Team name"}
-                    onChange={(e) => {
-                        onintroChange(e);
-                    }}
-                />
-            </div>
-            <div className={classes.container}>
-                <input
-                    className={classes.field}
-                    placeholder={"Type of sport"}
-                    onChange={(e) => {
-                        onintroChange(e);
-                    }}
-                />
-            </div>
+                <div className={classes.container}>
+                    <input
+                        className={classes.field}
+                        placeholder={"Club name"}
+                        onChange={(e) => {
+                            onintroChange(e);
+                        }}
+                    />
+                </div>
+                <div className={classes.container}>
+                    <input
+                        className={classes.field}
+                        placeholder={"Team name"}
+                        onChange={(e) => {
+                            onintroChange(e);
+                        }}
+                    />
+                </div>
+                <div className={classes.container}>
+                    <input
+                        className={classes.field}
+                        placeholder={"Type of sport"}
+                        onChange={(e) => {
+                            onintroChange(e);
+                        }}
+                    />
+                </div>
             </div>
             <div className={classes.buttoncontainer}>
-            <Button
-                variant="contained"
-                color="primary"
-                disableElevation
-                className={classes.edit}
-                onClick={handleSubmit}
-            >
-                Create New Team
-            </Button>
-             </div>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    disableElevation
+                    className={classes.edit}
+                    onClick={handleSubmit}
+                >
+                    Create New Team
+                </Button>
+            </div>
         </div>
     );
 

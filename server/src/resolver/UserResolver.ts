@@ -52,9 +52,23 @@ export class UserResolver {
     }
     //
     @Mutation(() => Boolean)
-    async logout(@Ctx() { res }: ResReq) {
-        sendRefreshToken(res, "");
-        return true;
+    @UseMiddleware(isAuth)
+    async logout(@Ctx() { res, payload }: ResReq) {
+        console.log(payload);
+        const user = await UserModel.findOne({ _id: payload?._id });
+        if (!user) {
+            res.status(409).json({ success: false, msg: "Error" });
+            return false;
+        } else {
+            user.tokenVersion = (user.tokenVersion + 1) % 100;
+            try {
+                await user.save();
+            } catch (err) {
+                console.log(err);
+            }
+            sendRefreshToken(res, "");
+            return true;
+        }
     }
     //
     // @Mutation(() => Boolean)

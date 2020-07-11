@@ -13,7 +13,8 @@ import cors from "cors";
 import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
 import { EventResolver } from "./resolver/EventResolver";
-import {MessageResolver} from "./resolver/MessageResolver"
+import { MessageResolver } from "./resolver/MessageResolver";
+import routes from "./routes/index";
 (async () => {
     const app = express();
     connectDatabase();
@@ -33,6 +34,7 @@ import {MessageResolver} from "./resolver/MessageResolver"
     });
 
     apolloServer.applyMiddleware({ app, cors: false });
+    app.use(routes);
     app.listen(4000, () => {
         console.log("express server started on http://localhost:4000/graphql");
     });

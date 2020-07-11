@@ -1,10 +1,17 @@
 import Layout from "../components/Layout";
 import React from "react";
 import Frontpage from "./FrontPage/App";
-const IndexPage = () => (
-    // <Layout title="Frontpage">
-    <Frontpage />
-    // </Layout>
-);
+import { getAccessToken } from "../lib/accessToken";
+import PersonalPage from "./PersonalPage/App";
+
+const IndexPage = () => {
+    return getAccessToken() === "" ? (
+        <Frontpage />
+    ) : (
+        <Layout title="Frontpage">
+            <PersonalPage />
+        </Layout>
+    );
+};
 
 export default IndexPage;

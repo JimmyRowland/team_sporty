@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import MessageBoard from "../../components/post/MessageBoard";
 
 const useStyles = makeStyles({
-
     container: {
         backgroundColor: "#EFEFEF",
         paddingTop: 90,
@@ -58,9 +57,9 @@ const useStyles = makeStyles({
         flexDirection: "column",
         alignItems: "center",
     },
-    eventContainer:{
+    eventContainer: {
         height: "50%",
-        overflowY:"scroll",
+        overflowY: "scroll",
     },
     rosterCard: {
         borderRadius: "15px",
@@ -78,7 +77,6 @@ const useStyles = makeStyles({
         padding: 7,
     },
 });
-
 
 const posts = ["e", "e", "dfg"];
 function TeamPage() {
@@ -98,9 +96,7 @@ function TeamPage() {
         dispatch(postAsync());
     }, []);
 
-
     return (
-
         <div className={classes.container}>
             <div className={classes.leftColumn}>
                 <Card raised={true}>
@@ -113,13 +109,11 @@ function TeamPage() {
                         </div>
                         <Typography variant={"h5"}>UPCOMING...</Typography>
                         <div className={classes.eventContainer}>
-
                             <EventList />
                         </div>
                         <Link href="/teammanage">
                             <Button> Team Management </Button>
                         </Link>
-
                     </div>
                 </Card>
             </div>

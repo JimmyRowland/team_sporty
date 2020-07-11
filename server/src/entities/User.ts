@@ -26,8 +26,8 @@ export class User extends CreationAndModificationDate {
     teamID?: string[];
 
     // @Field(() => Int)
-    // @prop({ default: 0 })
-    // tokenVersion: number;
+    @prop({ default: 0 })
+    tokenVersion: number;
 
     @Field(() => [String])
     @prop({ default: [] })
