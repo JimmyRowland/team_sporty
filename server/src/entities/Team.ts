@@ -1,30 +1,24 @@
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field } from "type-graphql";
 import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
+import { CreationAndModificationDate } from "./CreationAndModificationDate";
+import { Post } from "./Post";
 @ObjectType()
-export class Team {
-    @Field(() => ID)
-    @prop({ required: true })
-    _id: string;
-
-    @Field()
-    @prop({ required: true })
-    creationDate: Date;
-
-    @Field()
-    @prop({ required: true })
-    lastModifyDate: Date;
-
+export class Team extends CreationAndModificationDate {
     @Field()
     @prop({ required: true })
     name: string;
 
-    @Field(() => [User], { nullable: true })
-    @prop({ Ref: "User" })
-    couches?: Ref<User>[];
+    @Field(() => [User])
+    @prop({ Ref: "User", required: true })
+    couches: Ref<User>[];
 
-    @Field(() => [User], { nullable: true })
-    @prop({ Ref: "User" })
-    members?: Ref<User>[];
+    @Field(() => [User])
+    @prop({ Ref: "User", default: [] })
+    members: Ref<User>[];
+
+    @Field(() => [Post])
+    @prop({ Ref: "Post", default: [] })
+    posts: Ref<Post>[];
 }
 export const TeamModel = getModelForClass(Team);

@@ -1,29 +1,29 @@
 import { Resolver, Query, Mutation, Arg, Ctx, ObjectType, Field } from "type-graphql";
-import { Message, MessageModel } from "../entities/Message";
+import { Post, PostModel } from "../entities/Post";
 import { ResReq } from "../interfaces/interfaces";
 
 @ObjectType()
-class MessageResponse {
-    @Field(() => Message)
-    message: Message | null;
+class PostResponse {
+    @Field(() => Post)
+    message: Post | null;
 }
 
 @Resolver()
-export class MessageResolver {
-    @Query(() => [Message])
+export class PostResolver {
+    @Query(() => [Post])
     // @UseMiddleware(isAuth)
     messages() {
-        return MessageModel.find();
+        return PostModel.find();
     }
 
-    @Mutation(() => MessageResponse)
-    async postMessage(
+    @Mutation(() => PostResponse)
+    async newPost(
         @Arg("content") content: string,
         @Arg("user") user: string,
         @Arg("isPined") isPined: boolean,
         @Ctx() { res }: ResReq,
-    ): Promise<MessageResponse> {
-        const message = new MessageModel({
+    ): Promise<PostResponse> {
+        const message = new PostModel({
             creationDate: new Date(),
             content: content,
             user: user,
@@ -39,12 +39,8 @@ export class MessageResolver {
     }
 
     @Mutation(() => Boolean)
-    async updateMessagePin(
-        @Arg("_id") _id: string,
-        @Arg("isPined") isPined: boolean,
-        @Ctx() { res }: ResReq,
-    ): Promise<boolean> {
-        const message = await MessageModel.updateOne({ _id }, { isPined: isPined });
+    async pinPost(@Arg("_id") _id: string, @Arg("isPined") isPined: boolean, @Ctx() { res }: ResReq): Promise<boolean> {
+        const message = await PostModel.updateOne({ _id }, { isPined: isPined });
         if (message === undefined) {
             res.status(503).json({ success: false, message: "Server error" });
         }

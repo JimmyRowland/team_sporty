@@ -1,0 +1,7 @@
+mutation AddEvent($description: String!, $name: String!, $hour: Float!, $startDate: String! ){
+    addEvent(description:$description, name:$name, hour: $hour, startDate: $startDate){
+        event{
+            name
+        }
+    }
+}

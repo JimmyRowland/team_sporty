@@ -6,11 +6,9 @@ export class CreationAndModificationDate {
     @Field(() => ID)
     readonly _id: ObjectId;
 
-    @Field()
     @prop({ default: new Date() })
     creationDate: Date;
 
-    @Field()
     @prop({ default: new Date() })
     lastModifyDate: Date;
 }
