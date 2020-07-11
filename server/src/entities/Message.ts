@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop, getModelForClass,} from "@typegoose/typegoose";
+import { prop, getModelForClass } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb";
 @ObjectType()
 export class Message {
@@ -9,7 +9,7 @@ export class Message {
 
     @Field()
     @prop({ required: false })
-    creationDate: String;
+    creationDate: string;
 
     @Field()
     @prop({ required: false })

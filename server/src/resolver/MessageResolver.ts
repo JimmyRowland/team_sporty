@@ -43,9 +43,9 @@ export class MessageResolver {
         @Arg("_id") _id: string,
         @Arg("isPined") isPined: boolean,
         @Ctx() { res }: ResReq,
-    ): Promise<Boolean> {
+    ): Promise<boolean> {
         const message = await MessageModel.updateOne({ _id }, { isPined: isPined });
-        if(message === undefined){
+        if (message === undefined) {
             res.status(503).json({ success: false, message: "Server error" });
         }
         console.log(message);

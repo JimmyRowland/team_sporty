@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
             // height: "80px",
         },
         rightButtons: {
-            marginLeft: 'auto',
-        }
+            marginLeft: "auto",
+        },
     }),
 );
 const Layout = ({ children, title = "Team Sporty" }: Props) => {
