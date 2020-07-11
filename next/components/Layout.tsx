@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { AppBar, Toolbar, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { getAccessToken, setAccessToken } from "../lib/accessToken";
 import { useLogoutMutation } from "../generated/graphql";
@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
         header: {
             // height: "80px",
         },
+        rightButtons: {
+            marginLeft: 'auto',
+        }
     }),
 );
 const Layout = ({ children, title = "Team Sporty" }: Props) => {
@@ -42,9 +45,6 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                         <Link href="/">
                             <Button>Home</Button>
                         </Link>
-                        <Link href="/profile">
-                            <Button>Profile</Button>
-                        </Link>
                         <Link href="/team">
                             <Button>Team</Button>
                         </Link>
@@ -59,7 +59,8 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                 </AppBar>
             </header>
             {children}
-            <footer className={classes.footer}></footer>
+            {/* <footer className={classes.footer}>
+            </footer> */}
         </div>
     );
 };
