@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { CardHeader } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { addPost } from "./postSlice";
+import { addPost, addpostAsync } from "./postSlice";
 
 const useStyles = makeStyles({
     root: {
@@ -54,7 +54,7 @@ export default function PostCreator() {
 
     const handleSend = (e: any) => {
         e.preventDefault();
-        dispatch(addPost(comment));
+        dispatch(addpostAsync(comment, "User Name"));
         setComment("");
     };
 

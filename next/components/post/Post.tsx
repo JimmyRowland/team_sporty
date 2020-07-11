@@ -15,11 +15,11 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { commentAsync, PostInterface, selectPosts } from "./postSlice";
+import { changePinAsync, commentAsync, PostInterface, selectPosts } from "./postSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { addPin, removePin } from "./pinnedpostSlice";
+import {} from "./postSlice";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -64,7 +64,6 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const posts = useSelector(selectPosts);
     const dispatch = useDispatch();
 
     const handleExpandClick = () => {
@@ -81,12 +80,12 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
 
     const pinPost = () => {
         setAnchorEl(null);
-        dispatch(addPin(post));
+        dispatch(changePinAsync(post.id, true));
     };
 
     const unpinPost = () => {
         setAnchorEl(null);
-        dispatch(removePin(post.id));
+        dispatch(changePinAsync(post.id, false));
     };
 
     const PinMenu = () => {
@@ -135,64 +134,8 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
                     aria-label="show more"
-                >
-                    <ExpandMoreIcon
-                        onClick={() => {
-                            dispatch(commentAsync(index));
-                        }}
-                    />
-                </IconButton>
+                ></IconButton>
             </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                {posts.length > 0
-                    ? posts[index].comments.map((comment: string, key: number) => {
-                          return (
-                              <CardContent key={key}>
-                                  <div className={classes.commentContainer}>
-                                      <div>
-                                          {" "}
-                                          <Avatar aria-label="recipe" className={classes.avatar}>
-                                              {key}
-                                          </Avatar>
-                                      </div>
-                                      <div className={classes.comment}>
-                                          {" "}
-                                          <Typography paragraph>{comment}</Typography>
-                                      </div>
-                                  </div>
-                              </CardContent>
-                          );
-                      })
-                    : null}
-                <CardContent>
-                    <div className={classes.commentContainer}>
-                        <div>
-                            {" "}
-                            <Avatar aria-label="recipe" className={classes.avatar}>
-                                R
-                            </Avatar>
-                        </div>
-                        <div className={classes.comment}>
-                            {" "}
-                            <Typography paragraph>Disqus</Typography>
-                        </div>
-                    </div>
-                </CardContent>
-                <CardContent>
-                    <div className={classes.commentContainer}>
-                        <div>
-                            {" "}
-                            <Avatar aria-label="recipe" className={classes.avatar}>
-                                R
-                            </Avatar>
-                        </div>
-                        <div className={classes.comment}>
-                            {" "}
-                            <Typography paragraph>Disqus</Typography>
-                        </div>
-                    </div>
-                </CardContent>
-            </Collapse>
         </Card>
     );
 }

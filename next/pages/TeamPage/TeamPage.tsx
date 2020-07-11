@@ -6,9 +6,9 @@ import Post from "../../components/post/Post";
 import { selectPosts, postAsync, PostInterface } from "../../components/post/postSlice";
 import { useSelector, useDispatch } from "react-redux";
 import PostCreator from "../../components/post/PostCreator";
-import { selectPinnedPosts } from "../../components/post/pinnedpostSlice";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
+import MessageBoard from "../../components/post/MessageBoard";
 
 const useStyles = makeStyles({
 
@@ -91,13 +91,14 @@ function TeamPage() {
     //   const event: EventListItemType = { date: date, title: title, body: detail };
     //   events.push(event);
     // }
-    const posts1 = useSelector(selectPosts);
-    const pinnedpost = useSelector(selectPinnedPosts);
     const dispatch = useDispatch();
+
     useEffect(() => {
         console.log("load posts");
         dispatch(postAsync());
     }, []);
+
+
     return (
 
         <div className={classes.container}>
@@ -121,13 +122,7 @@ function TeamPage() {
             </div>
             <div className={classes.rightColumn}>
                 <div className={classes.columnItem}>
-                    {pinnedpost.map((post: PostInterface, index: number) => {
-                        return (
-                            <div key={index} className={classes.columnItem}>
-                                <Post index={index} post={post} />
-                            </div>
-                        );
-                    })}
+                    <MessageBoard pinned={true} />
                 </div>
                 <div className={classes.columnItem}>
                     <PostCreator />
@@ -150,13 +145,7 @@ function TeamPage() {
                         </div>
                     </Card>
                 </div>
-                {posts1.map((post: PostInterface, index: number) => {
-                    return (
-                        <div key={index} className={classes.columnItem}>
-                            <Post index={index} post={post} />
-                        </div>
-                    );
-                })}
+                <MessageBoard pinned={false} />
             </div>
         </div>
     );
