@@ -18,13 +18,17 @@ const useStyles = makeStyles({
 
     },
     teamContainer:{
+        marginTop:"5%",
         width:"100%",
-        height:"500px",
+        height:"600px",
         overflowY:"scroll",
     },
     teamtabContainer:{
         margin:"2em",
-    }
+    },
+    createteamContainer:{
+        marginTop:"5%",
+    },
 })
 
 function TeamSearchPage(){
@@ -57,7 +61,7 @@ function TeamSearchPage(){
                     <ClubDisplayTab />
                 </div>
             </div>
-            <div>
+            <div className={classes.createteamContainer}>
                 <CreateTeamModal />
             </div>
         </div>

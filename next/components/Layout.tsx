@@ -46,9 +46,7 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                 </AppBar>
             </header>
             {children}
-            <footer>
-                <hr />
-                <span>I&apos;m here to stay (Footer)</span>
+            <footer className={classes.footer}>
             </footer>
         </div>
     );

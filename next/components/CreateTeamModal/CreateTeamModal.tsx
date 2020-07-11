@@ -6,6 +6,7 @@ import { IconButton } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +16,6 @@ const useStyles = makeStyles((theme: Theme) =>
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 700,
-            height: 400,
             backgroundColor: theme.palette.background.paper,
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 200,
             height: 30,
         },
+        buttoncontainer:{
+            marginBottom:"5px",
+        }
     }),
 );
 
@@ -97,6 +100,7 @@ export default function CreateTeamModal() {
                     <CloseIcon />
                 </IconButton>
             </div>
+            <Typography variant={"h6"}> Create Team </Typography>
             <div className={classes.allcontainer}>
             <div className={classes.container}>
                 <input
@@ -126,6 +130,7 @@ export default function CreateTeamModal() {
                 />
             </div>
             </div>
+            <div className={classes.buttoncontainer}>
             <Button
                 variant="contained"
                 color="primary"
@@ -135,6 +140,7 @@ export default function CreateTeamModal() {
             >
                 Create New Team
             </Button>
+             </div>
         </div>
     );
 
