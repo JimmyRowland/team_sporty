@@ -59,6 +59,7 @@ export function createRefreshToken(user: User): string {
     const payload = {
         _id: _id,
         iat: Date.now(),
+        tokenVersion: user.tokenVersion,
     };
 
     const signedToken = sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: "RS256" });
@@ -75,7 +76,7 @@ export function sendRefreshToken(res: Response, token: string): void {
 }
 
 export const createAccessToken = (user: User) => {
-    return sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
+    return sign({ _id: user._id, tokenVersion: user.tokenVersion }, process.env.ACCESS_TOKEN_SECRET!, {
         expiresIn: "15m",
     });
 };

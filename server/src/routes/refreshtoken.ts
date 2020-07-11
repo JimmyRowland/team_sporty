@@ -33,11 +33,11 @@ const PUB_KEY = readFileSync(pathToPubKey, "utf8");
         if (!user) {
             return res.status(401).json({ success: false, msg: "Invalid User", accessToken: "" });
         }
-
-        // if (user.tokenVersion !== payload.tokenVersion) {
-        //     return res.send({ ok: false, accessToken: "" });
-        // }
-
+        // TODO Stretch only revoke one refresh token
+        if (user.tokenVersion !== payload.tokenVersion) {
+            return res.send({ success: false, accessToken: "" });
+        }
+        // console.log("refresh");
         sendRefreshToken(res, createRefreshToken(user));
 
         return res.send({ ok: true, accessToken: createAccessToken(user) });

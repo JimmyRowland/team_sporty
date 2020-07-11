@@ -54,7 +54,7 @@ export class UserResolver {
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async logout(@Ctx() { res, payload }: ResReq) {
-        console.log(payload);
+        // console.log(payload);
         const user = await UserModel.findOne({ _id: payload?._id });
         if (!user) {
             res.status(409).json({ success: false, msg: "Error" });
