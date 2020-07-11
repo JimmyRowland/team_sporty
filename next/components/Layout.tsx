@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { AppBar, Toolbar, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 type Props = {
@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme: Theme) =>
         header: {
             // height: "80px",
         },
+        rightButtons: {
+            marginLeft: 'auto',
+        }
     }),
 );
 const Layout = ({ children, title = "Team Sporty" }: Props) => {
@@ -27,9 +30,6 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
             <header className={classes.header}>
                 <AppBar>
                     <Toolbar>
-                        <Link href="/">
-                            <Button>Home</Button>
-                        </Link>
                         <Link href="/profile">
                             <Button>Profile</Button>
                         </Link>
@@ -42,12 +42,15 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                         <Link href="/teamsearch">
                             <Button>search</Button>
                         </Link>
+                        <Link href="/">
+                            <Button className={classes.rightButtons}>LOGOUT</Button>
+                        </Link>
                     </Toolbar>
                 </AppBar>
             </header>
             {children}
-            <footer className={classes.footer}>
-            </footer>
+            {/* <footer className={classes.footer}>
+            </footer> */}
         </div>
     );
 };
