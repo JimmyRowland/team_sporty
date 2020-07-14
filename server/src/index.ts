@@ -12,9 +12,12 @@ import cors from "cors";
 // import { createAccessToken, createRefreshToken } from "./auth";
 import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
-import { EventResolver } from "./resolver/EventResolver";
-import { PostResolver } from "./resolver/PostResolver";
+// import { EventResolver } from "./resolver/EventResolver";
+// import { PostResolver } from "./resolver/PostResolver";
 import routes from "./routes/index";
+import { TeamResolver } from "./resolver/TeamResolver";
+import { TypegooseMiddleware } from "./middleware/typegooseMiddleware";
+import { PostResolver } from "./resolver/PostResolver";
 (async () => {
     const app = express();
     connectDatabase();
@@ -28,7 +31,8 @@ import routes from "./routes/index";
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, EventResolver, PostResolver],
+            resolvers: [UserResolver, TeamResolver, PostResolver],
+            globalMiddlewares: [TypegooseMiddleware],
         }),
         context: ({ req, res }) => ({ req, res }),
     });

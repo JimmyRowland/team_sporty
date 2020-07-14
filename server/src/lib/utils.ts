@@ -77,6 +77,7 @@ export function sendRefreshToken(res: Response, token: string): void {
 
 export const createAccessToken = (user: User) => {
     return sign({ _id: user._id, tokenVersion: user.tokenVersion }, process.env.ACCESS_TOKEN_SECRET!, {
-        expiresIn: "15m",
+        // TODO fix expiredInt
+        expiresIn: "15d",
     });
 };

@@ -1,32 +1,14 @@
-import { ObjectType, Field, ID } from "type-graphql";
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
-import { ObjectId } from "mongodb";
+import { ObjectType, Field } from "type-graphql";
+import { prop, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
+import { CreationAndModificationDate } from "./CreationAndModificationDate";
 @ObjectType()
-export class Comment {
-    @Field(() => ID)
-    // @prop({ required: true, unique: true })
-    readonly _id: ObjectId;
-
+export class Comment extends CreationAndModificationDate {
     @Field()
     @prop({ required: true })
-    creationDate: Date;
+    content: string;
 
-    @Field()
-    @prop({ required: true })
-    lastModifyDate: Date;
-
-    @Field()
-    @prop({ required: true })
-    text: string;
-
-    @Field(() => User, { nullable: true })
-    @prop({ Ref: "User" })
-    couches?: Ref<User>;
-
-    @Field(() => [String])
-    @prop({ default: [] })
-    ip: string[];
+    @Field(() => User)
+    @prop({ Ref: User, required: true })
+    user: Ref<User>;
 }
-
-export const CommentModel = getModelForClass(Event);

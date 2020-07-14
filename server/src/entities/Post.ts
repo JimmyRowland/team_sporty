@@ -1,19 +1,38 @@
-import { ObjectType, Field } from "type-graphql";
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { ObjectType, Field, Root, Int } from "type-graphql";
+import { prop, Ref } from "@typegoose/typegoose";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
+import { User } from "./User";
+import { Comment } from "./Comment";
+import { LikesMapModel } from "./LikesMap";
 @ObjectType()
 export class Post extends CreationAndModificationDate {
     @Field()
     @prop({ required: false })
     content: string;
 
-    @Field()
-    @prop({ required: false })
-    user: string;
+    @Field(() => User)
+    @prop({ Ref: User, required: true })
+    user: Ref<User>;
 
     @Field(() => Boolean)
     @prop({ default: false })
     isPined: boolean;
-}
 
-export const PostModel = getModelForClass(Post);
+    @Field(() => [Comment])
+    @prop({ items: Comment, default: [] })
+    comments: Comment[];
+
+    @Field(() => Boolean)
+    @prop({ default: false })
+    isPrivate: boolean;
+
+    @Field(() => [String])
+    @prop({ default: [] })
+    imgUrls: string[];
+
+    @Field(() => Int, { complexity: 4 })
+    async numberOfLikes(@Root() post: Post): Promise<number> {
+        const pairs = await LikesMapModel.find({ "_id.post": post._id });
+        return pairs.length;
+    }
+}
