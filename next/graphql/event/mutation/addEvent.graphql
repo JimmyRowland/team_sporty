@@ -1,4 +1,4 @@
-mutation AddEvent($description: String!, $name: String!, $startDate: String!, $endDate: String!,
+mutation AddEvent($description: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!,
     $isPrivate: Boolean!, $eventType:String!, $teamID: String! ){
     addEvent(description:$description, name:$name, startDate: $startDate,
         endDate: $endDate, isPrivate: false, eventType: $eventType, teamID:$teamID)

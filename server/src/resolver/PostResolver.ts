@@ -7,10 +7,10 @@ import { Post } from "../entities/Post";
 import { ObjectID } from "mongodb";
 import { isMember } from "../middleware/isMember";
 import { LikesMapModel } from "../entities/LikesMap";
+import { isCoachPayload } from "../middleware/isCoachPayload";
 
 @Resolver()
 export class PostResolver {
-    // TODO isAuthor helper
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
     async pinPost(
@@ -104,14 +104,18 @@ export class PostResolver {
     }
 
     @Mutation(() => Boolean)
-    @UseMiddleware(isAuth, isMember)
+    @UseMiddleware(isAuth, isCoachPayload)
     async deletePost(@Arg("teamID") teamID: string, @Arg("postID") postID: string, @Ctx() { payload }: ResReq) {
         try {
-            await TeamModel.findByIdAndUpdate(
-                teamID,
-                { $pull: { "posts._id": postID } },
-                { arrayFilters: [{ "element._id": postID }] },
-            );
+            let deleted;
+            if (payload && payload._id && payload.isCoach) {
+                deleted = await TeamModel.findByIdAndUpdate(teamID, { $pull: { "posts._id": new ObjectID(postID) } });
+            } else {
+                deleted = await TeamModel.findByIdAndUpdate(teamID, {
+                    $pull: { posts: { _id: new ObjectID(postID), user: new ObjectID(payload._id) } },
+                });
+            }
+            if (!deleted) return false;
         } catch (e) {
             console.log(e);
             return false;

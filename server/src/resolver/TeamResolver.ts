@@ -7,13 +7,14 @@ import { hasTeam } from "../middleware/hasTeam";
 import { TeamCoachMapModel } from "../entities/TeamCoachMap";
 import { ObjectID } from "mongodb";
 import { hasUser } from "../middleware/hasUser";
-import { TeamMemberMapModel } from "../entities/TeamMemberMap";
+import { TeamMemberMap, TeamMemberMapModel } from "../entities/TeamMemberMap";
 import { User, UserModel } from "../entities/User";
 import { Post } from "../entities/Post";
 import { isMember } from "../middleware/isMember";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 import { EventTypeEnum, SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
+import { TeamUserResponse } from "../interfaces/responseType";
 
 @Resolver((of) => Team)
 export class TeamResolver {
@@ -74,11 +75,11 @@ export class TeamResolver {
     @UseMiddleware(isAuth, hasUser, hasTeam, isCoach)
     async addMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
         try {
+            const input = new TeamUserResponse();
+            input.team = teamID;
+            input.user = userID;
             const teamMemberPair = new TeamMemberMapModel({
-                _id: {
-                    team: teamID,
-                    user: userID,
-                },
+                _id: input,
             });
             await teamMemberPair.save();
         } catch (err) {
@@ -166,7 +167,7 @@ export class TeamResolver {
     @UseMiddleware(getIDfromToken)
     async posts(@Root() team: Team, @Ctx() { payload }: ResReq): Promise<Post[]> {
         let isAMember = false;
-        if (payload._id) {
+        if (payload && payload._id) {
             isAMember = await TeamResolver.isMember(team._id.toHexString(), payload._id);
         }
         const result = team.posts.filter((post) => {

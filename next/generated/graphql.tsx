@@ -14,24 +14,29 @@ export type Scalars = {
     DateTime: any;
 };
 
-export type AddEventResponse = {
-    __typename?: "AddEventResponse";
-    event: Event;
+export type Comment = {
+    __typename?: "Comment";
+    _id: Scalars["ID"];
+    content: Scalars["String"];
+    user: User;
 };
 
 export type Event = {
     __typename?: "Event";
     _id: Scalars["ID"];
-    creationDate: Scalars["DateTime"];
-    lastModifyDate: Scalars["DateTime"];
     startDate: Scalars["DateTime"];
-    hour?: Maybe<Scalars["Int"]>;
+    endDate?: Maybe<Scalars["DateTime"]>;
     description: Scalars["String"];
     name: Scalars["String"];
-    going?: Maybe<User>;
-    notgoing?: Maybe<User>;
-    pending?: Maybe<User>;
+    eventType: EventTypeEnum;
+    isPrivate: Scalars["Boolean"];
 };
+
+/** Type of event */
+export enum EventTypeEnum {
+    Match = "match",
+    Training = "training",
+}
 
 export type LoginResponse = {
     __typename?: "LoginResponse";
@@ -39,28 +44,30 @@ export type LoginResponse = {
     user: User;
 };
 
-export type Message = {
-    __typename?: "Message";
-    _id: Scalars["ID"];
-    creationDate: Scalars["String"];
-    content: Scalars["String"];
-    user: Scalars["String"];
-    isPined: Scalars["Boolean"];
-};
-
-export type MessageResponse = {
-    __typename?: "MessageResponse";
-    message: Message;
-};
-
 export type Mutation = {
     __typename?: "Mutation";
     logout: Scalars["Boolean"];
+    revokeRefreshTokensForUser: Scalars["Boolean"];
     login: LoginResponse;
     register: Scalars["Boolean"];
-    addEvent: AddEventResponse;
-    postMessage: MessageResponse;
-    updateMessagePin: Scalars["Boolean"];
+    updateTeam: Scalars["Boolean"];
+    addMember: Scalars["Boolean"];
+    removeMember: Scalars["Boolean"];
+    removeCoach: Scalars["Boolean"];
+    addCoach: Scalars["Boolean"];
+    newTeam: Scalars["Boolean"];
+    pinPost: Scalars["Boolean"];
+    setPostPrivate: Scalars["Boolean"];
+    likePost: Scalars["Boolean"];
+    addPost: Scalars["Boolean"];
+    deletePost: Scalars["Boolean"];
+    editPost: Scalars["Boolean"];
+    addEvent: Scalars["Boolean"];
+    editEvent: Scalars["Boolean"];
+};
+
+export type MutationRevokeRefreshTokensForUserArgs = {
+    _id: Scalars["Int"];
 };
 
 export type MutationLoginArgs = {
@@ -69,65 +76,176 @@ export type MutationLoginArgs = {
 };
 
 export type MutationRegisterArgs = {
-    password: Scalars["String"];
+    input: RegisterInput;
+};
+
+export type MutationUpdateTeamArgs = {
     name: Scalars["String"];
-    email: Scalars["String"];
+    sport: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationAddMemberArgs = {
+    teamID: Scalars["String"];
+    userID: Scalars["String"];
+};
+
+export type MutationRemoveMemberArgs = {
+    teamID: Scalars["String"];
+    userID: Scalars["String"];
+};
+
+export type MutationRemoveCoachArgs = {
+    teamID: Scalars["String"];
+    userID: Scalars["String"];
+};
+
+export type MutationAddCoachArgs = {
+    teamID: Scalars["String"];
+    userID: Scalars["String"];
+};
+
+export type MutationNewTeamArgs = {
+    name: Scalars["String"];
+};
+
+export type MutationPinPostArgs = {
+    isPined: Scalars["Boolean"];
+    postID: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationSetPostPrivateArgs = {
+    isPrivate: Scalars["Boolean"];
+    postID: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationLikePostArgs = {
+    postID: Scalars["String"];
+};
+
+export type MutationAddPostArgs = {
+    imgUrls?: Maybe<Array<Scalars["String"]>>;
+    isPrivate?: Maybe<Scalars["Boolean"]>;
+    content: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationDeletePostArgs = {
+    postID: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationEditPostArgs = {
+    content: Scalars["String"];
+    postID: Scalars["String"];
+    teamID: Scalars["String"];
 };
 
 export type MutationAddEventArgs = {
-    description: Scalars["String"];
+    endDate: Scalars["DateTime"];
+    isPrivate: Scalars["Boolean"];
+    startDate: Scalars["DateTime"];
+    eventType: Scalars["String"];
     name: Scalars["String"];
-    hour: Scalars["Float"];
-    startDate: Scalars["String"];
+    description: Scalars["String"];
+    teamID: Scalars["String"];
 };
 
-export type MutationPostMessageArgs = {
-    isPined: Scalars["Boolean"];
-    user: Scalars["String"];
+export type MutationEditEventArgs = {
+    endDate?: Maybe<Scalars["DateTime"]>;
+    isPrivate: Scalars["Boolean"];
+    startDate: Scalars["DateTime"];
+    eventType: Scalars["String"];
+    name: Scalars["String"];
+    description: Scalars["String"];
+    teamID: Scalars["String"];
+    eventID: Scalars["String"];
+};
+
+export type Post = {
+    __typename?: "Post";
+    _id: Scalars["ID"];
     content: Scalars["String"];
-};
-
-export type MutationUpdateMessagePinArgs = {
+    user: User;
     isPined: Scalars["Boolean"];
-    _id: Scalars["String"];
+    comments: Array<Comment>;
+    isPrivate: Scalars["Boolean"];
+    imgUrls: Array<Scalars["String"]>;
+    numberOfLikes: Scalars["Int"];
 };
 
 export type Query = {
     __typename?: "Query";
     users: Array<User>;
     me?: Maybe<User>;
-    events: Array<Event>;
-    messages: Array<Message>;
+    getTeams: Array<Team>;
+    getMembers: Array<User>;
+    getCoaches: Array<User>;
+    getTeam: Team;
+};
+
+export type QueryGetMembersArgs = {
+    teamID: Scalars["String"];
+};
+
+export type QueryGetCoachesArgs = {
+    teamID: Scalars["String"];
+};
+
+export type QueryGetTeamArgs = {
+    teamID: Scalars["String"];
+};
+
+export type RegisterInput = {
+    email: Scalars["String"];
+    password: Scalars["String"];
+    name: Scalars["String"];
+};
+
+/** Types of sports */
+export enum Sport {
+    Football = "football",
+    Cricket = "cricket",
+    Basketball = "basketball",
+    Unspecified = "unspecified",
+}
+
+export type Team = {
+    __typename?: "Team";
+    _id: Scalars["ID"];
+    name: Scalars["String"];
+    posts?: Maybe<Array<Post>>;
+    events?: Maybe<Array<Event>>;
+    sport: Sport;
+    imgUrl?: Maybe<Scalars["String"]>;
 };
 
 export type User = {
     __typename?: "User";
     _id: Scalars["ID"];
-    creationDate: Scalars["DateTime"];
-    lastModifyDate: Scalars["DateTime"];
     lastLoginDate: Scalars["DateTime"];
     name: Scalars["String"];
     email: Scalars["String"];
     teamID: Array<Scalars["String"]>;
+    tokenVersion: Scalars["Int"];
     ip: Array<Scalars["String"]>;
+    bannerUrls: Scalars["String"];
+    avatarUrl: Scalars["String"];
 };
 
 export type AddEventMutationVariables = Exact<{
     description: Scalars["String"];
     name: Scalars["String"];
-    hour: Scalars["Float"];
-    startDate: Scalars["String"];
+    startDate: Scalars["DateTime"];
+    endDate: Scalars["DateTime"];
+    isPrivate: Scalars["Boolean"];
+    eventType: Scalars["String"];
+    teamID: Scalars["String"];
 }>;
 
-export type AddEventMutation = { __typename?: "Mutation" } & {
-    addEvent: { __typename?: "AddEventResponse" } & { event: { __typename?: "Event" } & Pick<Event, "name"> };
-};
-
-export type EventsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type EventsQuery = { __typename?: "Query" } & {
-    events: Array<{ __typename?: "Event" } & Pick<Event, "_id" | "name" | "description" | "startDate" | "hour">>;
-};
+export type AddEventMutation = { __typename?: "Mutation" } & Pick<Mutation, "addEvent">;
 
 export type LoginMutationVariables = Exact<{
     email: Scalars["String"];
@@ -159,12 +277,24 @@ export type MeQuery = { __typename?: "Query" } & {
 };
 
 export const AddEventDocument = gql`
-    mutation AddEvent($description: String!, $name: String!, $hour: Float!, $startDate: String!) {
-        addEvent(description: $description, name: $name, hour: $hour, startDate: $startDate) {
-            event {
-                name
-            }
-        }
+    mutation AddEvent(
+        $description: String!
+        $name: String!
+        $startDate: DateTime!
+        $endDate: DateTime!
+        $isPrivate: Boolean!
+        $eventType: String!
+        $teamID: String!
+    ) {
+        addEvent(
+            description: $description
+            name: $name
+            startDate: $startDate
+            endDate: $endDate
+            isPrivate: false
+            eventType: $eventType
+            teamID: $teamID
+        )
     }
 `;
 export type AddEventMutationFn = ApolloReactCommon.MutationFunction<AddEventMutation, AddEventMutationVariables>;
@@ -184,8 +314,11 @@ export type AddEventMutationFn = ApolloReactCommon.MutationFunction<AddEventMuta
  *   variables: {
  *      description: // value for 'description'
  *      name: // value for 'name'
- *      hour: // value for 'hour'
  *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      isPrivate: // value for 'isPrivate'
+ *      eventType: // value for 'eventType'
+ *      teamID: // value for 'teamID'
  *   },
  * });
  */
@@ -200,44 +333,6 @@ export type AddEventMutationOptions = ApolloReactCommon.BaseMutationOptions<
     AddEventMutation,
     AddEventMutationVariables
 >;
-export const EventsDocument = gql`
-    query Events {
-        events {
-            _id
-            name
-            description
-            startDate
-            hour
-        }
-    }
-`;
-
-/**
- * __useEventsQuery__
- *
- * To run a query within a React component, call `useEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEventsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useEventsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EventsQuery, EventsQueryVariables>) {
-    return ApolloReactHooks.useQuery<EventsQuery, EventsQueryVariables>(EventsDocument, baseOptions);
-}
-export function useEventsLazyQuery(
-    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EventsQuery, EventsQueryVariables>,
-) {
-    return ApolloReactHooks.useLazyQuery<EventsQuery, EventsQueryVariables>(EventsDocument, baseOptions);
-}
-export type EventsQueryHookResult = ReturnType<typeof useEventsQuery>;
-export type EventsLazyQueryHookResult = ReturnType<typeof useEventsLazyQuery>;
-export type EventsQueryResult = ApolloReactCommon.QueryResult<EventsQuery, EventsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
@@ -311,7 +406,7 @@ export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutati
 export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!, $name: String!) {
-        register(email: $email, password: $password, name: $name)
+        register(input: { email: $email, password: $password, name: $name })
     }
 `;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;

@@ -1,16 +1,32 @@
 // import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
-import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
+import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int, InputType } from "type-graphql";
 import { validPassword, createRefreshToken, sendRefreshToken, genPassword, createAccessToken } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { verify } from "jsonwebtoken";
+import { IsEmail, MaxLength, MinLength } from "class-validator";
 @ObjectType()
 class LoginResponse {
     @Field()
     accessToken: string;
     @Field(() => User)
     user: User | null;
+}
+// TODO hide users query
+@InputType()
+class RegisterInput {
+    @Field()
+    @IsEmail()
+    email: string;
+
+    @Field()
+    @MinLength(20)
+    password: string;
+
+    @Field()
+    @MaxLength(50)
+    name: string;
 }
 
 @Resolver()
@@ -101,12 +117,7 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async register(
-        @Arg("email") email: string,
-        @Arg("name") name: string,
-        @Arg("password") password: string,
-        @Ctx() { res }: ResReq,
-    ) {
+    async register(@Arg("input") { email, name, password }: RegisterInput, @Ctx() { res }: ResReq) {
         const user = await UserModel.findOne({ email });
         if (user) {
             return false;

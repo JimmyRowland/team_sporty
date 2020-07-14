@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from "type-graphql";
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
+import { prop, getModelForClass } from "@typegoose/typegoose";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
 import { defaultAvatarUrl, defaultBannerUrl } from "../interfaces/const";
 @ObjectType()

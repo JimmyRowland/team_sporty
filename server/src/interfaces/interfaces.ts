@@ -5,7 +5,7 @@ import { User } from "../entities/User";
 export interface ResReq {
     req: Request;
     res: Response;
-    payload: { _id?: string; team?: Team; member?: User; coach?: User };
+    payload: { _id?: string; team?: Team; member?: User; coach?: User; isCoach?: boolean };
 }
 
 export interface salthash {

@@ -5,7 +5,7 @@ import { teamUserIdObject } from "../interfaces/interfaces";
 @ObjectType()
 export class TeamMemberMap {
     @Field(() => TeamUserResponse)
-    @prop({ items: TeamUserResponse, required: true })
+    @prop({ required: true })
     _id: teamUserIdObject;
 
     @prop({ default: new Date() })
