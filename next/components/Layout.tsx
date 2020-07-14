@@ -48,13 +48,13 @@ const Layout = ({ children, title = "Team Sporty" }: Props) => {
                         <Link href="/team">
                             <Button>Team</Button>
                         </Link>
-                        <Link href="/event">
+                        <Link href="/calendar">
                             <Button>Calendar</Button>
                         </Link>
                         <Link href="/teamsearch">
                             <Button>search</Button>
                         </Link>
-                        {!!accessToken ? <Button onClick={handleLogout}>Logout</Button> : null}
+                        {!!accessToken ? <Button className={classes.rightButtons} onClick={handleLogout}>Logout</Button> : null}
                     </Toolbar>
                 </AppBar>
             </header>

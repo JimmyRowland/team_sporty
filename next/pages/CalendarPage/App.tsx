@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarList from "../../components/calendar/CalendarList";
-import CalendarList2 from "../../components/calendar/CalendarList2";
 import TeamDropDown from "../../components/teamDropDown/TeamDropDown";
 import Typography from "@material-ui/core/Typography";
 
@@ -30,9 +29,9 @@ const events = [
         name: "Away @ Surrey",
         date: "Sun, 31 Dec 1899 00:00:00 GMT",
         address: "123 ubc ave",
-        going: 15,
-        notGoing: 2,
-        notResponded: 3,
+        going: [1,2,3,4,5,6,7,8,15,16,17],
+        notGoing: [9,10,11],
+        notResponded: [12,13,14],
     },
     {
         id: 2,
@@ -40,9 +39,9 @@ const events = [
         name: "Home @ North Van",
         date: "Sun, 31 Dec 2012 00:00:00 GMT",
         address: "123 thunderbird ave",
-        going: 15,
-        notGoing: 2,
-        notResponded: 3,
+        going: [1,2,3,4,5,6,7],
+        notGoing: [9,10,11,8],
+        notResponded: [12,13,14,15,16,17,18,19,20,21,22],
     },
     {
         id: 3,
@@ -50,9 +49,9 @@ const events = [
         name: "Training",
         date: "Sun, 31 Dec 1899 00:00:00 GMT",
         address: "456 ubc ave",
-        going: 15,
-        notGoing: 2,
-        notResponded: 3,
+        going: [1,2,3,4,5,6,7,8],
+        notGoing: [9,10,11],
+        notResponded: [12,13,14],
     },
     {
         id: 4,
@@ -60,9 +59,9 @@ const events = [
         name: "Home @ Burnaby",
         date: "Sun, 31 Dec 1899 00:00:00 GMT",
         address: "123 ubc ave",
-        going: 15,
-        notGoing: 2,
-        notResponded: 3,
+        going: [1,2,3,4,5,6,7,8],
+        notGoing: [9,10,11],
+        notResponded: [12,13,14],
     },
     {
         id: 5,
@@ -70,9 +69,9 @@ const events = [
         name: "Year end party",
         date: "Sun, 31 Dec 1899 00:00:00 GMT",
         address: "123 ubc ave",
-        going: 15,
-        notGoing: 2,
-        notResponded: 3,
+        going: [1,2,3,4,5,6,7,8],
+        notGoing: [9,10,11],
+        notResponded: [12,13,14],
     },
 ];
 
@@ -87,14 +86,13 @@ function CalendarPage() {
                 <div className={classes.columnContainer}>
                     <h2>Richmond FC</h2>
                 </div>
-                <div className={classes.columnContainer}>
-                    <Typography align="right">
+                <div className={classes.columnContainer} align="right">
                         <TeamDropDown />
-                    </Typography>
+
                 </div>
             </div>
             <div className={classes.container}>
-                <CalendarList2 eventList={events} />
+                <CalendarList eventList={events} />
             </div>
         </div>
     );

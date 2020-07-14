@@ -1,27 +1,37 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles, withStyles, createMuiTheme } from "@material-ui/core/styles";
+import { green, red, grey } from "@material-ui/core/colors";
+//import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+//import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+//import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import AvailabilityButton from "./AvailabilityButton";
+import Radio, { RadioProps } from "@material-ui/core/Radio";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: "100%",
+            border: "1px solid rgba(0, 0, 0, .125)",
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: "33.33%",
+            flexBasis: "50.00%",
             flexShrink: 0,
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "60.00%",
+            flexBasis: "50.00%",
             flexShrink: 0,
         },
         tertiaryHeading: {
@@ -30,24 +40,77 @@ const useStyles = makeStyles((theme: Theme) =>
             flexBasis: "27%",
             flexShrink: 0,
         },
-        palette: {
-            primary: {
-                light: "#757ce8",
-                main: "#3f50b5",
-                dark: "#002884",
-                contrastText: "#fff",
-            },
-            secondary: {
-                light: "#ff7961",
-                main: "#f44336",
-                dark: "#ba000d",
-                contrastText: "#000",
-            },
+        spacing: {
+            fontSize: theme.typography.pxToRem(15),
+            color: theme.palette.text.secondary,
+            flexBasis: "3%",
+            flexShrink: 0,
+        },
+        greenIcon: {
+            color: "green",
+        },
+        redIcon: {
+            color: "red",
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
         },
     }),
 );
 
-function CalendarItem(props: {
+//ExpansionPanels
+const ExpansionPanelSummary = withStyles({
+    root: {
+        backgroundColor: "rgba(0,0,0,.03)",
+        borderBottom: "1px solid rgba(0,0,0,.125)",
+        marginBottom: -1,
+        minHeight: 56,
+        "&$expanded": {
+            minHeight: 56,
+        },
+    },
+    content: {
+        "&$expanded": {
+            margin: "12px 0",
+        },
+    },
+    expanded: {},
+})((props) => <MuiExpansionPanelSummary {...props} />);
+
+//Radio Options
+const GreenRadio = withStyles({
+    root: {
+        color: green[400],
+        "&$checked": {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props: RadioProps) => <Radio color="default" {...props} />);
+const RedRadio = withStyles({
+    root: {
+        color: red[400],
+        "&$checked": {
+            color: red[600],
+        },
+    },
+    checked: {},
+})((props: RadioProps) => <Radio color="default" {...props} />);
+const GreyRadio = withStyles({
+    root: {
+        color: grey[400],
+        "&$checked": {
+            color: grey[600],
+        },
+    },
+    checked: {},
+})((props: RadioProps) => <Radio color="default" {...props} />);
+
+
+
+export default function CalendarItem(props: {
+    key: React.ReactNode;
     name: React.ReactNode;
     type: React.ReactNode;
     date: React.ReactNode;
@@ -57,68 +120,119 @@ function CalendarItem(props: {
     notResponded: React.ReactNode;
 }) {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState<string | false>(false);
-
-    const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-        setExpanded(isExpanded ? panel : false);
+    //Radio
+    const [selectedValue, setSelectedValue] = React.useState("c");
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedValue(event.target.value);
+    };
+    //Select
+    const [availability, setAvailability] = React.useState("");
+    const handleChangeAvailability = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setAvailability(event.target.value as string);
     };
 
-    const numberGoing = [];
-    const numberNotGoing = [];
-    const numberNotResponded = [];
 
     return (
-        <div>
-            <ExpansionPanel expanded={expanded === "panel1"} onChange={handleChange("panel1")}>
+        <div className={classes.root}>
+            <ExpansionPanel>
                 <ExpansionPanelSummary
-                    // expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
+                    //expandIcon={<ExpandMoreIcon />}
+                    aria-label="Expand"
+                    aria-controls="additional-actions1-content"
                 >
-                    <Typography className={classes.heading} align="left">
+                    <div className={classes.heading} align="left">
                         <h3>{props.name}</h3>
                         <p>{props.date}</p>
                         <p>{props.address}</p>
-                    </Typography>
-                    <Typography className={classes.secondaryHeading} align="right">
-                        <AvailabilityButton />
-                    </Typography>
+                    </div>
+                    <div className={classes.secondaryHeading} align="right">
+                        <FormControl variant="filled" className={classes.formControl} align="left">
+                            <InputLabel>Availability</InputLabel>
+                            <Select
+                                value={availability}
+                                onChange={handleChangeAvailability}
+                                label="Availability"
+                                defaultValue="notResponded"
+                                onClick={(event) => event.stopPropagation()}
+                                onFocus={(event) => event.stopPropagation()}
+                            >
+                                <MenuItem value="going">Going</MenuItem>
+                                <MenuItem value="notGoing">Not Going</MenuItem>
+                                {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
+                            </Select>
+                        </FormControl>
+
+                    </div>
+                    {/* <div className={classes.secondaryHeading} align="right">
+                            Going
+                            <GreenRadio
+                                checked={selectedValue === "a"}
+                                onChange={handleChange}
+                                value="a"
+                                name="radio-button-demo"
+                                inputProps={{ "aria-label": "A" }}
+                                onClick={(event) => event.stopPropagation()}
+                                onFocus={(event) => event.stopPropagation()}
+                            /><br></br>
+                            Not going
+                            <RedRadio
+                                checked={selectedValue === "b"}
+                                onChange={handleChange}
+                                value="b"
+                                name="radio-button-demo"
+                                inputProps={{ "aria-label": "B" }}
+                                onClick={(event) => event.stopPropagation()}
+                                onFocus={(event) => event.stopPropagation()}
+                            /><br></br>
+                            Not Responded
+                            <GreyRadio
+                                checked={selectedValue === "c"}
+                                onChange={handleChange}
+                                value="c"
+                                name="radio-button-demo"
+                                inputProps={{ "aria-label": "C" }}
+                                onClick={(event) => event.stopPropagation()}
+                                onFocus={(event) => event.stopPropagation()}
+                            />
+                    </div> */}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Going: {props.going}</p>
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                        <AccountCircleIcon color="primary" />
-                    </Typography>
-                    <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Not Going: {props.notGoing}</p>
-                        <AccountCircleIcon color="secondary" />
-                        <AccountCircleIcon color="secondary" />
-                    </Typography>
-
-                    <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Not Responded: {props.notResponded}</p>
-                        <AccountCircleIcon />
-                        <AccountCircleIcon />
-                        <AccountCircleIcon />
-                    </Typography>
+                    <div className={classes.tertiaryHeading} align="left">
+                        <p>Going: {props.going.length}</p>
+                        {props.going.map((c) => (
+                            <Tooltip title={c} placement="top">
+                                <IconButton size="small">
+                                    <span title={c}>
+                                        <AccountCircleIcon className={classes.greenIcon} />
+                                    </span>
+                                </IconButton>
+                            </Tooltip>
+                        ))}
+                    </div>
+                    <div className={classes.spacing}></div>
+                    <div className={classes.tertiaryHeading} align="left">
+                        <p>Not Going: {props.notGoing.length}</p>
+                        {props.notGoing.map((c) => (
+                            <Tooltip title={c} placement="top">
+                                <IconButton size="small">
+                                    <AccountCircleIcon className={classes.redIcon} />
+                                </IconButton>
+                            </Tooltip>
+                        ))}
+                    </div>
+                    <div className={classes.spacing}></div>
+                    <div className={classes.tertiaryHeading} align="left">
+                        <p>Not Responded: {props.notResponded.length}</p>
+                        {props.notResponded.map((c) => (
+                            <Tooltip title={c} placement="top">
+                                <IconButton size="small">
+                                    <AccountCircleIcon />
+                                </IconButton>
+                            </Tooltip>
+                        ))}
+                    </div>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>
     );
 }
-
-export default CalendarItem;
