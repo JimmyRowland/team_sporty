@@ -1,15 +1,29 @@
-import { ObjectType, Field, Int } from "type-graphql";
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
+import { ObjectType, Field, Int, Root } from "type-graphql";
+import { prop, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
+import { registerEnumType } from "type-graphql";
+import { EventTypeEnum, EventUserResEnum } from "../interfaces/enum";
+
+registerEnumType(EventUserResEnum, {
+    name: "EventUserResEnum",
+    description: "Going? Not going? No Response",
+});
+
+registerEnumType(EventTypeEnum, {
+    name: "EventTypeEnum",
+    description: "Type of event",
+});
+
 @ObjectType()
 export class Event extends CreationAndModificationDate {
     @Field()
-    @prop({ required: true })
+    @prop({ items: Date, required: true })
     startDate: Date;
 
-    @Field(() => Int, { nullable: true })
-    hour: number;
+    @Field({ nullable: true })
+    @prop()
+    endDate: Date;
 
     @Field(() => String)
     @prop({ required: true })
@@ -19,17 +33,11 @@ export class Event extends CreationAndModificationDate {
     @prop({ required: true })
     name: string;
 
-    @Field(() => User, { nullable: true })
-    @prop({ Ref: "User" })
-    going?: Ref<User>[];
+    @Field(() => EventTypeEnum)
+    @prop({ default: EventTypeEnum.training })
+    eventType: EventTypeEnum;
 
-    @Field(() => User, { nullable: true })
-    @prop({ Ref: "User" })
-    notgoing?: Ref<User>[];
-
-    @Field(() => User, { nullable: true })
-    @prop({ Ref: "User" })
-    pending?: Ref<User>[];
+    @Field(() => Boolean)
+    @prop({ default: false })
+    isPrivate: boolean;
 }
-
-export const EventModel = getModelForClass(Event);

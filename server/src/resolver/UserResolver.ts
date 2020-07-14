@@ -1,5 +1,5 @@
 // import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
-import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware } from "type-graphql";
+import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
 import { validPassword, createRefreshToken, sendRefreshToken, genPassword, createAccessToken } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
@@ -15,24 +15,12 @@ class LoginResponse {
 
 @Resolver()
 export class UserResolver {
-    // @Query(() => String)
-    // hello() {
-    //   return "hi!";
-    // }
-
-    // @Query(() => String)
-    // @UseMiddleware(isAuth)
-    // bye(@Ctx() { payload }: MyContext) {
-    //     console.log(payload);
-    //     return `your user id is: ${payload!.userId}`;
-    // }
-    //
     @Query(() => [User])
     @UseMiddleware(isAuth)
     users() {
         return UserModel.find();
     }
-    //
+
     @Query(() => User, { nullable: true })
     me(@Ctx() context: ResReq) {
         const authorization = context.req.headers["authorization"];
@@ -50,7 +38,7 @@ export class UserResolver {
             return null;
         }
     }
-    //
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async logout(@Ctx() { res, payload }: ResReq) {
@@ -70,13 +58,12 @@ export class UserResolver {
             return true;
         }
     }
-    //
-    // @Mutation(() => Boolean)
-    // async revokeRefreshTokensForUser(@Arg("userId", () => Int) userId: number) {
-    //     await getConnection().getRepository(User).increment({ id: userId }, "tokenVersion", 1);
-    //
-    //     return true;
-    // }
+
+    @Mutation(() => Boolean)
+    async revokeRefreshTokensForUser(@Arg("_id", () => Int) _id: number) {
+        await UserModel.findByIdAndUpdate(_id, { $inc: { tokenVersion: 1 } });
+        return true;
+    }
 
     @Mutation(() => LoginResponse)
     async login(
@@ -84,26 +71,29 @@ export class UserResolver {
         @Arg("password") password: string,
         @Ctx() { res, req }: ResReq,
     ): Promise<LoginResponse> {
-        // console.log(email);
         const user = await UserModel.findOne({ email });
         const nullResponse: LoginResponse = { accessToken: "", user: null };
         if (!user) {
-            res.status(401).json({ success: false, msg: "could not find user" });
             return nullResponse;
-            // throw new Error("could not find user");
         } else {
             const isValid = validPassword(password, user.hash, user.salt);
 
             if (!isValid) {
-                res.status(401).json({ success: false, msg: "you entered the wrong password" });
                 return nullResponse;
-                // throw new Error("you entered the wrong password");
             } else {
                 sendRefreshToken(res, createRefreshToken(user));
             }
-            // login successful
         }
         console.log(req.connection.remoteAddress);
+        if (req.connection.remoteAddress && !user.ip.includes(req.connection.remoteAddress)) {
+            user.ip.push(req.connection.remoteAddress);
+        }
+        user.lastLoginDate = new Date();
+        try {
+            user.save();
+        } catch (e) {
+            console.log(e);
+        }
         return {
             accessToken: createAccessToken(user!),
             user,
@@ -119,7 +109,6 @@ export class UserResolver {
     ) {
         const user = await UserModel.findOne({ email });
         if (user) {
-            res.status(409).json({ success: false, msg: "User already exist" });
             return false;
         } else {
             const { hash, salt } = genPassword(password);
@@ -134,7 +123,6 @@ export class UserResolver {
             });
             try {
                 await newUser.save();
-                // res.status(200).json({ success: true, user: newUser });
             } catch (err) {
                 console.log(err);
                 return false;
