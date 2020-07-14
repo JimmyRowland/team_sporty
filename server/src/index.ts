@@ -18,6 +18,7 @@ import routes from "./routes/index";
 import { TeamResolver } from "./resolver/TeamResolver";
 import { TypegooseMiddleware } from "./middleware/typegooseMiddleware";
 import { PostResolver } from "./resolver/PostResolver";
+import { EventResolver } from "./resolver/EventResolver";
 (async () => {
     const app = express();
     connectDatabase();
@@ -31,7 +32,7 @@ import { PostResolver } from "./resolver/PostResolver";
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, TeamResolver, PostResolver],
+            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver],
             globalMiddlewares: [TypegooseMiddleware],
         }),
         context: ({ req, res }) => ({ req, res }),
