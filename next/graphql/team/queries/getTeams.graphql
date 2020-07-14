@@ -1,0 +1,9 @@
+query GetTeams {
+    getTeams {
+        name
+        _id
+        sport
+        imgUrl
+    }
+}
+

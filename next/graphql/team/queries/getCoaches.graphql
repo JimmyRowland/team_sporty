@@ -1,0 +1,9 @@
+query GetCoaches($teamID: String!) {
+    getCoaches(teamID: $teamID) {
+        name
+        _id
+        sport
+        avatarUrl
+    }
+}
+
