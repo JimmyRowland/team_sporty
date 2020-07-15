@@ -272,6 +272,17 @@ export type AddEventMutation = (
   & Pick<Mutation, 'addEvent'>
 );
 
+export type AddCoachMutationVariables = Exact<{
+  teamID: Scalars['String'];
+  userID: Scalars['String'];
+}>;
+
+
+export type AddCoachMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCoach'>
+);
+
 export type AddMemberMutationVariables = Exact<{
   teamID: Scalars['String'];
   userID: Scalars['String'];
@@ -461,6 +472,37 @@ export function useAddEventMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type AddEventMutationHookResult = ReturnType<typeof useAddEventMutation>;
 export type AddEventMutationResult = ApolloReactCommon.MutationResult<AddEventMutation>;
 export type AddEventMutationOptions = ApolloReactCommon.BaseMutationOptions<AddEventMutation, AddEventMutationVariables>;
+export const AddCoachDocument = gql`
+    mutation AddCoach($teamID: String!, $userID: String!) {
+  addCoach(teamID: $teamID, userID: $userID)
+}
+    `;
+export type AddCoachMutationFn = ApolloReactCommon.MutationFunction<AddCoachMutation, AddCoachMutationVariables>;
+
+/**
+ * __useAddCoachMutation__
+ *
+ * To run a mutation, you first call `useAddCoachMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCoachMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCoachMutation, { data, loading, error }] = useAddCoachMutation({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      userID: // value for 'userID'
+ *   },
+ * });
+ */
+export function useAddCoachMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCoachMutation, AddCoachMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCoachMutation, AddCoachMutationVariables>(AddCoachDocument, baseOptions);
+      }
+export type AddCoachMutationHookResult = ReturnType<typeof useAddCoachMutation>;
+export type AddCoachMutationResult = ApolloReactCommon.MutationResult<AddCoachMutation>;
+export type AddCoachMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCoachMutation, AddCoachMutationVariables>;
 export const AddMemberDocument = gql`
     mutation AddMember($teamID: String!, $userID: String!) {
   addMember(teamID: $teamID, userID: $userID)

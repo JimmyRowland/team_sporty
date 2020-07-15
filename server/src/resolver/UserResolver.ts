@@ -21,7 +21,7 @@ class RegisterInput {
     email: string;
 
     @Field()
-    @MinLength(20)
+    @MinLength(12)
     password: string;
 
     @Field()
