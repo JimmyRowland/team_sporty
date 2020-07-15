@@ -1,4 +1,15 @@
-import { Resolver, Mutation, Query, Arg, Ctx, UseMiddleware, FieldResolver, Root } from "type-graphql";
+import {
+    Resolver,
+    Mutation,
+    Query,
+    Arg,
+    Ctx,
+    UseMiddleware,
+    FieldResolver,
+    Root,
+    ObjectType,
+    Field,
+} from "type-graphql";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { Team, TeamModel } from "../entities/Team";
@@ -15,6 +26,16 @@ import { getIDfromToken } from "../middleware/getIDfromToken";
 import { EventTypeEnum, SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
 import { TeamUserResponse } from "../interfaces/responseType";
+import { TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
+import { isCreditCard } from "class-validator";
+import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendingList";
+@ObjectType()
+class GetTeamsResponse {
+    @Field(() => Boolean)
+    isMember: boolean;
+    @Field(() => Team)
+    team: Team;
+}
 
 @Resolver((of) => Team)
 export class TeamResolver {
@@ -27,9 +48,25 @@ export class TeamResolver {
         return true;
     }
 
-    @Query(() => [Team])
-    async getTeams() {
-        return TeamModel.find();
+    @Query(() => [GetTeamsResponse])
+    @UseMiddleware(isAuth)
+    async getTeams(@Ctx() { res, payload }: ResReq) {
+        const teams = await TeamModel.find();
+        const memberTeamPair = await TeamMemberMapModel.find({ "_id.user": payload._id });
+        const coachTeamPair = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        return teams.map((team) => {
+            const idString = team._id.toHexString();
+            const isMember = memberTeamPair.find((pair) => {
+                return pair._id.team === idString;
+            });
+            const isCoach = coachTeamPair.find((pair) => {
+                return pair._id.team === idString;
+            });
+            const teamResponse = new GetTeamsResponse();
+            teamResponse.isMember = !!isMember || !!isCoach;
+            teamResponse.team = team;
+            return teamResponse;
+        });
     }
 
     @Mutation(() => Boolean)
@@ -78,10 +115,70 @@ export class TeamResolver {
             const input = new TeamUserResponse();
             input.team = teamID;
             input.user = userID;
-            const teamMemberPair = new TeamMemberMapModel({
+            const deleted = await TeamApplicationPendingListModel.findOneAndDelete({ _id: input });
+            if (deleted) {
+                const teamMemberPair = new TeamMemberMapModel({
+                    _id: input,
+                });
+                await teamMemberPair.save();
+            }
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async applyTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+        try {
+            const input = new TeamUserResponse();
+            input.team = teamID;
+            input.user = payload._id!;
+            const application = new TeamApplicationPendingListModel({
                 _id: input,
             });
-            await teamMemberPair.save();
+            await application.save();
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async inviteMember(@Arg("teamID") teamID: string, @Arg("userID") userID: string, @Ctx() { res, payload }: ResReq) {
+        try {
+            const input = new TeamUserResponse();
+            input.team = teamID;
+            input.user = userID;
+            const invitation = new TeamInvitationPendingListModel({
+                _id: input,
+            });
+            await invitation.save();
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async acceptInvitation(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+        try {
+            const input = new TeamUserResponse();
+            input.team = teamID;
+            input.user = payload._id!;
+            const deleted = await TeamInvitationPendingListModel.findOneAndDelete({ _id: input });
+            if (deleted) {
+                const teamMemberPair = new TeamMemberMapModel({
+                    _id: input,
+                });
+                await teamMemberPair.save();
+            }
         } catch (err) {
             console.log(err);
             return false;
@@ -143,7 +240,12 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async newTeam(@Arg("name") name: string, @Ctx() { payload, res }: ResReq) {
+    async newTeam(
+        @Arg("name") name: string,
+        @Ctx() { payload, res }: ResReq,
+        @Arg("imgUrl", { nullable: true }) imgUrl: string,
+        @Arg("sport", { nullable: true }) sport: SportEnum,
+    ) {
         const newTeam = new TeamModel({
             name: name,
         });

@@ -22,3 +22,8 @@ export interface postUserIdObject {
     post: string;
     user: string;
 }
+
+export interface eventUserObject {
+    event: string;
+    user: string;
+}

@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, Root } from "type-graphql";
-import { prop, Ref } from "@typegoose/typegoose";
+import { index, prop, Ref } from "@typegoose/typegoose";
 import { User } from "./User";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
 import { registerEnumType } from "type-graphql";
@@ -16,6 +16,7 @@ registerEnumType(EventTypeEnum, {
 });
 
 @ObjectType()
+@index({ _id: 1 })
 export class Event extends CreationAndModificationDate {
     @Field()
     @prop({ required: true })

@@ -1,0 +1,6 @@
+mutation EditEvent($description: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!,
+    $isPrivate: Boolean!, $eventType:String!, $teamID: String!, $eventID: String! ){
+    editEvent(description:$description, name:$name, startDate: $startDate,
+        endDate: $endDate, isPrivate: false, eventType: $eventType, teamID:$teamID,eventID:$eventID)
+
+}

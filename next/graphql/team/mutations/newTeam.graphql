@@ -1,0 +1,3 @@
+mutation NewTeam($sport: String, $imgUrl: String, $name: String!) {
+    newTeam(sport: $sport, imgUrl: $imgUrl, name: $name)
+}
