@@ -2,7 +2,6 @@ import { Field, Formik } from "formik";
 import Router from "next/router";
 import React from "react";
 import { InputField } from "../components/fields/InputField";
-import Layout from "../components/Layout";
 import { useRegisterMutation } from "../generated/graphql";
 
 export default function registerPage() {
@@ -32,12 +31,14 @@ export default function registerPage() {
             initialValues={{
                 email: "",
                 password: "",
-                name: "",
+                firstName: "",
+                lastName: "",
             }}
         >
             {({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
-                    <Field name="name" placeholder="name" component={InputField} />
+                    <Field name="firstName" placeholder="firstName" component={InputField} />
+                    <Field name="lastName" placeholder="lastName" component={InputField} />
                     <Field name="email" placeholder="email" component={InputField} />
                     <Field name="password" placeholder="password" type="password" component={InputField} />
                     <button type="submit">submit</button>

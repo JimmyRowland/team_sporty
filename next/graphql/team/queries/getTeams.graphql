@@ -1,9 +1,12 @@
 query GetTeams {
     getTeams {
-        name
-        _id
-        sport
-        imgUrl
+        team{
+            name
+            _id
+            sport
+            imgUrl
+        }
+        isMember
     }
 }
 

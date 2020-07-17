@@ -5,29 +5,9 @@ import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { verify } from "jsonwebtoken";
-import { IsEmail, MaxLength, MinLength } from "class-validator";
-@ObjectType()
-class LoginResponse {
-    @Field()
-    accessToken: string;
-    @Field(() => User)
-    user: User | null;
-}
+import { RegisterInput } from "../interfaces/inputType";
+import { LoginResponse } from "../interfaces/responseType";
 // TODO hide users query
-@InputType()
-class RegisterInput {
-    @Field()
-    @IsEmail()
-    email: string;
-
-    @Field()
-    @MinLength(12)
-    password: string;
-
-    @Field()
-    @MaxLength(50)
-    name: string;
-}
 
 @Resolver()
 export class UserResolver {
@@ -117,7 +97,7 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async register(@Arg("input") { email, name, password }: RegisterInput, @Ctx() { res }: ResReq) {
+    async register(@Arg("input") { email, firstName, lastName, password }: RegisterInput, @Ctx() { res }: ResReq) {
         const user = await UserModel.findOne({ email });
         if (user) {
             return false;
@@ -129,7 +109,8 @@ export class UserResolver {
                 creationDate: new Date(),
                 lastLoginDate: new Date(),
                 lastModifyDate: new Date(),
-                name: name,
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
             });
             try {

@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from "type-graphql";
+import { ObjectType, Field, Int, Root } from "type-graphql";
 import { prop, getModelForClass } from "@typegoose/typegoose";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
 import { defaultAvatarUrl, defaultBannerUrl } from "../interfaces/const";
@@ -11,7 +11,16 @@ export class User extends CreationAndModificationDate {
 
     @Field()
     @prop({ required: true })
-    name: string;
+    firstName: string;
+
+    @Field()
+    @prop({ default: "" })
+    lastName: string;
+
+    @Field({ complexity: 2 })
+    name(@Root() parent: User): string {
+        return `${parent.firstName} ${parent.lastName}`;
+    }
 
     @Field()
     @prop({ required: true, unique: true })

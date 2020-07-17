@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem2 from "./CalendarItem2";
-import { useEventsQuery } from "../../generated/graphql";
+import { useGetEventsQuery, Event } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,7 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     const classes = useStyles();
     // graphql
-    const { data, loading, error } = useEventsQuery();
+    const { data, loading, error } = useGetEventsQuery({
+        variables: {
+            teamID: "5f0d712db3addc027b9fab0a",
+        },
+    });
     if (loading) {
         return <div>loading...</div>;
     }
@@ -51,7 +55,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
                 />
             ))}
             {/* <CalendarItem2 /> */}
-            {data.events.map((event, index) => {
+            {data.getTeam!.events!.map((event, index: number) => {
                 // graphql
                 return (
                     <CalendarItem2

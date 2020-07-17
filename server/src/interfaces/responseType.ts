@@ -27,3 +27,11 @@ export class EventUserResponse {
     @Field(() => User)
     user: User;
 }
+
+@ObjectType()
+export class LoginResponse {
+    @Field()
+    accessToken: string;
+    @Field(() => User)
+    user: User | null;
+}
