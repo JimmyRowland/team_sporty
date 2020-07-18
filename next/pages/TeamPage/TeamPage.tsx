@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, Avatar } from "@material-ui/core";
 import { EventList } from "../../components/eventList/EventList";
-import Post from "../../components/post/Post";
+import PostComponent from "../../components/post/PostComponent";
 import { selectPosts, postAsync, PostInterface } from "../../components/post/postSlice";
 import { useSelector, useDispatch } from "react-redux";
 import PostCreator from "../../components/post/PostCreator";
@@ -133,9 +133,7 @@ function TeamPage() {
                             {posts.map((name, index) => {
                                 return (
                                     <div key={index} className={classes.rosterAvatar}>
-                                        {/*<Link href={"/"}>*/}
                                         <Avatar key={index}>{name}</Avatar>
-                                        {/*</Link>*/}
                                     </div>
                                 );
                             })}

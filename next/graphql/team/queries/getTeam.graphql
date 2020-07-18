@@ -1,19 +1,24 @@
 query GetTeamPage($teamID: String!) {
     getTeam(teamID:$teamID) {
-        name
-        _id
-        imgUrl
-        posts{
-            content
+        team{
+            name
             _id
-            isPined
-            imgUrls
-            numberOfLikes
-            user{
-                name
-                avatarUrl
+            imgUrl
+            posts{
+                content
+                _id
+                isPined
+                imgUrls
+                numberOfLikes
+                lastModifyDate
+                user{
+                    name
+                    avatarUrl
+                }
             }
         }
+        isCoach
+
     }
 }
 

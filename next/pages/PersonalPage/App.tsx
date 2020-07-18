@@ -50,7 +50,7 @@ function PersonalPage() {
                     </CardPersonalPage>
                 </div>
                 <div className={classes.columnContainer}>
-                    <TeamList teamlist={teamlist} />
+                    <TeamList />
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ import { EventList } from "../../features/eventList/EventList";
 import { EventListItemType, monthArray } from "../../interface/Interface";
 import PersonalInfoTab from "../../features/PersonalInfoTab/PersonalInfoTab";
 import TeamList from "../../features/teamList/TeamList";
-import Post from "../../features/post/Post";
+import Post from "../../features/post/PostComponent";
 import CardPersonalPage from "../../features/cardPersonalPage/CardPersonalPage";
 const useStyles = makeStyles({
     container: {
@@ -92,7 +92,7 @@ function TestPage() {
             {/*</div>*/}
             {/*<div className={classes.rightColumn}>*/}
             {/*  <div className={classes.columnItem}>*/}
-            {/*    <Post index={0} />*/}
+            {/*    <PostComponent index={0} />*/}
             {/*  </div>*/}
             {/*  <div className={classes.columnItem}>*/}
             {/*    <Card>*/}
@@ -113,7 +113,7 @@ function TestPage() {
             {/*  {posts.map((post, index) => {*/}
             {/*    return (*/}
             {/*      <div key={index} className={classes.columnItem}>*/}
-            {/*        <Post index={index} />*/}
+            {/*        <PostComponent index={index} />*/}
             {/*      </div>*/}
             {/*    );*/}
             {/*  })}*/}

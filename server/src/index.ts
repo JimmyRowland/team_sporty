@@ -3,17 +3,10 @@ import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-
-// import { createConnection } from "typeorm";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-// import { User } from "./models/User";
-// import { sendRefreshToken } from "./sendRefreshToken";
-// import { createAccessToken, createRefreshToken } from "./auth";
 import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
-// import { EventResolver } from "./resolver/EventResolver";
-// import { PostResolver } from "./resolver/PostResolver";
 import routes from "./routes/index";
 import { TeamResolver } from "./resolver/TeamResolver";
 import { TypegooseMiddleware } from "./middleware/typegooseMiddleware";

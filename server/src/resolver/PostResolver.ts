@@ -1,15 +1,17 @@
-import { Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
+import { Resolver, Mutation, Arg, Ctx, UseMiddleware, FieldResolver, Root } from "type-graphql";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { isCoach } from "../middleware/isCoach";
-import { TeamModel } from "../entities/Team";
+import { Team, TeamModel } from "../entities/Team";
 import { Post } from "../entities/Post";
 import { ObjectID } from "mongodb";
 import { isMember } from "../middleware/isMember";
 import { LikesMapModel } from "../entities/LikesMap";
 import { isCoachPayload } from "../middleware/isCoachPayload";
+import { getIDfromToken } from "../middleware/getIDfromToken";
+import { User, UserModel } from "../entities/User";
 
-@Resolver()
+@Resolver(() => Post)
 export class PostResolver {
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
@@ -142,5 +144,15 @@ export class PostResolver {
             return false;
         }
         return true;
+    }
+
+    @FieldResolver(() => User)
+    async user(@Root() post: Post, @Ctx() { payload }: ResReq): Promise<User> {
+        const user = await UserModel.findById(post.user);
+        if (user) {
+            return user;
+        } else {
+            throw new Error("User not found");
+        }
     }
 }

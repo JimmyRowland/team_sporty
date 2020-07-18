@@ -33,6 +33,16 @@ import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendin
 class GetTeamsResponse {
     @Field(() => Boolean)
     isMember: boolean;
+    @Field(() => Boolean)
+    isCoach: boolean;
+    @Field(() => Team)
+    team: Team;
+}
+
+@ObjectType()
+class GetTeamResponse {
+    @Field(() => Boolean)
+    isCoach: boolean;
     @Field(() => Team)
     team: Team;
 }
@@ -49,7 +59,7 @@ export class TeamResolver {
     }
 
     @Query(() => [GetTeamsResponse])
-    @UseMiddleware(isAuth)
+    @UseMiddleware(getIDfromToken)
     async getTeams(@Ctx() { res, payload }: ResReq) {
         const teams = await TeamModel.find();
         const memberTeamPair = await TeamMemberMapModel.find({ "_id.user": payload._id });
@@ -65,6 +75,7 @@ export class TeamResolver {
             const teamResponse = new GetTeamsResponse();
             teamResponse.isMember = !!isMember || !!isCoach;
             teamResponse.team = team;
+            teamResponse.isCoach = !!isCoach;
             return teamResponse;
         });
     }
@@ -104,6 +115,23 @@ export class TeamResolver {
         return UserModel.find({
             _id: {
                 $in: pairs.map((pair) => pair._id.user),
+            },
+        });
+    }
+
+    @Query(() => [Team])
+    @UseMiddleware(isAuth)
+    async getMyTeams(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+        const memberPairs = await TeamMemberMapModel.find({
+            "_id.user": payload._id,
+        });
+        const coachPairs = await TeamCoachMapModel.find({
+            "_id.user": payload._id,
+        });
+        const teamIDs = memberPairs.map((pair) => pair._id.team).concat(coachPairs.map((pair) => pair._id.team));
+        return TeamModel.find({
+            _id: {
+                $in: teamIDs,
             },
         });
     }
@@ -233,9 +261,18 @@ export class TeamResolver {
         return true;
     }
 
-    @Query(() => Team)
-    getTeam(@Arg("teamID") teamID: string) {
-        return TeamModel.findById(teamID);
+    @Query(() => GetTeamResponse)
+    @UseMiddleware(getIDfromToken)
+    async getTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetTeamResponse> {
+        const team = await TeamModel.findById(teamID);
+        const coachTeamPair = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const result = new GetTeamResponse();
+        const isCoach = coachTeamPair.find((pair) => {
+            return pair._id.team === team?._id.toHexString();
+        });
+        result.isCoach = !!isCoach;
+        result.team = team!;
+        return result;
     }
 
     @Mutation(() => Boolean)

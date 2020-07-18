@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { CardHeader } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { addPost, addpostAsync } from "./postSlice";
+import { useAddPostMutation, useMeQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles({
     root: {
@@ -47,19 +48,13 @@ const useStyles = makeStyles({
     },
 });
 
-export default function PostCreator() {
+export default function PostCreator({ teamID }: { teamID: string }) {
     const classes = useStyles();
-    const dispatch = useDispatch();
-    const [comment, setComment] = useState("");
-
-    const handleSend = (e: any) => {
-        e.preventDefault();
-        dispatch(addpostAsync(comment, "User Name"));
-        setComment("");
-    };
-
-    const updateField = (e: any) => {
-        setComment(e.target.value);
+    const [content, setContent] = useState("");
+    const [submitPost] = useAddPostMutation();
+    const handleSubmit = () => {
+        submitPost({ variables: { teamID: teamID, content: content } });
+        setContent("");
     };
 
     return (
@@ -68,10 +63,10 @@ export default function PostCreator() {
                 <Typography color="textPrimary" className={classes.title}>
                     New Post
                 </Typography>
-                <textarea className={classes.field} onChange={(e) => updateField(e)} value={comment} />
+                <textarea className={classes.field} onChange={(e) => setContent(e.target.value)} value={content} />
             </CardContent>
             <CardActions className={classes.action}>
-                <Button className={classes.send} onClick={(e) => handleSend(e)}>
+                <Button className={classes.send} onClick={handleSubmit}>
                     {" "}
                     Send{" "}
                 </Button>

@@ -20,6 +20,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {} from "./postSlice";
+import { Post, usePinPostMutation } from "../../generated/graphql";
+import { first } from "rxjs/operators";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,12 +62,27 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function Post({ index, post }: { index: number; post: PostInterface }) {
+export default function PostComponent({
+    content,
+    firstName,
+    lastModifyDate,
+    isPinned,
+    postID,
+    teamID,
+    isCoach,
+}: {
+    content: string;
+    firstName: string;
+    lastModifyDate: string;
+    isPinned: boolean;
+    postID: string;
+    teamID: string;
+    isCoach: boolean;
+}) {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const dispatch = useDispatch();
-
+    const [pinPost] = usePinPostMutation({ variables: { teamID: teamID, isPined: !isPinned, postID: postID } });
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -78,36 +95,24 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
         setAnchorEl(null);
     };
 
-    const pinPost = () => {
+    const handlePin = () => {
         setAnchorEl(null);
-        dispatch(changePinAsync(post.id, true));
-    };
-
-    const unpinPost = () => {
-        setAnchorEl(null);
-        dispatch(changePinAsync(post.id, false));
+        pinPost();
     };
 
     const PinMenu = () => {
-        if (!post.pin) {
-            return (
-                <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem onClick={pinPost}>Pin Post</MenuItem>
-                </Menu>
-            );
-        }
-        return (
+        return isCoach ? (
             <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={unpinPost}>Unpin Post</MenuItem>
+                <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
             </Menu>
-        );
+        ) : null;
     };
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
-                        {post.user.id}
+                        {firstName[0]}
                     </Avatar>
                 }
                 action={
@@ -118,12 +123,11 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
                         <PinMenu />
                     </div>
                 }
-                title={post.title}
-                subheader={post.timeStamp.toString()}
+                subheader={lastModifyDate}
             />
             <CardContent>
                 <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>
-                    {post.body}
+                    {content}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -134,7 +138,7 @@ export default function Post({ index, post }: { index: number; post: PostInterfa
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
                     aria-label="show more"
-                ></IconButton>
+                />
             </CardActions>
         </Card>
     );

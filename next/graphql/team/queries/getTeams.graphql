@@ -5,6 +5,8 @@ query GetTeams {
             _id
             sport
             imgUrl
+            numberMembers
+            description
         }
         isMember
     }

@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { postAsync, PostInterface, selectPosts } from "./postSlice";
-import Post from "./Post";
+import PostComponent from "./PostComponent";
 import React, { useEffect } from "react";
 
 const useStyles = makeStyles((Theme: Theme) =>
@@ -18,11 +18,11 @@ export default function MessageBoard({ pinned }: { pinned: boolean }) {
     const reverseposts = posts.slice().reverse();
     return (
         <div>
-            {reverseposts.map((post: PostInterface) => {
+            {reverseposts.map((post: PostInterface, index) => {
                 if (pinned === post.pin) {
                     return (
-                        <div key={post.id} className={classes.messageItem}>
-                            <Post index={post.id} post={post} />
+                        <div key={index} className={classes.messageItem}>
+                            <PostComponent post={post} />
                         </div>
                     );
                 }

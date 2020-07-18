@@ -55,7 +55,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
                 />
             ))}
             {/* <CalendarItem2 /> */}
-            {data.getTeam!.events!.map((event, index: number) => {
+            {data?.getTeam?.team?.events?.map((event, index: number) => {
                 // graphql
                 return (
                     <CalendarItem2

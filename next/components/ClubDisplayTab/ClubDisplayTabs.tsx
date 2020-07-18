@@ -1,8 +1,10 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
 import { GTranslate } from "@material-ui/icons";
+import { Team, useApplyTeamMutation } from "../../generated/graphql";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -65,8 +67,26 @@ const useStyles = makeStyles((Theme: Theme) =>
     }),
 );
 
-export default function ClubDisplayTab() {
+export default function ClubDisplayTab({
+    name,
+    sport,
+    numberMembers,
+    description,
+    teamID,
+    isMember,
+}: {
+    name: string;
+    sport: string;
+    numberMembers: number;
+    description: string;
+    teamID: string;
+    isMember: boolean;
+}) {
     const classes = useStyles();
+    const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
+    const handleJoinTeam = () => {
+        joinTeam();
+    };
     return (
         <div className={classes.body}>
             <div className={classes.clubIMGContainer}>
@@ -74,21 +94,25 @@ export default function ClubDisplayTab() {
             </div>
             <div className={classes.infoContainer}>
                 <div className={classes.infocontainer}>
-                    <div className={classes.infoLine1items}>Club Name</div>
-                    <div className={classes.infoLine1items}>Team Name</div>
+                    {/*<div className={classes.infoLine1items}>Club Name</div>*/}
+                    <div className={classes.infoLine1items}>{name}</div>
                 </div>
                 <div className={classes.infocontainer}>
-                    <div className={classes.infoLine2items}> Type of Sport </div>
-                    <div className={classes.infoLine2items}> 20 members </div>
+                    <div className={classes.infoLine2items}> {sport} </div>
+                    <div className={classes.infoLine2items}> {numberMembers} members </div>
                 </div>
                 <div className={classes.infoLine3}>
-                    <div className={classes.infoLine3items}> Some descriptions over here </div>
+                    <div className={classes.infoLine3items}> {description} </div>
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
-                <Button variant="contained" color="primary" className={classes.addButton}>
-                    Join
-                </Button>
+                {isMember ? (
+                    `${loading} ${isMember}`
+                ) : (
+                    <Button onClick={handleJoinTeam} variant="contained" color="primary" className={classes.addButton}>
+                        Join
+                    </Button>
+                )}
             </div>
         </div>
     );
