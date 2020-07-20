@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Layout from "../components/Layout";
+import Layout from "../components/layouts/index/Layout";
 import React from "react";
 import TeamPage from "./TeamPage/TeamPage";
 import { initializeStore } from "../lib/redux";

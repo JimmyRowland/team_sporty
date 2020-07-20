@@ -225,6 +225,8 @@ export type Query = {
     getMembers: Array<User>;
     getCoaches: Array<User>;
     getMyTeams: Array<Team>;
+    getTeamsAsCoach: Array<Team>;
+    getTeamsAsMember: Array<Team>;
     getTeam: GetTeamResponse;
 };
 
@@ -423,6 +425,18 @@ export type UpdateTeamMutationVariables = Exact<{
 }>;
 
 export type UpdateTeamMutation = { __typename?: "Mutation" } & Pick<Mutation, "updateTeam">;
+
+export type GetTeamListAsCoachQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTeamListAsCoachQuery = { __typename?: "Query" } & {
+    getTeamsAsCoach: Array<{ __typename?: "Team" } & Pick<Team, "name" | "_id">>;
+};
+
+export type GetTeamListAsMemberQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTeamListAsMemberQuery = { __typename?: "Query" } & {
+    getTeamsAsMember: Array<{ __typename?: "Team" } & Pick<Team, "name" | "_id">>;
+};
 
 export type GetCoachesQueryVariables = Exact<{
     teamID: Scalars["String"];
@@ -1167,6 +1181,98 @@ export type UpdateTeamMutationResult = ApolloReactCommon.MutationResult<UpdateTe
 export type UpdateTeamMutationOptions = ApolloReactCommon.BaseMutationOptions<
     UpdateTeamMutation,
     UpdateTeamMutationVariables
+>;
+export const GetTeamListAsCoachDocument = gql`
+    query GetTeamListAsCoach {
+        getTeamsAsCoach {
+            name
+            _id
+        }
+    }
+`;
+
+/**
+ * __useGetTeamListAsCoachQuery__
+ *
+ * To run a query within a React component, call `useGetTeamListAsCoachQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamListAsCoachQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamListAsCoachQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTeamListAsCoachQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamListAsCoachQuery, GetTeamListAsCoachQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetTeamListAsCoachQuery, GetTeamListAsCoachQueryVariables>(
+        GetTeamListAsCoachDocument,
+        baseOptions,
+    );
+}
+export function useGetTeamListAsCoachLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamListAsCoachQuery, GetTeamListAsCoachQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetTeamListAsCoachQuery, GetTeamListAsCoachQueryVariables>(
+        GetTeamListAsCoachDocument,
+        baseOptions,
+    );
+}
+export type GetTeamListAsCoachQueryHookResult = ReturnType<typeof useGetTeamListAsCoachQuery>;
+export type GetTeamListAsCoachLazyQueryHookResult = ReturnType<typeof useGetTeamListAsCoachLazyQuery>;
+export type GetTeamListAsCoachQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamListAsCoachQuery,
+    GetTeamListAsCoachQueryVariables
+>;
+export const GetTeamListAsMemberDocument = gql`
+    query GetTeamListAsMember {
+        getTeamsAsMember {
+            name
+            _id
+        }
+    }
+`;
+
+/**
+ * __useGetTeamListAsMemberQuery__
+ *
+ * To run a query within a React component, call `useGetTeamListAsMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamListAsMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamListAsMemberQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTeamListAsMemberQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamListAsMemberQuery, GetTeamListAsMemberQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetTeamListAsMemberQuery, GetTeamListAsMemberQueryVariables>(
+        GetTeamListAsMemberDocument,
+        baseOptions,
+    );
+}
+export function useGetTeamListAsMemberLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamListAsMemberQuery, GetTeamListAsMemberQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetTeamListAsMemberQuery, GetTeamListAsMemberQueryVariables>(
+        GetTeamListAsMemberDocument,
+        baseOptions,
+    );
+}
+export type GetTeamListAsMemberQueryHookResult = ReturnType<typeof useGetTeamListAsMemberQuery>;
+export type GetTeamListAsMemberLazyQueryHookResult = ReturnType<typeof useGetTeamListAsMemberLazyQuery>;
+export type GetTeamListAsMemberQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamListAsMemberQuery,
+    GetTeamListAsMemberQueryVariables
 >;
 export const GetCoachesDocument = gql`
     query GetCoaches($teamID: String!) {

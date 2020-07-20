@@ -1,4 +1,4 @@
-import Layout from "../components/Layout";
+import Layout from "../components/layouts/index/Layout";
 import React from "react";
 
 import PersonalPage from "./PersonalPage/App";

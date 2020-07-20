@@ -2,7 +2,7 @@ import { Field, Formik } from "formik";
 import Router from "next/router";
 import React from "react";
 import { InputField } from "../components/fields/InputField";
-import Layout from "../components/Layout";
+import Layout from "../components/layouts/index/Layout";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../lib/accessToken";
 

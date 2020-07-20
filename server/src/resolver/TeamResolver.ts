@@ -136,6 +136,34 @@ export class TeamResolver {
         });
     }
 
+    @Query(() => [Team])
+    @UseMiddleware(isAuth)
+    async getTeamsAsCoach(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+        const coachPairs = await TeamCoachMapModel.find({
+            "_id.user": payload._id,
+        });
+        const teamIDs = coachPairs.map((pair) => pair._id.team);
+        return TeamModel.find({
+            _id: {
+                $in: teamIDs,
+            },
+        });
+    }
+
+    @Query(() => [Team])
+    @UseMiddleware(isAuth)
+    async getTeamsAsMember(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+        const memberPairs = await TeamMemberMapModel.find({
+            "_id.user": payload._id,
+        });
+        const teamIDs = memberPairs.map((pair) => pair._id.team);
+        return TeamModel.find({
+            _id: {
+                $in: teamIDs,
+            },
+        });
+    }
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, hasUser, hasTeam, isCoach)
     async addMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {

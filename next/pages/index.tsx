@@ -1,4 +1,4 @@
-import Layout from "../components/Layout";
+import Layout from "../components/layouts/index/Layout";
 import React from "react";
 import Frontpage from "./FrontPage/App";
 import { getAccessToken } from "../lib/accessToken";

@@ -37,7 +37,6 @@ export default function App({ Component, pageProps }: { Component: ComponentType
         <Provider store={store}>
             <ApolloProvider client={apolloClient}>
                 <ThemeProvider theme={theme}>
-                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     {loading ? (
                         "loading"
                     ) : (
