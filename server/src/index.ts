@@ -14,6 +14,8 @@ import connectDatabase from "./config/database";
 import { UserResolver } from "./resolver/UserResolver";
 import { EventResolver } from "./resolver/EventResolver";
 import {MessageResolver} from "./resolver/MessageResolver"
+import {UserUploadResolver} from "./resolver/UserUploadResolver";
+import { json } from 'express';
 (async () => {
     const app = express();
     connectDatabase();
@@ -24,10 +26,10 @@ import {MessageResolver} from "./resolver/MessageResolver"
         }),
     );
     app.use(cookieParser());
-
+    app.use(json( { limit: '50mb' } ) );
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, EventResolver, MessageResolver],
+            resolvers: [UserResolver, EventResolver, MessageResolver, UserUploadResolver],
         }),
         context: ({ req, res }) => ({ req, res }),
     });
