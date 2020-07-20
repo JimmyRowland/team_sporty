@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
+import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "30%",
             width: "100%",
             margin: "auto",
+            padding:"1em",
         },
         title: {
             fontWeight: "bold",
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         field: {
             display: "block",
-            width: "60%",
+            width: "80%",
             height: "50%",
             borderRadius: 15,
             resize: "none",
@@ -113,7 +115,7 @@ export default function EditPopUp() {
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Profile Picture</div>
-                <div className={classes.icon}> Icon </div>
+                <AvatarUpload/>
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Cover Photo</div>
