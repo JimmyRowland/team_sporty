@@ -198,7 +198,6 @@ export const getStaticProps: GetStaticProps = async (url) => {
             query: GetTeamPageDocument,
             variables: { teamID: id },
         });
-        console.log(apolloClient.cache.extract());
         return { props: { id, initialApolloState: apolloClient.cache.extract() } };
     } catch (err) {
         return { props: { errors: err.message } };
