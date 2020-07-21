@@ -38,8 +38,8 @@ export default function Header() {
     const handleLogout = async () => {
         await logout();
         setAccessToken("");
-        await client?.resetStore();
         await Router.push("/");
+        await client?.resetStore();
     };
     return (
         <AppBar className={classes.root} color={"inherit"}>

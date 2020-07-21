@@ -5,7 +5,7 @@ import { getAccessToken } from "../../../lib/accessToken";
 import { useMediaQuery } from "@material-ui/core";
 import Header from "../../Header/Header";
 import clsx from "clsx";
-import Sidebar from "../../sidebar/Sidebar";
+import Sidebar from "../../Sidebar/Sidebar";
 
 type Props = {
     children?: ReactNode;

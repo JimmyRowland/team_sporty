@@ -65,6 +65,7 @@ export type Mutation = {
     revokeRefreshTokensForUser: Scalars["Boolean"];
     login: LoginResponse;
     register: Scalars["Boolean"];
+    uploadAvatar: Scalars["Boolean"];
     updateTeam: Scalars["Boolean"];
     addMember: Scalars["Boolean"];
     applyTeam: Scalars["Boolean"];
@@ -96,6 +97,10 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
     input: RegisterInput;
+};
+
+export type MutationUploadAvatarArgs = {
+    avatarUrl: Scalars["String"];
 };
 
 export type MutationUpdateTeamArgs = {
@@ -280,6 +285,8 @@ export type User = {
     name: Scalars["String"];
     email: Scalars["String"];
     tokenVersion: Scalars["Int"];
+    address: Scalars["String"];
+    phone: Scalars["String"];
     ip: Array<Scalars["String"]>;
     sport: Array<Sport>;
     bannerUrls: Scalars["String"];
@@ -443,7 +450,9 @@ export type GetCoachesQueryVariables = Exact<{
 }>;
 
 export type GetCoachesQuery = { __typename?: "Query" } & {
-    getCoaches: Array<{ __typename?: "User" } & Pick<User, "name" | "_id" | "sport" | "avatarUrl">>;
+    getCoaches: Array<
+        { __typename?: "User" } & Pick<User, "name" | "_id" | "sport" | "phone" | "email" | "address" | "avatarUrl">
+    >;
 };
 
 export type GetMembersQueryVariables = Exact<{
@@ -451,7 +460,9 @@ export type GetMembersQueryVariables = Exact<{
 }>;
 
 export type GetMembersQuery = { __typename?: "Query" } & {
-    getMembers: Array<{ __typename?: "User" } & Pick<User, "name" | "_id" | "sport" | "avatarUrl">>;
+    getMembers: Array<
+        { __typename?: "User" } & Pick<User, "name" | "_id" | "sport" | "phone" | "email" | "address" | "avatarUrl">
+    >;
 };
 
 export type GetTeamPageQueryVariables = Exact<{
@@ -522,10 +533,16 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: "Mutation" } & Pick<Mutation, "register">;
 
+export type UploadAvatarMutationVariables = Exact<{
+    url: Scalars["String"];
+}>;
+
+export type UploadAvatarMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadAvatar">;
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = { __typename?: "Query" } & {
-    me?: Maybe<{ __typename?: "User" } & Pick<User, "_id" | "email" | "name">>;
+    me?: Maybe<{ __typename?: "User" } & Pick<User, "_id" | "name" | "avatarUrl">>;
 };
 
 export const AddEventDocument = gql`
@@ -1280,6 +1297,9 @@ export const GetCoachesDocument = gql`
             name
             _id
             sport
+            phone
+            email
+            address
             avatarUrl
         }
     }
@@ -1320,6 +1340,9 @@ export const GetMembersDocument = gql`
             name
             _id
             sport
+            phone
+            email
+            address
             avatarUrl
         }
     }
@@ -1637,12 +1660,53 @@ export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<
     RegisterMutation,
     RegisterMutationVariables
 >;
+export const UploadAvatarDocument = gql`
+    mutation UploadAvatar($url: String!) {
+        uploadAvatar(avatarUrl: $url)
+    }
+`;
+export type UploadAvatarMutationFn = ApolloReactCommon.MutationFunction<
+    UploadAvatarMutation,
+    UploadAvatarMutationVariables
+>;
+
+/**
+ * __useUploadAvatarMutation__
+ *
+ * To run a mutation, you first call `useUploadAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadAvatarMutation, { data, loading, error }] = useUploadAvatarMutation({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useUploadAvatarMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<UploadAvatarMutation, UploadAvatarMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<UploadAvatarMutation, UploadAvatarMutationVariables>(
+        UploadAvatarDocument,
+        baseOptions,
+    );
+}
+export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
+export type UploadAvatarMutationResult = ApolloReactCommon.MutationResult<UploadAvatarMutation>;
+export type UploadAvatarMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    UploadAvatarMutation,
+    UploadAvatarMutationVariables
+>;
 export const MeDocument = gql`
     query Me {
         me {
             _id
-            email
             name
+            avatarUrl
         }
     }
 `;

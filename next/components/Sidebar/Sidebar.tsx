@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     root: {
-        backgroundColor: theme.palette.white,
         display: "flex",
         flexDirection: "column",
         height: "100%",
