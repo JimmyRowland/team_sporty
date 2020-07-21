@@ -62,13 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 18,
         },
         icon: {
-            textAlign: "center",
-            height: 100,
-            width: 100,
-            borderRadius: "50%",
-            backgroundColor: "#C4C4C4",
+            width: "100%",
+            height: "100%",
             margin: "auto",
-            marginTop: "1em",
+            paddingTop: "2em",
         },
         edit: {
             textAlign: "center",
@@ -115,7 +112,7 @@ export default function EditPopUp() {
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Profile Picture</div>
-                <AvatarUpload/>
+                <AvatarUpload className={classes.icon}/>
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Cover Photo</div>

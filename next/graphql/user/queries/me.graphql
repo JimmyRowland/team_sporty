@@ -3,6 +3,8 @@ query Me {
         _id
         email
         name
+        bannerUrls
+        avatarUrl
     }
 }
 

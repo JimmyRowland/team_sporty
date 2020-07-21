@@ -8,7 +8,6 @@ const black = "#000000";
 // Create a theme instance.
 const theme = createMuiTheme({
     palette: {
-        type: "dark",
         primary: {
             contrastText: white,
             dark: colors.indigo[900],
@@ -46,7 +45,7 @@ const theme = createMuiTheme({
             light: colors.red[400],
         },
         background: {
-            default: "#000",
+            default: "white",
             paper: grey["900"],
         },
     },

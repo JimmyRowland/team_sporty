@@ -12,9 +12,8 @@ import { TeamResolver } from "./resolver/TeamResolver";
 import { TypegooseMiddleware } from "./middleware/typegooseMiddleware";
 import { PostResolver } from "./resolver/PostResolver";
 import { EventResolver } from "./resolver/EventResolver";
-import {MessageResolver} from "./resolver/MessageResolver"
-import {UserUploadResolver} from "./resolver/UserUploadResolver";
-import { json } from 'express';
+import { UserUploadResolver } from "./resolver/UserUploadResolver";
+import { json } from "express";
 (async () => {
     const app = express();
     connectDatabase();
@@ -25,10 +24,10 @@ import { json } from 'express';
         }),
     );
     app.use(cookieParser());
-    app.use(json( { limit: '50mb' } ) );
+    app.use(json({ limit: "50mb" }));
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver，UserUploadResolver],
+            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver, UserUploadResolver],
             globalMiddlewares: [TypegooseMiddleware],
         }),
         context: ({ req, res }) => ({ req, res }),

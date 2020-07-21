@@ -5,19 +5,17 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { IconButton } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
-import React from "react";
+import React, {useEffect} from "react";
+import {useMeQuery, useUploadAvatarMutation} from "../../../generated/graphql";
+import {async} from "q";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            width: "100%",
-            height: "100%",
-            margin: "auto",
-            marginTop: "1em",
         },
         avatar: {
-            width: theme.spacing(20),
-            height: theme.spacing(20),
+            width: theme.spacing(15),
+            height: theme.spacing(15),
             margin: "auto",
             "&:hover": {
                 opacity: "0.5",
@@ -29,9 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function AvatarUpload() {
+export default function AvatarUpload(dragDisabled: boolean) {
     const classes = useStyles();
     const [avatar, setAvatar] = React.useState("");
+    const me = useMeQuery();
+    const [uploadAvatar] = useUploadAvatarMutation()
 
     const readURL = (e: any) => {
         e.preventDefault();
@@ -40,7 +40,7 @@ export default function AvatarUpload() {
         if (file) {
             reader.onloadend = () => {
                 setAvatar(reader.result);
-                // Upload here
+                uploadImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -55,7 +55,6 @@ export default function AvatarUpload() {
             if (file && file.type.match("image.*")) {
                 reader.onloadend = () => {
                     setAvatar(reader.result);
-                    // Upload here
                     uploadImage(reader.result);
                 };
                 reader.readAsDataURL(file);
@@ -63,13 +62,24 @@ export default function AvatarUpload() {
         }
     };
 
-    const uploadImage = (base64EncodedImage: any) => {
-        console.log(base64EncodedImage);
+    const uploadImage = async (base64EncodedImage: any) => {
+        try{
+            console.log(me)
+            console.log(typeof me.data.me._id);
+            const res = await uploadAvatar({variables:{_id:me.data.me._id, avatarUrl:base64EncodedImage}});
+            console.log(res);
+        }catch(err){
+            console.log(err);
+        }
     }
 
     const dragover = (e: any) => {
         e.preventDefault();
     };
+    if(me.loading) return(<div></div>);
+    useEffect(() => {
+        setAvatar(me.data.me.avatarUrl);
+    },[])
 
     return (
         <div className={classes.container}>

@@ -28,7 +28,7 @@ export class UserResolver {
         try {
             const token = authorization.split(" ")[1];
             const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-            return UserModel.findOne(payload._id);
+            return UserModel.findOne({ _id: payload._id });
         } catch (err) {
             console.log(err);
             return null;
