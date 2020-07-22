@@ -1,4 +1,4 @@
-query GetTeamList {
+query GetMyTeamList {
     getMyTeams {
         name
         _id

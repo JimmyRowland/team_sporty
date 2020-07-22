@@ -1,13 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Layout from "../../../components/layouts/settings/Layout";
-import {
-    useAddCoachesMutation,
-    useAddMembersMutation,
-    useGetCoachesQuery,
-    useGetPendingsQuery,
-    useRemoveMembersMutation,
-} from "../../../generated/graphql";
+import { useAddMembersMutation, useGetPendingsQuery } from "../../../generated/graphql";
 import { useRouter } from "next/router";
 import { TeamNotFound } from "../../../components/Error/TeamNotFound";
 import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
@@ -16,8 +10,8 @@ import UsersToolbar from "../../../components/UserToolbar/UserToolbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
 import { Button } from "@material-ui/core";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { getTeamStaticPaths } from "../../../lib/staticPaths";
+import { GetStaticPaths } from "next";
+import { getTeamStaticPathsAsCoach } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ManagePendingListPage(res) {
+function ManagePendingListPage() {
     const classes = useStyles();
     const router = useRouter();
     const { tid } = router.query;
@@ -86,3 +80,5 @@ function ManagePendingListPage(res) {
 }
 
 export default ManagePendingListPage;
+
+export const getStaticPaths: GetStaticPaths = getTeamStaticPathsAsCoach;

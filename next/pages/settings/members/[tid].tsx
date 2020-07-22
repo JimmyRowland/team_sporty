@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
 import { Button } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { getTeamStaticPaths } from "../../../lib/staticPaths";
+import { getMyTeamStaticPaths } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -97,7 +97,7 @@ function ManageMembersPage({ tid, errors }: Props) {
 
 export default ManageMembersPage;
 
-export const getStaticPaths: GetStaticPaths = getTeamStaticPaths;
+export const getStaticPaths: GetStaticPaths = getMyTeamStaticPaths;
 
 export const getStaticProps: GetStaticProps = async (url) => {
     try {

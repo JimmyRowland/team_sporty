@@ -228,6 +228,7 @@ export type MutationEditPostArgs = {
 
 export type MutationAddEventArgs = {
   endDate: Scalars['DateTime'];
+  address: Scalars['String'];
   isPrivate: Scalars['Boolean'];
   startDate: Scalars['DateTime'];
   eventType: Scalars['String'];
@@ -361,6 +362,7 @@ export type AddEventMutationVariables = Exact<{
   isPrivate: Scalars['Boolean'];
   eventType: Scalars['String'];
   teamID: Scalars['String'];
+  address: Scalars['String'];
 }>;
 
 
@@ -655,6 +657,17 @@ export type GetMembersQuery = (
   )> }
 );
 
+export type GetMyTeamIDsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyTeamIDsQuery = (
+  { __typename?: 'Query' }
+  & { getMyTeams: Array<(
+    { __typename?: 'Team' }
+    & Pick<Team, '_id'>
+  )> }
+);
+
 export type GetPendingsQueryVariables = Exact<{
   teamID: Scalars['String'];
 }>;
@@ -707,10 +720,10 @@ export type GetTeamIDsQuery = (
   )> }
 );
 
-export type GetTeamListQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMyTeamListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTeamListQuery = (
+export type GetMyTeamListQuery = (
   { __typename?: 'Query' }
   & { getMyTeams: Array<(
     { __typename?: 'Team' }
@@ -795,8 +808,8 @@ export type MeQuery = (
 
 
 export const AddEventDocument = gql`
-    mutation AddEvent($description: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!, $isPrivate: Boolean!, $eventType: String!, $teamID: String!) {
-  addEvent(description: $description, name: $name, startDate: $startDate, endDate: $endDate, isPrivate: false, eventType: $eventType, teamID: $teamID)
+    mutation AddEvent($description: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!, $isPrivate: Boolean!, $eventType: String!, $teamID: String!, $address: String!) {
+  addEvent(description: $description, name: $name, startDate: $startDate, endDate: $endDate, isPrivate: false, eventType: $eventType, teamID: $teamID, address: $address)
 }
     `;
 export type AddEventMutationFn = ApolloReactCommon.MutationFunction<AddEventMutation, AddEventMutationVariables>;
@@ -821,6 +834,7 @@ export type AddEventMutationFn = ApolloReactCommon.MutationFunction<AddEventMuta
  *      isPrivate: // value for 'isPrivate'
  *      eventType: // value for 'eventType'
  *      teamID: // value for 'teamID'
+ *      address: // value for 'address'
  *   },
  * });
  */
@@ -1603,6 +1617,38 @@ export function useGetMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>;
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>;
 export type GetMembersQueryResult = ApolloReactCommon.QueryResult<GetMembersQuery, GetMembersQueryVariables>;
+export const GetMyTeamIDsDocument = gql`
+    query GetMyTeamIDs {
+  getMyTeams {
+    _id
+  }
+}
+    `;
+
+/**
+ * __useGetMyTeamIDsQuery__
+ *
+ * To run a query within a React component, call `useGetMyTeamIDsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyTeamIDsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyTeamIDsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyTeamIDsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyTeamIDsQuery, GetMyTeamIDsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMyTeamIDsQuery, GetMyTeamIDsQueryVariables>(GetMyTeamIDsDocument, baseOptions);
+      }
+export function useGetMyTeamIDsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyTeamIDsQuery, GetMyTeamIDsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMyTeamIDsQuery, GetMyTeamIDsQueryVariables>(GetMyTeamIDsDocument, baseOptions);
+        }
+export type GetMyTeamIDsQueryHookResult = ReturnType<typeof useGetMyTeamIDsQuery>;
+export type GetMyTeamIDsLazyQueryHookResult = ReturnType<typeof useGetMyTeamIDsLazyQuery>;
+export type GetMyTeamIDsQueryResult = ApolloReactCommon.QueryResult<GetMyTeamIDsQuery, GetMyTeamIDsQueryVariables>;
 export const GetPendingsDocument = gql`
     query GetPendings($teamID: String!) {
   getPendings(teamID: $teamID) {
@@ -1726,8 +1772,8 @@ export function useGetTeamIDsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetTeamIDsQueryHookResult = ReturnType<typeof useGetTeamIDsQuery>;
 export type GetTeamIDsLazyQueryHookResult = ReturnType<typeof useGetTeamIDsLazyQuery>;
 export type GetTeamIDsQueryResult = ApolloReactCommon.QueryResult<GetTeamIDsQuery, GetTeamIDsQueryVariables>;
-export const GetTeamListDocument = gql`
-    query GetTeamList {
+export const GetMyTeamListDocument = gql`
+    query GetMyTeamList {
   getMyTeams {
     name
     _id
@@ -1737,29 +1783,29 @@ export const GetTeamListDocument = gql`
     `;
 
 /**
- * __useGetTeamListQuery__
+ * __useGetMyTeamListQuery__
  *
- * To run a query within a React component, call `useGetTeamListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTeamListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMyTeamListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyTeamListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTeamListQuery({
+ * const { data, loading, error } = useGetMyTeamListQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetTeamListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamListQuery, GetTeamListQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetTeamListQuery, GetTeamListQueryVariables>(GetTeamListDocument, baseOptions);
+export function useGetMyTeamListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyTeamListQuery, GetMyTeamListQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMyTeamListQuery, GetMyTeamListQueryVariables>(GetMyTeamListDocument, baseOptions);
       }
-export function useGetTeamListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamListQuery, GetTeamListQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetTeamListQuery, GetTeamListQueryVariables>(GetTeamListDocument, baseOptions);
+export function useGetMyTeamListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyTeamListQuery, GetMyTeamListQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMyTeamListQuery, GetMyTeamListQueryVariables>(GetMyTeamListDocument, baseOptions);
         }
-export type GetTeamListQueryHookResult = ReturnType<typeof useGetTeamListQuery>;
-export type GetTeamListLazyQueryHookResult = ReturnType<typeof useGetTeamListLazyQuery>;
-export type GetTeamListQueryResult = ApolloReactCommon.QueryResult<GetTeamListQuery, GetTeamListQueryVariables>;
+export type GetMyTeamListQueryHookResult = ReturnType<typeof useGetMyTeamListQuery>;
+export type GetMyTeamListLazyQueryHookResult = ReturnType<typeof useGetMyTeamListLazyQuery>;
+export type GetMyTeamListQueryResult = ApolloReactCommon.QueryResult<GetMyTeamListQuery, GetMyTeamListQueryVariables>;
 export const GetTeamsDocument = gql`
     query GetTeams {
   getTeams {

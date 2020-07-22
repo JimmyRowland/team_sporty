@@ -1,0 +1,6 @@
+query GetMyTeamIDs {
+    getMyTeams {
+        _id
+    }
+}
+

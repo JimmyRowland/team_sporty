@@ -10,6 +10,8 @@ import UsersToolbar from "../../../components/UserToolbar/UserToolbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
 import { Button } from "@material-ui/core";
+import { GetStaticPaths } from "next";
+import { getMyTeamStaticPaths } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -92,3 +94,5 @@ function ManageMembersPage() {
 }
 
 export default ManageMembersPage;
+
+export const getStaticPaths: GetStaticPaths = getMyTeamStaticPaths;

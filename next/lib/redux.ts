@@ -1,5 +1,4 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "../components/counter/counterSlice";
 import postReducer from "../components/post/postSlice";
 import eventReducer from "../components/eventList/eventSlice";
 import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
@@ -13,7 +12,6 @@ let redux: any;
 const initStore = (preloadedState: Record<string, unknown>) => {
     return configureStore({
         reducer: {
-            counter: counterReducer,
             posts: postReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,

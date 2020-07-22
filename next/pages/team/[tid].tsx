@@ -11,7 +11,7 @@ import Layout from "../../components/layouts/index/Layout";
 import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { getTeamStaticPaths } from "../../lib/staticPaths";
+import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 
 const useStyles = makeStyles({
     container: {
@@ -180,7 +180,7 @@ function TeamPage({ id, errors }: Props) {
 
 export default TeamPage;
 
-export const getStaticPaths: GetStaticPaths = getTeamStaticPaths;
+export const getStaticPaths: GetStaticPaths = getAllTeamStaticPaths;
 
 export const getStaticProps: GetStaticProps = async (url) => {
     try {
