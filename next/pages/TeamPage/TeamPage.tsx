@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import MessageBoard from "../../components/post/MessageBoard";
+import PostBoard from "../../components/post/PostBoard";
 
 const useStyles = makeStyles({
     container: {
@@ -119,7 +119,7 @@ function TeamPage() {
             </div>
             <div className={classes.rightColumn}>
                 <div className={classes.columnItem}>
-                    <MessageBoard pinned={true} />
+                    <PostBoard pinned={true} />
                 </div>
                 <div className={classes.columnItem}>
                     <PostCreator />
@@ -140,7 +140,7 @@ function TeamPage() {
                         </div>
                     </Card>
                 </div>
-                <MessageBoard pinned={false} />
+                <PostBoard pinned={false} />
             </div>
         </div>
     );

@@ -1,64 +1,66 @@
 import React from "react";
-import styles from "./PersonalInfoTab.module.css";
 import EditPopUp from "./EditPopUp/EditPopUp";
 import { useSelector } from "react-redux";
 import { selectPersonal } from "./EditPopUp/EditPersonalInfoSlice";
 import {useMeQuery} from "../../generated/graphql";
-import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Avatar} from "@material-ui/core";
 import AvatarUpload from "../ImageUpload/AvatarUpload/AvatarUpload";
+import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        body:{
+            position:"relative",
+            width:"90%",
+            height:"40%",
+            minWidth:"400px",
+            minHeight:"300px",
+            maxWidth:"1000px",
+            maxHeight:"700px",
+            margin:"50px auto",
+            padding:theme.spacing(2),
+
+        },
         avatar:{
             margin:"auto",
             width: theme.spacing(15),
             height: theme.spacing(15),
-            marginTop:"1em",
+            marginTop:"-3em",
+        },
+        text:{
+            textAlign: "center",
         }
     }),
 );
 export default function PersonalInfoTab(){
     const info = useSelector(selectPersonal);
-    const me = useMeQuery();
+    const { data, loading, refetch } = useMeQuery();
     const classes = useStyles();
-    console.log(me);
-    if(!me.loading){
-        return (
-            <div className={styles.Tab}>
-                <div className={styles.Cover} />
-                <Avatar src={me.data.me.avatarUrl} className={classes.avatar}/>
-                <div className={styles.Pcontainer}>
+        return loading && data && data.me ? null : (
+            <Card className={classes.body}>
+                <CardMedia
+                    component="img"
+                    alt="CoverPhoto"
+                    height="200"
+                    image={data?.me?.bannerUrls}
+                    title="CoverPhoto"
+                />
+                <Avatar src={data?.me?.avatarUrl} className={classes.avatar}/>
+                <div>
                     <p>
-                        <div className={styles.Name}> {me.data.me.name} </div>
+                        <Typography variant={"h4"} className={classes.text}> {data?.me?.name} </Typography>
                     </p>
                     <p>
-                        <div className={styles.Info}> {info.intro} </div>
+                        <Typography variant={"h6"}  className={classes.text}> {info.intro} </Typography>
                     </p>
                 </div>
-                <div className={styles.Edit}>
+                <div>
                     <EditPopUp />
                 </div>
-            </div>
+            </Card>
         )
-    }
-    else{
-        return (
-            <div className={styles.Tab}>
-                <div className={styles.Cover} />
-                <div id={styles.TempIcon} />
-                <div className={styles.Pcontainer}>
-                    <p>
-                        <div className={styles.Name}> {info.name} </div>
-                    </p>
-                    <p>
-                        <div className={styles.Info}> {info.intro} </div>
-                    </p>
-                </div>
-                <div className={styles.Edit}>
-                    <EditPopUp />
-                </div>
-            </div>
-        )
-    }
+
 }

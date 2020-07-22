@@ -140,4 +140,22 @@ export class UserResolver {
         }
         return true;
     }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async uploadBanner(@Arg("bannerUrl") bannerUrl: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
+        const _id = payload._id;
+        try {
+            console.log(bannerUrl);
+            const message = await UserModel.updateOne({ _id }, { bannerUrls: bannerUrl });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
+    }
 }

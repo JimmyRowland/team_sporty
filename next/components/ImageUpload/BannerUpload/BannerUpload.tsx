@@ -1,20 +1,32 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import React, { useEffect } from "react";
-import {avatarPreset, cloudinary, CLOUDINARY_URL, CloudinaryImageUpload} from "../../../lib/cloudinary";
-import { useMeQuery, useUploadAvatarMutation } from "../../../generated/graphql";
+import { CloudinaryImageUpload } from "../../../lib/cloudinary";
+import { useMeQuery, useUploadBannerMutation } from "../../../generated/graphql";
+import { CardMedia } from "@material-ui/core";
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
+            height: "100%",
+            width: "100%",
         },
-        avatar: {
-            width: theme.spacing(15),
-            height: theme.spacing(15),
+        covercontainer: {
+            display: "block",
+            overflow: "hidden",
+            width: "400px",
+            height: "150px",
+            borderRadius: 15,
             margin: "auto",
+            marginTop: "1em",
             "&:hover": {
                 opacity: "0.5",
             },
+        },
+        cover: {
+            display: "block",
+            maxWidth: "100%",
+            verticalAlign: "middle",
+            horizontalAlign: "middle",
         },
         imageDrop: {
             display: "none",
@@ -22,12 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function AvatarUpload() {
-    //TODO move query to parent
-    const { data, loading, refetch } = useMeQuery();
+export default function BannerUpload() {
     const classes = useStyles();
-    const [updateAvatar] = useUploadAvatarMutation();
-
+    const [updateBanner] = useUploadBannerMutation();
+    const { data, loading, refetch } = useMeQuery();
     const readURL = async (e: any) => {
         e.preventDefault();
         const reader = new FileReader();
@@ -60,34 +70,43 @@ export default function AvatarUpload() {
     };
 
     const uploadImage = async (base64EncodedImage: any) => {
-        CloudinaryImageUpload(base64EncodedImage).then((data) => {
-            const uploadedFileUrl = data.secure_url;
-            updateAvatar({
-                variables:{
-                    url:uploadedFileUrl,
-                },
-            }).then((res)=>{
-                console.log(res);
-                refetch();
+        CloudinaryImageUpload(base64EncodedImage)
+            .then((data) => {
+                const uploadedFileUrl = data.secure_url;
+                updateBanner({
+                    variables: {
+                        url: uploadedFileUrl,
+                    },
+                }).then((res) => {
+                    console.log(res);
+                    refetch();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
             });
-        }).catch((err)=>{
-            console.log(err);
-        })
     };
 
     const dragover = (e: any) => {
         e.preventDefault();
     };
-
-    return loading && data && data.me && data.me.avatarUrl ? null : (
+    return loading && data && data.me && data.me.bannerUrls ? null : (
         <div className={classes.container}>
             <form>
-                <label htmlFor="fileupload" onDrop={(e) => dropURL(e)} onDragOver={(e) => dragover(e)}>
-                    <Avatar id="avatar" alt="user" src={data?.me?.avatarUrl} className={classes.avatar} />
+                <label htmlFor="bannerupload" onDrop={(e) => dropURL(e)} onDragOver={(e) => dragover(e)}>
+                    <div className={classes.covercontainer}>
+                        <CardMedia
+                            component="img"
+                            alt="Upload banner"
+                            height="150"
+                            image={data?.me?.bannerUrls}
+                            className={classes.cover}
+                        />
+                    </div>
                 </label>
 
                 <input
-                    id="fileupload"
+                    id="bannerupload"
                     type="file"
                     accept="image/*"
                     onChange={(e) => readURL(e)}

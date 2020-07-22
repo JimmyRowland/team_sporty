@@ -6,7 +6,7 @@ import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import MessageBoard from "../../components/post/MessageBoard";
+import PostBoard from "../../components/post/PostBoard";
 import Layout from "../../components/layouts/index/Layout";
 import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";

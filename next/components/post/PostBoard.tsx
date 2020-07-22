@@ -7,12 +7,12 @@ import React, { useEffect } from "react";
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
         messageItem: {
-            marginBottom: 20,
+            marginBottom: 100,
         },
     }),
 );
 
-export default function MessageBoard({ pinned }: { pinned: boolean }) {
+export default function PostBoard({ pinned }: { pinned: boolean }) {
     const classes = useStyles();
     const posts = useSelector(selectPosts);
     const reverseposts = posts.slice().reverse();
