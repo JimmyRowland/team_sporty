@@ -5,11 +5,9 @@ type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLI
 
 export const InputField = ({ field, form: { errors, touched }, type }: FieldProps & InputProps) => {
     const errorMessage = touched[field.name] && errors[field.name];
-    // console.log(field, props);
     return (
         <div>
             <TextField {...field} type={type} label={field.name} variant="outlined" />
-            {/*<input  />*/}
             {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
         </div>
     );

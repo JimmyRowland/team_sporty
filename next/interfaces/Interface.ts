@@ -18,3 +18,8 @@ export interface StaticPropsResponseType {
     id: string;
     errors?: string;
 }
+export enum EventUserResEnum {
+    notGoing,
+    going,
+    noResponse,
+}

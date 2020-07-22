@@ -10,7 +10,7 @@ import { Team } from "../../generated/graphql";
 
 function TeamItem({ name, _id, record }: { name: string; _id: string; record: string }) {
     return (
-        <Link href={"/team/[id]"} as={`/team/${_id}`}>
+        <Link href={"/team/[tid]"} as={`/team/${_id}`}>
             <Button fullWidth>
                 <ListItem>
                     <ListItemAvatar>

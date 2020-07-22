@@ -20,6 +20,7 @@ export class EventResolver {
         @Arg("eventType") eventType: EventTypeEnum,
         @Arg("startDate") startDate: Date,
         @Arg("isPrivate") isPrivate: boolean,
+        @Arg("address") address: string,
         @Ctx() { payload }: ResReq,
         @Arg("endDate") endDate?: Date,
     ) {

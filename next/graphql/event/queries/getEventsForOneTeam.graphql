@@ -1,4 +1,4 @@
-query GetEvents($teamID: String!) {
+query GetEventsForOneTeam($teamID: String!) {
     getTeam(teamID:$teamID) {
         team{
             name

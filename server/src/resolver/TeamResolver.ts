@@ -25,7 +25,7 @@ import { getIDfromToken } from "../middleware/getIDfromToken";
 import { EventTypeEnum, SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
 import { TeamUserResponse } from "../interfaces/responseType";
-import { TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
+import { TeamApplicationPendingList, TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
 import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendingList";
 @ObjectType()
 class GetTeamsResponse {
@@ -96,8 +96,20 @@ export class TeamResolver {
     }
 
     @Query(() => [User])
+    @UseMiddleware(isAuth)
     async getMembers(@Arg("teamID") teamID: string): Promise<User[]> {
         const pairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
+        return UserModel.find({
+            _id: {
+                $in: pairs.map((pair) => pair._id.user),
+            },
+        });
+    }
+
+    @Query(() => [User])
+    @UseMiddleware(isAuth, isCoach)
+    async getPendings(@Arg("teamID") teamID: string): Promise<User[]> {
+        const pairs: TeamApplicationPendingList[] = await TeamApplicationPendingListModel.find({ "_id.team": teamID });
         return UserModel.find({
             _id: {
                 $in: pairs.map((pair) => pair._id.user),
@@ -184,6 +196,33 @@ export class TeamResolver {
     }
 
     @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async addMembers(
+        @Arg("userIDs", () => [String]) userIDs: string[],
+        @Arg("teamID") teamID: string,
+        @Ctx() { res, payload }: ResReq,
+    ) {
+        try {
+            for (const userID of userIDs) {
+                const input = new TeamUserResponse();
+                input.team = teamID;
+                input.user = userID;
+                const deleted = await TeamApplicationPendingListModel.findOneAndDelete({ _id: input });
+                if (deleted) {
+                    const teamMemberPair = new TeamMemberMapModel({
+                        _id: input,
+                    });
+                    await teamMemberPair.save();
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async applyTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
         try {
@@ -254,6 +293,25 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
+    async removeMembers(
+        @Arg("userIDs", () => [String]) userIDs: string[],
+        @Arg("teamID") teamID: string,
+        @Ctx() { res, payload }: ResReq,
+    ) {
+        try {
+            const ids = userIDs.map((userID) => {
+                return { team: teamID, user: userID };
+            });
+            await TeamMemberMapModel.remove({ _id: { $in: ids } });
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
     async removeCoach(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
         try {
             const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
@@ -280,6 +338,30 @@ export class TeamResolver {
                 },
             });
             await teamCoachPair.save();
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async addCoaches(
+        @Arg("userIDs", () => [String]) userIDs: string[],
+        @Arg("teamID") teamID: string,
+        @Ctx() { res, payload }: ResReq,
+    ) {
+        try {
+            for (const userID of userIDs) {
+                const teamCoachPair = new TeamCoachMapModel({
+                    _id: {
+                        team: teamID,
+                        user: userID,
+                    },
+                });
+                await teamCoachPair.save();
+            }
         } catch (err) {
             console.log(err);
             return false;

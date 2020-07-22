@@ -38,6 +38,10 @@ export class Event extends CreationAndModificationDate {
     @prop({ default: EventTypeEnum.training })
     eventType: EventTypeEnum;
 
+    @Field()
+    @prop({ default: "" })
+    address: string;
+
     @Field(() => Boolean)
     @prop({ default: false })
     isPrivate: boolean;

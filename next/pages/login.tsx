@@ -2,14 +2,12 @@ import { Field, Formik } from "formik";
 import Router from "next/router";
 import React from "react";
 import { InputField } from "../components/fields/InputField";
-import Layout from "../components/layouts/index/Layout";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../lib/accessToken";
 
 const LoginPage = () => {
     const [login] = useLoginMutation();
     return (
-        // <Layout title="Login page">
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
@@ -58,7 +56,6 @@ const LoginPage = () => {
                 </form>
             )}
         </Formik>
-        // </Layout>
     );
 };
 export default LoginPage;

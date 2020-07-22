@@ -1,6 +1,5 @@
 import React from "react";
-import { makeStyles, createStyles, withStyles, createMuiTheme, Theme, ThemeProvider } from "@material-ui/core/styles";
-import Fade from "@material-ui/core/Fade";
+import { makeStyles, createStyles, createMuiTheme, Theme, ThemeProvider } from "@material-ui/core/styles";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import SportsBasketballIcon from "@material-ui/icons/SportsBasketball";
 import SportsBaseballIcon from "@material-ui/icons/SportsBaseball";
@@ -8,7 +7,7 @@ import SportsFootballIcon from "@material-ui/icons/SportsFootball";
 import SportsCricketIcon from "@material-ui/icons/SportsCricket";
 import Button from "@material-ui/core/Button";
 import { NoSsr } from "@material-ui/core";
-import { green, purple } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import classNames from "classnames";
 import Router from "next/router";
 
@@ -128,16 +127,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const ColorButton = withStyles((theme: Theme) => ({
-    root: {
-        color: theme.palette.getContrastText(purple[500]),
-        backgroundColor: purple[500],
-        "&:hover": {
-            backgroundColor: purple[700],
-        },
-    },
-}))(Button);
-
 function CalendarPage() {
     const classes = useStyles();
 
@@ -227,9 +216,5 @@ function CalendarPage() {
         </NoSsr>
     );
 }
-
-// const logo = document.querySelectorAll("#logo path");
-//
-// console.log(logo.length);
 
 export default CalendarPage;

@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import CalendarList from "../../components/calendar/CalendarList";
-import CalendarList2 from "../../components/calendar/CalendarList2";
+import CalendarList from "./CalendarList";
 import TeamDropDown from "../../components/teamDropDown/TeamDropDown";
 import Typography from "@material-ui/core/Typography";
 
@@ -94,7 +93,7 @@ function CalendarPage() {
                 </div>
             </div>
             <div className={classes.container}>
-                <CalendarList2 eventList={events} />
+                <CalendarList eventList={events} />
             </div>
         </div>
     );

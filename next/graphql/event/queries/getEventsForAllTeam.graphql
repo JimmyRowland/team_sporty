@@ -1,0 +1,20 @@
+query GetEventsForAllTeam {
+    getTeams {
+        team{
+            name
+            _id
+            events{
+                _id
+                startDate
+                endDate
+                description
+                name
+                eventType
+                address
+            }
+        }
+        isCoach
+        isMember
+    }
+}
+

@@ -1,22 +1,14 @@
-import React, { forwardRef, Fragment } from "react";
+import React, { Fragment } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem, Button, colors } from "@material-ui/core";
-import { Team, useGetTeamListAsCoachQuery } from "../../../generated/graphql";
-import PeopleIcon from "@material-ui/icons/People";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import TextFieldsIcon from "@material-ui/icons/TextFields";
-import ImageIcon from "@material-ui/icons/Image";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import SettingsIcon from "@material-ui/icons/Settings";
+import { List, ListItem, Button } from "@material-ui/core";
+import { Team } from "../../../generated/graphql";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import { ListItemProps } from "../../../interfaces/Interface";
 import { SportsSoccer } from "@material-ui/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -57,11 +49,12 @@ const useStyles = makeStyles((theme) => ({
 
 const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const router = useRouter();
+    const { tid } = router.query;
+    const [open, setOpen] = React.useState(tid === team._id);
     const handleClick = () => {
         setOpen(!open);
     };
-
     return (
         <Fragment>
             <ListItem button onClick={handleClick} disableGutters>
@@ -76,7 +69,7 @@ const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={`/settings/members/${team._id}`}>
+                        <Link href={"/settings/members/[tid]"} as={`/settings/members/${team._id}`}>
                             <Button className={classes.button}>
                                 <div className={classes.icon}>
                                     <SportsSoccer />
@@ -86,7 +79,7 @@ const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
                         </Link>
                     </ListItem>
                     <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={`/settings/coaches/${team._id}`}>
+                        <Link href={"/settings/coaches/[tid]"} as={`/settings/coaches/${team._id}`}>
                             <Button className={classes.button}>
                                 <div className={classes.icon}>
                                     <SportsSoccer />
@@ -96,7 +89,7 @@ const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
                         </Link>
                     </ListItem>
                     <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={`/settings/pending/${team._id}`}>
+                        <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${team._id}`}>
                             <Button className={classes.button}>
                                 <div className={classes.icon}>
                                     <SportsSoccer />

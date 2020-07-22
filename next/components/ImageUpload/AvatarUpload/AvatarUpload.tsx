@@ -67,7 +67,6 @@ export default function AvatarUpload() {
         const formData = new FormData();
         formData.append("file", base64EncodedImage);
         formData.append("upload_preset", avatarPreset);
-
         fetch(CLOUDINARY_URL, {
             method: "POST",
             body: formData,

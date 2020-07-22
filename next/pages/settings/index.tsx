@@ -1,7 +1,6 @@
 import Layout from "../../components/layouts/settings/Layout";
 import React from "react";
 import { getAccessToken } from "../../lib/accessToken";
-import PersonalPage from "../PersonalPage/App";
 import { useRouter } from "next/router";
 
 const SettingPage = () => {
@@ -10,11 +9,7 @@ const SettingPage = () => {
     if (!accessToken) {
         router.push("/");
     }
-    return (
-        <Layout title="Settings">
-            <PersonalPage />
-        </Layout>
-    );
+    return <Layout>{null}</Layout>;
 };
 
 export default SettingPage;

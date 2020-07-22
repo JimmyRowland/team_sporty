@@ -16,10 +16,13 @@ export const userTableSlice = createSlice({
         setSeletedUsers: (state, action: PayloadAction<string[]>) => {
             state.selectedUsers = action.payload;
         },
+        resetSelectedUsers: (state) => {
+            state.selectedUsers = [];
+        },
     },
 });
 
-export const { setSeletedUsers } = userTableSlice.actions;
+export const { setSeletedUsers, resetSelectedUsers } = userTableSlice.actions;
 
 export const selectSeletedUserState = (state: RootState) => state.seletedUserInTable.selectedUsers;
 

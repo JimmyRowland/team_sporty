@@ -1,21 +1,17 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem, Button, colors } from "@material-ui/core";
+import { List, ListItem, Button } from "@material-ui/core";
 import { useGetTeamListAsCoachQuery } from "../../../generated/graphql";
 import PeopleIcon from "@material-ui/icons/People";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-import TextFieldsIcon from "@material-ui/icons/TextFields";
-import ImageIcon from "@material-ui/icons/Image";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { ListItemProps } from "../../../interfaces/Interface";
-import { SportsSoccer } from "@material-ui/icons";
 import NestedTeamItem from "./NestedTeamItem";
 import Link from "next/link";
 
@@ -58,60 +54,30 @@ const useStyles = makeStyles((theme) => ({
 
 const SidebarNav = () => {
     const classes = useStyles();
-    const { data, loading, error } = useGetTeamListAsCoachQuery();
+    const { data, loading } = useGetTeamListAsCoachQuery();
     const [open, setOpen] = React.useState(true);
     const handleClick = () => {
         setOpen(!open);
     };
-    const teamPages: ListItemProps[] =
-        data &&
-        data.getTeamsAsCoach &&
-        data.getTeamsAsCoach.map((team, index) => {
-            return {
-                title: team.name,
-                href: `/settings/team/${team._id}`,
-                icon: <PeopleIcon />,
-            };
-        });
     const pages: ListItemProps[] = [
         {
-            title: "Cloudinary",
-            href: "/settings/cloudinary",
+            title: "Performance (stretch)",
+            href: "/",
             icon: <DashboardIcon />,
         },
         {
-            title: "Users",
-            href: "/users",
-            icon: <PeopleIcon />,
-        },
-        {
-            title: "Products",
-            href: "/products",
-            icon: <ShoppingBasketIcon />,
-        },
-        {
-            title: "Authentication",
-            href: "/sign-in",
+            title: "Authentication (change password email)",
+            href: "/authentication",
             icon: <LockOpenIcon />,
         },
         {
-            title: "Typography",
-            href: "/typography",
-            icon: <TextFieldsIcon />,
-        },
-        {
-            title: "Icons",
-            href: "/icons",
-            icon: <ImageIcon />,
-        },
-        {
-            title: "Account",
+            title: "Account change avatar, address sport and more",
             href: "/account",
             icon: <AccountBoxIcon />,
         },
         {
-            title: "Settings",
-            href: "/settings",
+            title: "Place holder",
+            href: "/",
             icon: <SettingsIcon />,
         },
     ];

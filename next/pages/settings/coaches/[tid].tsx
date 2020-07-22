@@ -1,205 +1,94 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Card, Avatar } from "@material-ui/core";
-import { EventList } from "../../components/eventList/EventList";
-import PostComponent from "../../components/post/PostComponent";
-import PostCreator from "../../components/post/PostCreator";
-import Link from "next/link";
-import Button from "@material-ui/core/Button";
-import MessageBoard from "../../components/post/MessageBoard";
-import Layout from "../../components/layouts/index/Layout";
-import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
-import { initializeApollo } from "../../lib/apollo";
-import { GetStaticPaths, GetStaticProps } from "next";
+import Layout from "../../../components/layouts/settings/Layout";
+import { useAddCoachesMutation, useGetCoachesQuery, useRemoveMembersMutation } from "../../../generated/graphql";
+import { useRouter } from "next/router";
+import { TeamNotFound } from "../../../components/Error/TeamNotFound";
+import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
+import UsersTable from "../../../components/UserTable/UserTable";
+import UsersToolbar from "../../../components/UserToolbar/UserToolbar";
+import { useDispatch, useSelector } from "react-redux";
+import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
+import { Button } from "@material-ui/core";
 
-const useStyles = makeStyles({
-    container: {
-        backgroundColor: "#EFEFEF",
-        paddingTop: 90,
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(3),
     },
-    avatar: {
-        height: 120,
-        width: 120,
+    content: {
+        marginTop: theme.spacing(2),
     },
-    rosterAvatar: {
-        padding: 7,
+    importButton: {
+        marginRight: theme.spacing(1),
     },
-    leftColumn: {
-        height: "80vh",
-        position: "sticky",
-        top: "6vh",
-        flexBasis: "25%",
-        Width: "30vw",
+    exportButton: {
+        marginRight: theme.spacing(1),
     },
-    rightColumn: {
-        // flexGrow:1
+}));
 
-        marginLeft: "1em",
-        flexBasis: "70%",
-        maxWidth: "70vw",
-    },
-    columnItem: {
-        marginBottom: 20,
-    },
-    leftInnerContainer: {
-        height: "87vh",
-        display: "grid",
-        flexDirection: "column",
-        width: "100%",
-        justifyContent: "space-evenly",
-    },
-    teamContainer: {
-        margin: "1em",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    eventContainer: {
-        height: "50%",
-        overflowY: "scroll",
-    },
-    rosterCard: {
-        borderRadius: "15px",
-    },
-    rosterContainer: {
-        display: "flex",
-        marginLeft: "1em",
-        padding: 10,
-    },
-    rosterText: {
-        fontWeight: "bold",
-        fontSize: "24px",
-        marginLeft: "1em",
-        marginTop: "4px",
-        padding: 7,
-    },
-});
-
-type Props = {
-    id: string;
-    errors?: string;
-};
-
-function TeamPage({ id, errors }: Props) {
-    if (errors) {
-        return "Error component";
-    }
+function ManageMembersPage() {
     const classes = useStyles();
-    const { data, loading, error } = useGetTeamPageQuery({
+    const router = useRouter();
+    const { tid } = router.query;
+    if (typeof tid !== "string") {
+        return <TeamNotFound />;
+    }
+    const { data, loading, error, refetch } = useGetCoachesQuery({
         variables: {
-            teamID: id,
+            teamID: tid,
         },
         pollInterval: 500,
     });
 
+    const selectedUsers: string[] = useSelector(selectSeletedUserState);
+    const dispatch = useDispatch();
+    const [removeUsers] = useRemoveMembersMutation();
+    const [addCoaches] = useAddCoachesMutation();
+    let error1;
+    const handleRemoveMembers = () => {
+        dispatch(resetSelectedUsers());
+        removeUsers({ variables: { userIDs: selectedUsers, teamID: tid } })
+            .then(() => {
+                refetch();
+            })
+            .catch((e: any) => {
+                error1 = e;
+            });
+    };
+    const handlePromoteCoaches = () => {
+        dispatch(resetSelectedUsers());
+        addCoaches({ variables: { userIDs: selectedUsers, teamID: tid } })
+            .then(() => {
+                refetch();
+            })
+            .catch((e) => {
+                error1 = e;
+            });
+    };
+
+    if (error || error1) return <TeamNotFound />;
+
     return (
-        <Layout title={data?.getTeam.team.name}>
-            <div className={classes.container}>
-                <div className={classes.leftColumn}>
-                    <Card raised={true}>
-                        <div className={classes.leftInnerContainer}>
-                            <div className={classes.teamContainer}>
-                                <Avatar className={classes.avatar}>T</Avatar>
-                                <Typography variant={"h4"}>Team name</Typography>
-                                <Typography variant={"subtitle1"}>something</Typography>
-                                <Typography variant={"subtitle2"}>somethingElse</Typography>
-                            </div>
-                            <Typography variant={"h5"}>UPCOMING...</Typography>
-                            <div className={classes.eventContainer}>
-                                <EventList />
-                            </div>
-                            <Link href="/teammanage">
-                                <Button> Team Management </Button>
-                            </Link>
-                        </div>
-                    </Card>
-                </div>
-                <div className={classes.rightColumn}>
-                    <div className={classes.columnItem}>
-                        {data?.getTeam.team.posts?.map((post, index) => {
-                            return !post.isPined ? null : (
-                                <PostComponent
-                                    key={index}
-                                    content={post.content}
-                                    firstName={post.user.name}
-                                    lastModifyDate={post.lastModifyDate}
-                                    isPinned={post.isPined}
-                                    postID={post._id}
-                                    teamID={id}
-                                    isCoach={data?.getTeam.isCoach}
-                                />
-                            );
-                        })}
+        <Layout>
+            {loading || !data || !data.getCoaches ? (
+                <LoadingMembers />
+            ) : (
+                <div className={classes.root}>
+                    <UsersToolbar>
+                        <Button color="primary" variant="contained" onClick={handlePromoteCoaches}>
+                            Promote Coaches
+                        </Button>
+                        <Button className={classes.importButton} onClick={handleRemoveMembers}>
+                            Remove Members
+                        </Button>
+                    </UsersToolbar>
+                    <div className={classes.content}>
+                        <UsersTable users={data.getCoaches} />
                     </div>
-                    <div className={classes.columnItem}>
-                        <PostCreator teamID={id} />
-                    </div>
-                    {/*<div className={classes.columnItem}>*/}
-                    {/*    <Card className={classes.rosterCard}>*/}
-                    {/*        <div className={classes.rosterText}>*/}
-                    {/*            <Typography variant={"h5"}>Roster</Typography>*/}
-                    {/*        </div>*/}
-                    {/*        <div className={classes.rosterContainer}>*/}
-                    {/*            {posts.map((name, index) => {*/}
-                    {/*                return (*/}
-                    {/*                    <div key={index} className={classes.rosterAvatar}>*/}
-                    {/*                        /!*<Link href={"/"}>*!/*/}
-                    {/*                        <Avatar key={index}>{name}</Avatar>*/}
-                    {/*                        /!*</Link>*!/*/}
-                    {/*                    </div>*/}
-                    {/*                );*/}
-                    {/*            })}*/}
-                    {/*        </div>*/}
-                    {/*    </Card>*/}
-                    {/*</div>*/}
-                    {data?.getTeam.team.posts?.map((post, index) => {
-                        return post.isPined ? null : (
-                            <PostComponent
-                                key={index}
-                                content={post.content}
-                                firstName={post.user.name}
-                                lastModifyDate={post.lastModifyDate}
-                                isPinned={post.isPined}
-                                postID={post._id}
-                                teamID={id}
-                                isCoach={data?.getTeam.isCoach}
-                            />
-                        );
-                    })}
                 </div>
-            </div>
+            )}
         </Layout>
     );
 }
 
-export default TeamPage;
-
-export const getStaticPaths: GetStaticPaths = async () => {
-    const apolloClient = initializeApollo();
-    const teams = await apolloClient.query({
-        query: GetTeamIDsDocument,
-    });
-    const paths = teams.data.getTeams.map(({ team }: { team: Team }) => {
-        return { params: { id: team._id } };
-    });
-    return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async (url) => {
-    try {
-        const id = url.params?.id;
-        const apolloClient = initializeApollo();
-        await apolloClient.query({
-            query: GetTeamPageDocument,
-            variables: { teamID: id },
-        });
-        return { props: { id, initialApolloState: apolloClient.cache.extract() } };
-    } catch (err) {
-        return { props: { errors: err.message } };
-    }
-};
+export default ManageMembersPage;

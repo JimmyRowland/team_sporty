@@ -4,6 +4,7 @@ import postReducer from "../components/post/postSlice";
 import eventReducer from "../components/eventList/eventSlice";
 import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
+import nestedTeamListOpenReducer from "../components/Sidebar/SidebarNav/sidebarNavSlicer";
 import { useMemo } from "react";
 const dev = process.env.NODE_ENV === "development";
 
@@ -17,6 +18,7 @@ const initStore = (preloadedState: Record<string, unknown>) => {
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
             seletedUserInTable: selectedUsersInTableReducer,
+            nestedTeamListOpen: nestedTeamListOpenReducer,
         },
         devTools: dev,
         preloadedState: preloadedState,

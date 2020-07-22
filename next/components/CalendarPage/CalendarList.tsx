@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useEventsQuery } from "../../generated/graphql";
+import { useGetEventsForOneTeamQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.typography.pxToRem(15),
             flexBasis: "33.33%",
             flexShrink: 0,
-            align: "left",
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
@@ -21,15 +20,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-function CalendarList(props: { eventList: any[] }) {
+export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState<string | false>(false);
-
-    const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
-    const { data, loading, error } = useEventsQuery();
+    // graphql
+    const { data, loading, error } = useGetEventsForOneTeamQuery({
+        variables: {
+            teamID: "5f0d712db3addc027b9fab0a",
+        },
+    });
     if (loading) {
         return <div>loading...</div>;
     }
@@ -42,7 +40,6 @@ function CalendarList(props: { eventList: any[] }) {
     if (!data) {
         return <div>no data</div>;
     }
-    console.log(data);
     return (
         <div className={classes.root}>
             {props.eventList.map((c) => (
@@ -57,8 +54,8 @@ function CalendarList(props: { eventList: any[] }) {
                     notResponded={c.notResponded}
                 />
             ))}
-            {data.events.map((event, index) => {
-                // console.log(index, event);
+            {data?.getTeam?.team?.events?.map((event, index: number) => {
+                // graphql
                 return (
                     <CalendarItem
                         key={index}
@@ -73,8 +70,8 @@ function CalendarList(props: { eventList: any[] }) {
                 );
             })}
             <br></br>
+            <br></br>
+            <br></br>
         </div>
     );
 }
-
-export default CalendarList;

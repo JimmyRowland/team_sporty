@@ -1,30 +1,16 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Card, Avatar } from "@material-ui/core";
-import { EventList } from "../../components/eventList/EventList";
-import PostComponent from "../../components/post/PostComponent";
-import PostCreator from "../../components/post/PostCreator";
-import Link from "next/link";
-import Button from "@material-ui/core/Button";
-import MessageBoard from "../../components/post/MessageBoard";
 import Layout from "../../../components/layouts/settings/Layout";
-import {
-    GetTeamIDsDocument,
-    GetTeamPageDocument,
-    Team,
-    useGetCoachesQuery,
-    useGetMembersQuery,
-    useGetTeamListAsCoachQuery,
-    useGetTeamPageQuery,
-} from "../../../generated/graphql";
-import { initializeApollo } from "../../../lib/apollo";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { StaticPropsResponseType } from "../../../interfaces/Interface";
-import { useRouter } from "next/router";
-import { TeamNotFound } from "../../../components/error/TeamNotFound";
+import { useAddCoachesMutation, useGetMembersQuery, useRemoveMembersMutation } from "../../../generated/graphql";
+import { TeamNotFound } from "../../../components/Error/TeamNotFound";
 import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
 import UsersTable from "../../../components/UserTable/UserTable";
 import UsersToolbar from "../../../components/UserToolbar/UserToolbar";
+import { useDispatch, useSelector } from "react-redux";
+import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
+import { Button } from "@material-ui/core";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { getTeamStaticPaths } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,34 +19,91 @@ const useStyles = makeStyles((theme) => ({
     content: {
         marginTop: theme.spacing(2),
     },
+    importButton: {
+        marginRight: theme.spacing(1),
+    },
+    exportButton: {
+        marginRight: theme.spacing(1),
+    },
 }));
 
-function CoachesPage() {
+type Props = {
+    tid: string;
+    errors?: string;
+};
+
+function ManageMembersPage({ tid, errors }: Props) {
     const classes = useStyles();
-    const router = useRouter();
-    const { tid } = router.query;
-    if (typeof tid !== "string") {
+    if (errors) {
         return <TeamNotFound />;
     }
-    const { data, loading, error } = useGetCoachesQuery({
+    const { data, loading, error, refetch } = useGetMembersQuery({
         variables: {
             teamID: tid,
         },
         pollInterval: 500,
     });
-    if (loading || !data || !data.getCoaches) return <LoadingMembers />;
-    if (error) return <TeamNotFound />;
+
+    const selectedUsers: string[] = useSelector(selectSeletedUserState);
+    const dispatch = useDispatch();
+    const [removeUsers] = useRemoveMembersMutation();
+    const [addCoaches] = useAddCoachesMutation();
+    let error1;
+    const handleRemoveMembers = () => {
+        dispatch(resetSelectedUsers());
+        removeUsers({ variables: { userIDs: selectedUsers, teamID: tid } })
+            .then(() => {
+                refetch();
+            })
+            .catch((e: any) => {
+                error1 = e;
+            });
+    };
+    const handlePromoteCoaches = () => {
+        dispatch(resetSelectedUsers());
+        addCoaches({ variables: { userIDs: selectedUsers, teamID: tid } })
+            .then(() => {
+                refetch();
+            })
+            .catch((e) => {
+                error1 = e;
+            });
+    };
+
+    if (error || error1) return <TeamNotFound />;
 
     return (
-        <Layout title="Settings">
-            <div className={classes.root}>
-                <UsersToolbar />
-                <div className={classes.content}>
-                    <UsersTable users={data.getCoaches} />
+        <Layout>
+            {loading || !data || !data.getMembers ? (
+                <LoadingMembers />
+            ) : (
+                <div className={classes.root}>
+                    <UsersToolbar>
+                        <Button color="primary" variant="contained" onClick={handlePromoteCoaches}>
+                            Promote Coaches
+                        </Button>
+                        <Button className={classes.importButton} onClick={handleRemoveMembers}>
+                            Remove Members
+                        </Button>
+                    </UsersToolbar>
+                    <div className={classes.content}>
+                        <UsersTable users={data.getMembers} />
+                    </div>
                 </div>
-            </div>
+            )}
         </Layout>
     );
 }
 
-export default CoachesPage;
+export default ManageMembersPage;
+
+export const getStaticPaths: GetStaticPaths = getTeamStaticPaths;
+
+export const getStaticProps: GetStaticProps = async (url) => {
+    try {
+        const tid = url.params?.tid;
+        return { props: { tid } };
+    } catch (err) {
+        return { props: { errors: err.message } };
+    }
+};

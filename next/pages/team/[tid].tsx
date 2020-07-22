@@ -11,6 +11,7 @@ import Layout from "../../components/layouts/index/Layout";
 import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { getTeamStaticPaths } from "../../lib/staticPaths";
 
 const useStyles = makeStyles({
     container: {
@@ -179,26 +180,17 @@ function TeamPage({ id, errors }: Props) {
 
 export default TeamPage;
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const apolloClient = initializeApollo();
-    const teams = await apolloClient.query({
-        query: GetTeamIDsDocument,
-    });
-    const paths = teams.data.getTeams.map(({ team }: { team: Team }) => {
-        return { params: { id: team._id } };
-    });
-    return { paths, fallback: false };
-};
+export const getStaticPaths: GetStaticPaths = getTeamStaticPaths;
 
 export const getStaticProps: GetStaticProps = async (url) => {
     try {
-        const id = url.params?.id;
+        const tid = url.params?.tid;
         const apolloClient = initializeApollo();
         await apolloClient.query({
             query: GetTeamPageDocument,
-            variables: { teamID: id },
+            variables: { teamID: tid },
         });
-        return { props: { id, initialApolloState: apolloClient.cache.extract() } };
+        return { props: { id: tid, initialApolloState: apolloClient.cache.extract() } };
     } catch (err) {
         return { props: { errors: err.message } };
     }

@@ -1,8 +1,8 @@
 import Layout from "../components/layouts/index/Layout";
 import React from "react";
-import Frontpage from "./FrontPage/App";
+import Frontpage from "../components/FrontPage/App";
 import { getAccessToken } from "../lib/accessToken";
-import PersonalPage from "./PersonalPage/App";
+import PersonalPage from "../components/PersonalPage/App";
 
 const IndexPage = () => {
     return getAccessToken() === "" ? (

@@ -1,0 +1,3 @@
+mutation RemoveMembers($teamID: String!, $userIDs: [String!]!) {
+    removeMembers(teamID: $teamID, userIDs: $userIDs)
+}

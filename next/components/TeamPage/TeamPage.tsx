@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, Avatar } from "@material-ui/core";
 import { EventList } from "../../components/eventList/EventList";
-import PostComponent from "../../components/post/PostComponent";
-import { selectPosts, postAsync, PostInterface } from "../../components/post/postSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { postAsync } from "../../components/post/postSlice";
+import { useDispatch } from "react-redux";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
@@ -81,16 +80,7 @@ const useStyles = makeStyles({
 const posts = ["e", "e", "dfg"];
 function TeamPage() {
     const classes = useStyles();
-    // for (let i = 0; i < 3; i++) {
-    //   const date = new Date();
-    //   date.setDate(date.getDate() + i * 4);
-    //   const title = `Event ${i}`;
-    //   const detail = `sdofhsepohgr;kdznfbo ${i}`;
-    //   const event: EventListItemType = { date: date, title: title, body: detail };
-    //   events.push(event);
-    // }
     const dispatch = useDispatch();
-
     useEffect(() => {
         console.log("load posts");
         dispatch(postAsync());

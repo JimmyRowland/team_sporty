@@ -6,6 +6,7 @@ import { useMediaQuery } from "@material-ui/core";
 import Header from "../../Header/Header";
 import clsx from "clsx";
 import Sidebar from "../../Sidebar/Sidebar";
+import Layout from "../Layout";
 
 type Props = {
     children?: ReactNode;
@@ -52,19 +53,21 @@ export default function Settings({ children }: { children: ReactNode }) {
     const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
     return (
-        <div
-            className={clsx({
-                [classes.root]: true,
-                [classes.shiftContent]: isDesktop,
-            })}
-        >
-            <Header />
-            <Sidebar
-                onClose={handleSidebarClose}
-                open={shouldOpenSidebar}
-                variant={isDesktop ? "persistent" : "temporary"}
-            />
-            <main className={classes.content}>{children}</main>
-        </div>
+        <Layout title={"Settings"}>
+            <div
+                className={clsx({
+                    [classes.root]: true,
+                    [classes.shiftContent]: isDesktop,
+                })}
+            >
+                <Header />
+                <Sidebar
+                    onClose={handleSidebarClose}
+                    open={shouldOpenSidebar}
+                    variant={isDesktop ? "persistent" : "temporary"}
+                />
+                <main className={classes.content}>{children}</main>
+            </div>
+        </Layout>
     );
 }

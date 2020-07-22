@@ -110,37 +110,41 @@ const UsersTable = ({
                                     <TableCell>Email</TableCell>
                                     <TableCell>Location</TableCell>
                                     <TableCell>Phone</TableCell>
+                                    <TableCell>Sport</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {users.slice(0, rowsPerPage).map((user, index) => (
-                                    <TableRow
-                                        className={classes.tableRow}
-                                        hover
-                                        key={index}
-                                        selected={selectedUsers.indexOf(user._id) !== -1}
-                                    >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                checked={selectedUsers.indexOf(user._id) !== -1}
-                                                color="primary"
-                                                onChange={(event) => handleSelectOne(event, user._id)}
-                                                value="true"
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className={classes.nameContainer}>
-                                                <Avatar className={classes.avatar} src={user.avatarUrl}>
-                                                    {user.name}
-                                                </Avatar>
-                                                <Typography variant="body1">{user.name}</Typography>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>{user.email}</TableCell>
-                                        <TableCell>{user.address}</TableCell>
-                                        <TableCell>{user.phone}</TableCell>
-                                    </TableRow>
-                                ))}
+                                {users
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((user, index) => (
+                                        <TableRow
+                                            className={classes.tableRow}
+                                            hover
+                                            key={index}
+                                            selected={selectedUsers.indexOf(user._id) !== -1}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    checked={selectedUsers.indexOf(user._id) !== -1}
+                                                    color="primary"
+                                                    onChange={(event) => handleSelectOne(event, user._id)}
+                                                    value="true"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className={classes.nameContainer}>
+                                                    <Avatar className={classes.avatar} src={user.avatarUrl}>
+                                                        {user.name}
+                                                    </Avatar>
+                                                    <Typography variant="body1">{user.name}</Typography>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>{user.email}</TableCell>
+                                            <TableCell>{user.address}</TableCell>
+                                            <TableCell>{user.phone}</TableCell>
+                                            <TableCell>{user.sport}</TableCell>
+                                        </TableRow>
+                                    ))}
                             </TableBody>
                         </Table>
                     </div>
