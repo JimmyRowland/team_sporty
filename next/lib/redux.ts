@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import counterReducer from "../components/counter/counterSlice";
 import postReducer from "../components/post/postSlice";
 import eventReducer from "../components/eventList/eventSlice";
+import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
 import { useMemo } from "react";
 const dev = process.env.NODE_ENV === "development";
@@ -15,6 +16,7 @@ const initStore = (preloadedState: Record<string, unknown>) => {
             posts: postReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
+            seletedUserInTable: selectedUsersInTableReducer,
         },
         devTools: dev,
         preloadedState: preloadedState,

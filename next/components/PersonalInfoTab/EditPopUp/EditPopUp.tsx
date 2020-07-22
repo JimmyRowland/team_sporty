@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
 import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
+import { useMeQuery } from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "30%",
             width: "100%",
             margin: "auto",
-            padding:"1em",
+            padding: "1em",
         },
         title: {
             fontWeight: "bold",
@@ -82,6 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function EditPopUp() {
     const info = useSelector(selectPersonal);
+
     const dispatch = useDispatch();
     let intro = info.intro;
     const classes = useStyles();

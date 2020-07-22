@@ -15,19 +15,17 @@ import { isAuth } from "../middleware/isAuth";
 import { Team, TeamModel } from "../entities/Team";
 import { isCoach } from "../middleware/isCoach";
 import { hasTeam } from "../middleware/hasTeam";
-import { TeamCoachMapModel } from "../entities/TeamCoachMap";
+import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
 import { ObjectID } from "mongodb";
 import { hasUser } from "../middleware/hasUser";
 import { TeamMemberMap, TeamMemberMapModel } from "../entities/TeamMemberMap";
 import { User, UserModel } from "../entities/User";
 import { Post } from "../entities/Post";
-import { isMember } from "../middleware/isMember";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 import { EventTypeEnum, SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
 import { TeamUserResponse } from "../interfaces/responseType";
 import { TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
-import { isCreditCard } from "class-validator";
 import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendingList";
 @ObjectType()
 class GetTeamsResponse {
@@ -61,9 +59,9 @@ export class TeamResolver {
     @Query(() => [GetTeamsResponse])
     @UseMiddleware(getIDfromToken)
     async getTeams(@Ctx() { res, payload }: ResReq) {
-        const teams = await TeamModel.find();
-        const memberTeamPair = await TeamMemberMapModel.find({ "_id.user": payload._id });
-        const coachTeamPair = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const teams: Team[] = await TeamModel.find();
+        const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
+        const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
         return teams.map((team) => {
             const idString = team._id.toHexString();
             const isMember = memberTeamPair.find((pair) => {
@@ -99,7 +97,7 @@ export class TeamResolver {
 
     @Query(() => [User])
     async getMembers(@Arg("teamID") teamID: string): Promise<User[]> {
-        const pairs = await TeamMemberMapModel.find({ "_id.team": teamID });
+        const pairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
         return UserModel.find({
             _id: {
                 $in: pairs.map((pair) => pair._id.user),
@@ -109,7 +107,7 @@ export class TeamResolver {
 
     @Query(() => [User])
     async getCoaches(@Arg("teamID") teamID: string): Promise<User[]> {
-        const pairs = await TeamCoachMapModel.find({
+        const pairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.team": teamID,
         });
         return UserModel.find({
@@ -122,10 +120,10 @@ export class TeamResolver {
     @Query(() => [Team])
     @UseMiddleware(isAuth)
     async getMyTeams(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
-        const memberPairs = await TeamMemberMapModel.find({
+        const memberPairs: TeamMemberMap[] = await TeamMemberMapModel.find({
             "_id.user": payload._id,
         });
-        const coachPairs = await TeamCoachMapModel.find({
+        const coachPairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.user": payload._id,
         });
         const teamIDs = memberPairs.map((pair) => pair._id.team).concat(coachPairs.map((pair) => pair._id.team));
@@ -139,7 +137,7 @@ export class TeamResolver {
     @Query(() => [Team])
     @UseMiddleware(isAuth)
     async getTeamsAsCoach(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
-        const coachPairs = await TeamCoachMapModel.find({
+        const coachPairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.user": payload._id,
         });
         const teamIDs = coachPairs.map((pair) => pair._id.team);
@@ -153,7 +151,7 @@ export class TeamResolver {
     @Query(() => [Team])
     @UseMiddleware(isAuth)
     async getTeamsAsMember(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
-        const memberPairs = await TeamMemberMapModel.find({
+        const memberPairs: TeamMemberMap[] = await TeamMemberMapModel.find({
             "_id.user": payload._id,
         });
         const teamIDs = memberPairs.map((pair) => pair._id.team);
@@ -293,7 +291,7 @@ export class TeamResolver {
     @UseMiddleware(getIDfromToken)
     async getTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetTeamResponse> {
         const team = await TeamModel.findById(teamID);
-        const coachTeamPair = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
         const result = new GetTeamResponse();
         const isCoach = coachTeamPair.find((pair) => {
             return pair._id.team === team?._id.toHexString();

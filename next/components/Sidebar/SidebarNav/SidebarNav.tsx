@@ -11,7 +11,12 @@ import TextFieldsIcon from "@material-ui/icons/TextFields";
 import ImageIcon from "@material-ui/icons/Image";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import SettingsIcon from "@material-ui/icons/Settings";
-import ListItemProps from "../../../interfaces/Interface";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import { ListItemProps } from "../../../interfaces/Interface";
+import { SportsSoccer } from "@material-ui/icons";
+import NestedTeamItem from "./NestedTeamItem";
 import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,11 +51,18 @@ const useStyles = makeStyles((theme) => ({
     nav: {
         marginBottom: theme.spacing(2),
     },
+    nested: {
+        paddingLeft: theme.spacing(2),
+    },
 }));
 
 const SidebarNav = () => {
     const classes = useStyles();
     const { data, loading, error } = useGetTeamListAsCoachQuery();
+    const [open, setOpen] = React.useState(true);
+    const handleClick = () => {
+        setOpen(!open);
+    };
     const teamPages: ListItemProps[] =
         data &&
         data.getTeamsAsCoach &&
@@ -63,8 +75,8 @@ const SidebarNav = () => {
         });
     const pages: ListItemProps[] = [
         {
-            title: "Dashboard",
-            href: "/dashboard",
+            title: "Cloudinary",
+            href: "/settings/cloudinary",
             icon: <DashboardIcon />,
         },
         {
@@ -116,6 +128,24 @@ const SidebarNav = () => {
                     </ListItem>
                 </Link>
             ))}
+            <ListItem button onClick={handleClick} className={classes.item} disableGutters>
+                <Button className={classes.button}>
+                    <div className={classes.icon}>
+                        <PeopleIcon />
+                    </div>
+                    {"Teams"}
+                </Button>
+                {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding className={classes.nested}>
+                    {!loading && data && data.getTeamsAsCoach
+                        ? data.getTeamsAsCoach.map((team, index) => {
+                              return <NestedTeamItem team={team} key={index} />;
+                          })
+                        : null}
+                </List>
+            </Collapse>
         </List>
     );
 };

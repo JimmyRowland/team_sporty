@@ -3,6 +3,9 @@ query GetCoaches($teamID: String!) {
         name
         _id
         sport
+        phone
+        email
+        address
         avatarUrl
     }
 }

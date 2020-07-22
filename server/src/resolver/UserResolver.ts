@@ -7,6 +7,7 @@ import { isAuth } from "../middleware/isAuth";
 import { verify } from "jsonwebtoken";
 import { RegisterInput } from "../interfaces/inputType";
 import { LoginResponse } from "../interfaces/responseType";
+
 // TODO hide users query
 
 @Resolver()
@@ -120,7 +121,23 @@ export class UserResolver {
                 return false;
             }
         }
+        return true;
+    }
 
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async uploadAvatar(@Arg("avatarUrl") avatarUrl: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
+        const _id = payload._id;
+        try {
+            const message = await UserModel.updateOne({ _id }, { avatarUrl: avatarUrl });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
         return true;
     }
 }

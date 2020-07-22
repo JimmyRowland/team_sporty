@@ -1,9 +1,7 @@
 query Me {
     me {
         _id
-        email
         name
-        bannerUrls
         avatarUrl
     }
 }

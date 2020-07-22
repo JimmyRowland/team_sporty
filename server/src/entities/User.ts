@@ -36,6 +36,14 @@ export class User extends CreationAndModificationDate {
     @prop({ default: 0 })
     tokenVersion: number;
 
+    @Field()
+    @prop({ default: "" })
+    address: string;
+
+    @Field()
+    @prop({ default: "" })
+    phone: string;
+
     @Field(() => [String])
     @prop({ default: [] })
     ip: string[];

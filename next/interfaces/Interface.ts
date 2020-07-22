@@ -14,3 +14,7 @@ export interface ListItemProps {
     href: string;
     icon: ReactNode;
 }
+export interface StaticPropsResponseType {
+    id: string;
+    errors?: string;
+}
