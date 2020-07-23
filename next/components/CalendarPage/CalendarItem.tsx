@@ -119,7 +119,7 @@ export default function CalendarItem({
     let radio = 2;
     console.log(renders++);
     const classes = useStyles();
-    const [selectedValue, setSelectedValue] = React.useState(2);
+    const [selectedValue, setSelectedValue] = React.useState(-1);
     const [setGoing] = useSetGoingMutation();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(+e.target.value);
@@ -201,7 +201,7 @@ export default function CalendarItem({
                         <Typography align="right">
                             Not Responded
                             <GreyRadio
-                                checked={selectedValue === 2}
+                                checked={selectedValue === 2 || radio === 2}
                                 onChange={handleChange}
                                 value={2}
                                 name="radio-button-demo"
