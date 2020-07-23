@@ -6,10 +6,12 @@ import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
+import PostBoard from "../../components/post/PostBoard";
 import Layout from "../../components/layouts/index/Layout";
 import { GetTeamPageDocument, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
+import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
 
@@ -22,17 +24,14 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-evenly",
     },
-    avatar: {
-        height: 120,
-        width: 120,
-    },
+
     rosterAvatar: {
         padding: 7,
     },
     leftColumn: {
         height: "80vh",
         position: "sticky",
-        top: "6vh",
+        top: "10%",
         flexBasis: "25%",
         maxWidth: "25vw",
     },
@@ -44,18 +43,7 @@ const useStyles = makeStyles({
     columnItem: {
         marginBottom: 20,
     },
-    leftInnerContainer: {
-        height: "87vh",
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        justifyContent: "space-evenly",
-    },
-    teamContainer: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
+
     rosterCard: {
         borderRadius: "15px",
     },
@@ -81,6 +69,7 @@ type Props = {
 
 function TeamPage({ id, errors }: Props) {
     if (errors) {
+        console.log(errors);
         return "Error component";
     }
     const classes = useStyles();
@@ -90,6 +79,7 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
+    const reversePosts = data?.getTeam.team.posts?.slice().reverse();
     if (loading || error || !data || !data.getTeam) {
         return <LoadingMembers />;
     }
@@ -98,37 +88,23 @@ function TeamPage({ id, errors }: Props) {
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <Card raised={true}>
-                        <div className={classes.leftInnerContainer}>
-                            <div className={classes.teamContainer}>
-                                <Avatar className={classes.avatar}>T</Avatar>
-                                <Typography variant={"h4"}>Team name</Typography>
-                                <Typography variant={"subtitle1"}>something</Typography>
-                                <Typography variant={"subtitle2"}>somethingElse</Typography>
-                            </div>
-                            <Typography variant={"h5"}>UPCOMING...</Typography>
-                            <div>
-                                <EventList />
-                            </div>
-                            <Link href="/teammanage">
-                                <Button> Team Management </Button>
-                            </Link>
-                        </div>
-                    </Card>
+                    <TeamDisplayPannel data={data} />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>
-                        {data?.getTeam.team.posts?.map((post, index) => {
+                        {reversePosts.map((post, index) => {
                             return !post.isPined ? null : (
                                 <PostComponent
                                     key={index}
                                     content={post.content}
                                     firstName={post.user.name}
+                                    avatarUrl={post.user.avatarUrl}
                                     lastModifyDate={post.lastModifyDate}
                                     isPinned={post.isPined}
                                     postID={post._id}
                                     teamID={id}
                                     isCoach={data?.getTeam.isCoach}
+                                    imgUrls={post.imgUrls}
                                 />
                             );
                         })}
@@ -154,7 +130,7 @@ function TeamPage({ id, errors }: Props) {
                     {/*        </div>*/}
                     {/*    </Card>*/}
                     {/*</div>*/}
-                    {data?.getTeam.team.posts?.map((post, index) => {
+                    {reversePosts?.map((post, index) => {
                         return post.isPined ? null : (
                             <PostComponent
                                 key={index}
@@ -165,6 +141,8 @@ function TeamPage({ id, errors }: Props) {
                                 postID={post._id}
                                 teamID={id}
                                 isCoach={data?.getTeam.isCoach}
+                                avatarUrl={post.user.avatarUrl}
+                                imgUrls={post.imgUrls}
                             />
                         );
                     })}

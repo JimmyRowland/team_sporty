@@ -7,6 +7,7 @@ import { IconButton } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import Card from "@material-ui/core/Card";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -61,7 +62,7 @@ const useStyles = makeStyles((Theme: Theme) =>
 export default function TeamInfoManageTab() {
     const classes = useStyles();
     return (
-        <div className={classes.body}>
+        <Card className={classes.body}>
             <div className={classes.container}>
                 <Avatar className={classes.avatar}>T</Avatar>
             </div>
@@ -82,6 +83,6 @@ export default function TeamInfoManageTab() {
                     Edit{" "}
                 </Button>
             </div>
-        </div>
+        </Card>
     );
 }

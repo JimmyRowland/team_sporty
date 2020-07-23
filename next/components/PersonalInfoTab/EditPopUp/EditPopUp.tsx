@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
 import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
 import { useMeQuery } from "../../../generated/graphql";
+import BannerUpload from "../../ImageUpload/BannerUpload/BannerUpload";
+import Card from "@material-ui/core/Card";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "30%",
             width: "100%",
             margin: "auto",
-            padding: "1em",
+            padding: "2em",
         },
         title: {
             fontWeight: "bold",
@@ -37,10 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         coverphoto: {
             textAlign: "center",
-            height: "60%",
-            width: "80%",
-            borderRadius: 15,
-            backgroundColor: "#C4C4C4",
             margin: "auto",
             marginTop: "1em",
         },
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         field: {
             display: "block",
-            width: "80%",
+            width: "100%",
             height: "50%",
             borderRadius: 15,
             resize: "none",
@@ -63,13 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 18,
         },
         icon: {
-            textAlign: "center",
-            height: 100,
-            width: 100,
-            borderRadius: "50%",
-            backgroundColor: "#C4C4C4",
+            width: "100%",
+            height: "100%",
             margin: "auto",
-            marginTop: "1em",
+            paddingTop: "2em",
         },
         edit: {
             textAlign: "center",
@@ -86,7 +82,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function EditPopUp() {
     const info = useSelector(selectPersonal);
-
     const dispatch = useDispatch();
     let intro = info.intro;
     const classes = useStyles();
@@ -109,19 +104,27 @@ export default function EditPopUp() {
         dispatch(changeintro(intro));
     };
     const body = (
-        <div className={classes.paper}>
+        <Card className={classes.paper}>
             <div className={classes.closecontainer}>
                 <IconButton aria-label="close" className={classes.close} onClick={handleClose}>
                     <CloseIcon />
                 </IconButton>
             </div>
             <div className={classes.container}>
+                <div>
                 <div className={classes.title}>Profile Picture</div>
+                </div>
+                <div className={classes.icon}>
                 <AvatarUpload />
+                </div>
             </div>
             <div className={classes.container}>
+                <div>
                 <div className={classes.title}>Cover Photo</div>
-                <div className={classes.coverphoto}> Photo</div>
+                </div>
+                <div className={classes.coverphoto}>
+                <BannerUpload/>
+                </div>
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Personal Info</div>
@@ -142,7 +145,7 @@ export default function EditPopUp() {
             >
                 Edit
             </Button>
-        </div>
+        </Card>
     );
 
     return (

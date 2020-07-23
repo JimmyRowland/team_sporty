@@ -7,6 +7,7 @@ import { IconButton } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import Card from "@material-ui/core/Card";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -64,7 +65,7 @@ const useStyles = makeStyles((Theme: Theme) =>
 function MemberTab() {
     const classes = useStyles();
     return (
-        <div className={classes.memberbody}>
+        <Card className={classes.memberbody}>
             <div className={classes.memberelement}>
                 <Avatar className={classes.inner} />
             </div>
@@ -77,14 +78,14 @@ function MemberTab() {
             <div className={classes.memberelement2}>
                 <Button className={classes.inner}> Remove </Button>
             </div>
-        </div>
+        </Card>
     );
 }
 
 export default function TeamInfoManageTab() {
     const classes = useStyles();
     return (
-        <div className={classes.body}>
+        <Card className={classes.body}>
             <Typography variant="h6" className={classes.mmtext}>
                 {" "}
                 Member Management{" "}
@@ -98,6 +99,6 @@ export default function TeamInfoManageTab() {
                 <MemberTab />
                 <MemberTab />
             </div>
-        </div>
+        </Card>
     );
 }

@@ -26,9 +26,21 @@ export class UserResolver {
     }
 
     @Query(() => User, { nullable: true })
-    @UseMiddleware(isAuth)
-    me(@Ctx() { payload }: ResReq) {
-        return UserModel.findById(payload._id);
+    me(@Ctx() context: ResReq) {
+        const authorization = context.req.headers["authorization"];
+
+        if (!authorization) {
+            return null;
+        }
+
+        try {
+            const token = authorization.split(" ")[1];
+            const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
+            return UserModel.findOne({ _id: payload._id });
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
     }
 
     @Mutation(() => Boolean)
@@ -127,6 +139,24 @@ export class UserResolver {
         const _id = payload._id;
         try {
             const message = await UserModel.updateOne({ _id }, { avatarUrl: avatarUrl });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async uploadBanner(@Arg("bannerUrl") bannerUrl: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
+        const _id = payload._id;
+        try {
+            console.log(bannerUrl);
+            const message = await UserModel.updateOne({ _id }, { bannerUrls: bannerUrl });
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }

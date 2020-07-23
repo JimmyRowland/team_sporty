@@ -1,0 +1,3 @@
+mutation UploadBanner($url: String!) {
+    uploadBanner(bannerUrl: $url)
+}

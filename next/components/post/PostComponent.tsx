@@ -22,12 +22,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {} from "./postSlice";
 import { Post, usePinPostMutation } from "../../generated/graphql";
 import { first } from "rxjs/operators";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             maxWidth: "100%",
             borderRadius: "15px",
+            marginBottom: 20,
         },
         media: {
             height: 0,
@@ -56,8 +58,24 @@ const useStyles = makeStyles((theme: Theme) =>
         body: {
             paddingLeft: "2em",
             paddingRight: "2em",
+            marginBottom: "2em",
             display: "inlined-block",
             overflowWrap: "break-word",
+        },
+        imageCard: {
+            display: "block",
+            width: "30%",
+            margin: "1em",
+        },
+        image: {
+            height: "100%",
+        },
+        imageDisplayContainer: {
+            width: "100%",
+            marginTop: "1em",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "start",
         },
     }),
 );
@@ -70,6 +88,8 @@ export default function PostComponent({
     postID,
     teamID,
     isCoach,
+    avatarUrl,
+    imgUrls,
 }: {
     content: string;
     firstName: string;
@@ -78,17 +98,15 @@ export default function PostComponent({
     postID: string;
     teamID: string;
     isCoach: boolean;
+    avatarUrl: string;
+    imgUrls: string[];
 }) {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation({ variables: { teamID: teamID, isPined: !isPinned, postID: postID } });
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
+    const divref = React.useRef();
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(divref.current);
     };
 
     const handleClose = () => {
@@ -101,25 +119,49 @@ export default function PostComponent({
     };
 
     const PinMenu = () => {
+        return (
+            <div>
+                <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+                    <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
+                </Menu>
+            </div>
+        );
+    };
+
+    const PinButton = () => {
         return isCoach ? (
-            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
-            </Menu>
+            <IconButton aria-label="settings" onClick={handleClick}>
+                <MoreVertIcon />
+            </IconButton>
         ) : null;
     };
+
+    const ImageDisplay = () => {
+        return imgUrls ? (
+            <div className={classes.imageDisplayContainer}>
+                {imgUrls.map((image) => (
+                    <Card className={classes.imageCard}>
+                        <CardMedia
+                            component="img"
+                            alt="UploadedPhoto"
+                            image={image}
+                            title="UploadedPhoto"
+                            className={classes.image}
+                        />
+                    </Card>
+                ))}
+            </div>
+        ) : null;
+    };
+
     return (
         <Card className={classes.root}>
             <CardHeader
-                avatar={
-                    <Avatar aria-label="recipe" className={classes.avatar}>
-                        {firstName[0]}
-                    </Avatar>
-                }
+                avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
+                title={<Typography> {firstName} </Typography>}
                 action={
-                    <div>
-                        <IconButton aria-label="settings" onClick={handleClick}>
-                            <MoreVertIcon />
-                        </IconButton>
+                    <div ref={divref}>
+                        <PinButton />
                         <PinMenu />
                     </div>
                 }
@@ -129,17 +171,8 @@ export default function PostComponent({
                 <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>
                     {content}
                 </Typography>
+                <ImageDisplay />
             </CardContent>
-            <CardActions disableSpacing>
-                <IconButton
-                    className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                />
-            </CardActions>
         </Card>
     );
 }
