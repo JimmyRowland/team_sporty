@@ -1,4 +1,4 @@
-import { pbkdf2Sync, randomBytes } from "crypto";
+import { pbkdf2Sync, randomBytes, createHash } from "crypto";
 import { sign } from "jsonwebtoken";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -80,4 +80,9 @@ export const createAccessToken = (user: User) => {
         // TODO fix expiredInt
         expiresIn: "15d",
     });
+};
+
+export const getGravatarUrl = (email: string) => {
+    const hash = createHash("md5").update(email).digest("hex");
+    return `https://res.cloudinary.com/dfxanglyc/image/gravatar/d_monsterid/${hash}`;
 };

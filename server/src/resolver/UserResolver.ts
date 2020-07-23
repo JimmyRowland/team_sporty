@@ -1,6 +1,13 @@
 // import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
 import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int, InputType } from "type-graphql";
-import { validPassword, createRefreshToken, sendRefreshToken, genPassword, createAccessToken } from "../lib/utils";
+import {
+    validPassword,
+    createRefreshToken,
+    sendRefreshToken,
+    genPassword,
+    createAccessToken,
+    getGravatarUrl,
+} from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
@@ -92,6 +99,7 @@ export class UserResolver {
             return false;
         } else {
             const { hash, salt } = genPassword(password);
+            const avatarUrl = getGravatarUrl(email);
             const newUser = new UserModel({
                 hash: hash,
                 salt: salt,
@@ -101,6 +109,7 @@ export class UserResolver {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
+                avatarUrl: avatarUrl,
             });
             try {
                 await newUser.save();
