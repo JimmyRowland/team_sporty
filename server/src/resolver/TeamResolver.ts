@@ -24,26 +24,11 @@ import { Post } from "../entities/Post";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 import { EventTypeEnum, SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
-import { TeamUserResponse } from "../interfaces/responseType";
+import { GetMembersResponse, GetTeamResponse, GetTeamsResponse, TeamUserResponse } from "../interfaces/responseType";
 import { TeamApplicationPendingList, TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
 import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendingList";
-@ObjectType()
-class GetTeamsResponse {
-    @Field(() => Boolean)
-    isMember: boolean;
-    @Field(() => Boolean)
-    isCoach: boolean;
-    @Field(() => Team)
-    team: Team;
-}
-
-@ObjectType()
-class GetTeamResponse {
-    @Field(() => Boolean)
-    isCoach: boolean;
-    @Field(() => Team)
-    team: Team;
-}
+import { isMember } from "../middleware/isMember";
+import { isCoachPayload } from "../middleware/isCoachPayload";
 
 @Resolver((of) => Team)
 export class TeamResolver {
@@ -96,17 +81,6 @@ export class TeamResolver {
     }
 
     @Query(() => [User])
-    @UseMiddleware(isAuth)
-    async getMembers(@Arg("teamID") teamID: string): Promise<User[]> {
-        const pairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
-        return UserModel.find({
-            _id: {
-                $in: pairs.map((pair) => pair._id.user),
-            },
-        });
-    }
-
-    @Query(() => [User])
     @UseMiddleware(isAuth, isCoach)
     async getPendings(@Arg("teamID") teamID: string): Promise<User[]> {
         const pairs: TeamApplicationPendingList[] = await TeamApplicationPendingListModel.find({ "_id.team": teamID });
@@ -117,16 +91,36 @@ export class TeamResolver {
         });
     }
 
-    @Query(() => [User])
-    async getCoaches(@Arg("teamID") teamID: string): Promise<User[]> {
+    @Query(() => GetMembersResponse)
+    @UseMiddleware(isAuth, isMember, isCoachPayload)
+    async getCoaches(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetMembersResponse> {
         const pairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.team": teamID,
         });
-        return UserModel.find({
+        const users = await UserModel.find({
             _id: {
                 $in: pairs.map((pair) => pair._id.user),
             },
         });
+        const response = new GetMembersResponse();
+        response.isCoach = !!payload.isCoach;
+        response.users = users;
+        return response;
+    }
+
+    @Query(() => GetMembersResponse)
+    @UseMiddleware(isAuth, isMember, isCoachPayload)
+    async getMembers(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetMembersResponse> {
+        const pairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
+        const users = await UserModel.find({
+            _id: {
+                $in: pairs.map((pair) => pair._id.user),
+            },
+        });
+        const response = new GetMembersResponse();
+        response.isCoach = !!payload.isCoach;
+        response.users = users;
+        return response;
     }
 
     @Query(() => [Team])
@@ -174,6 +168,29 @@ export class TeamResolver {
         });
     }
 
+    @Query(() => [GetTeamResponse])
+    @UseMiddleware(isAuth)
+    async getTeamsAsMemberOrCoach(@Ctx() { res, payload }: ResReq): Promise<GetTeamResponse[]> {
+        const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
+        const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const coachTeamIDs = coachTeamPair.map((pair) => pair._id.team);
+        const memberTeamIDs = memberTeamPair.map((pair) => pair._id.team);
+        const teamIDs = coachTeamIDs.concat(memberTeamIDs);
+        const teams: Team[] = await TeamModel.find({
+            _id: {
+                $in: teamIDs,
+            },
+        });
+        const response: GetTeamResponse[] = [];
+        for (const team of teams) {
+            const getTeamResponse = new GetTeamResponse();
+            getTeamResponse.team = team;
+            getTeamResponse.isCoach = coachTeamIDs.includes(team._id.toHexString());
+            response.push(getTeamResponse);
+        }
+        return response;
+    }
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, hasUser, hasTeam, isCoach)
     async addMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
@@ -215,6 +232,25 @@ export class TeamResolver {
                     await teamMemberPair.save();
                 }
             }
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async rejectMembers(
+        @Arg("userIDs", () => [String]) userIDs: string[],
+        @Arg("teamID") teamID: string,
+        @Ctx() { res, payload }: ResReq,
+    ) {
+        try {
+            const ids = userIDs.map((userID) => {
+                return { team: teamID, user: userID };
+            });
+            await TeamApplicationPendingListModel.remove({ _id: { $in: ids } });
         } catch (err) {
             console.log(err);
             return false;
@@ -292,6 +328,18 @@ export class TeamResolver {
     }
 
     @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async quitTeamAsMember(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+        try {
+            await TeamMemberMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": payload._id });
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
     async removeMembers(
         @Arg("userIDs", () => [String]) userIDs: string[],
@@ -317,6 +365,23 @@ export class TeamResolver {
             const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
             if (pairs.length > 1) {
                 await TeamCoachMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": userID });
+            } else {
+                return false;
+            }
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async quitTeamAsCoach(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+        try {
+            const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
+            if (pairs.length > 1) {
+                await TeamCoachMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": payload._id });
             } else {
                 return false;
             }
@@ -417,9 +482,11 @@ export class TeamResolver {
         if (payload && payload._id) {
             isAMember = await TeamResolver.isMember(team._id.toHexString(), payload._id);
         }
-        const result = team.posts.filter((post) => {
-            return !post.isPrivate || isAMember;
-        });
+        const result = team.posts
+            .filter((post) => {
+                return !post.isPrivate || isAMember;
+            })
+            .sort((post1, post2) => post2.lastModifyDate.getTime() - post1.lastModifyDate.getTime());
         return result;
     }
 
@@ -430,9 +497,11 @@ export class TeamResolver {
         if (payload._id) {
             isAMember = await TeamResolver.isMember(team._id.toHexString(), payload._id);
         }
-        const result = team.events.filter((event) => {
-            return !event.isPrivate || isAMember;
-        });
+        const result = team.events
+            .filter((event) => {
+                return !event.isPrivate || isAMember;
+            })
+            .sort((event1, event2) => event2.lastModifyDate.getTime() - event1.lastModifyDate.getTime());
         return result;
     }
 }

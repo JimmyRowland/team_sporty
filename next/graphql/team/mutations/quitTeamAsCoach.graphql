@@ -1,0 +1,3 @@
+mutation QuitTeamAsCoach($teamID: String!) {
+    quitTeamAsCoach(teamID: $teamID)
+}

@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import { List, ListItem, Button } from "@material-ui/core";
-import { useGetTeamListAsCoachQuery } from "../../../generated/graphql";
+import { useGetTeamListAsCoachQuery, useGetTeamListAsMemberOrCoachQuery } from "../../../generated/graphql";
 import PeopleIcon from "@material-ui/icons/People";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SidebarNav = () => {
     const classes = useStyles();
-    const { data, loading } = useGetTeamListAsCoachQuery();
+    const { data, loading } = useGetTeamListAsMemberOrCoachQuery();
     const [open, setOpen] = React.useState(true);
     const handleClick = () => {
         setOpen(!open);
@@ -105,8 +105,8 @@ const SidebarNav = () => {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding className={classes.nested}>
-                    {!loading && data && data.getTeamsAsCoach
-                        ? data.getTeamsAsCoach.map((team, index) => {
+                    {!loading && data && data.getTeamsAsMemberOrCoach
+                        ? data.getTeamsAsMemberOrCoach.map((team, index) => {
                               return <NestedTeamItem team={team} key={index} />;
                           })
                         : null}

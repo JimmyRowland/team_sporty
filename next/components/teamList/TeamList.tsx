@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CardPersonalPage from "../cardPersonalPage/CardPersonalPage";
 import List from "@material-ui/core/List";
-import { useGetTeamListQuery } from "../../generated/graphql";
+import { useGetMyTeamListQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles({
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 
 function TeamList() {
     const classes = useStyles();
-    const { data, loading, error } = useGetTeamListQuery({});
+    const { data, loading, error } = useGetMyTeamListQuery({});
     return (
         <CardPersonalPage title="&nbsp; Your Teams">
             <List className={classes.root}>

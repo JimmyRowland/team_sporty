@@ -1,7 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Layout from "../../../components/layouts/settings/Layout";
-import { useAddCoachesMutation, useGetMembersQuery, useRemoveMembersMutation } from "../../../generated/graphql";
+import {
+    useAddCoachesMutation,
+    useGetMembersQuery,
+    useQuitTeamAsMemberMutation,
+    useRemoveMembersMutation,
+} from "../../../generated/graphql";
 import { TeamNotFound } from "../../../components/Error/TeamNotFound";
 import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
 import UsersTable from "../../../components/UserTable/UserTable";
@@ -10,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
 import { Button } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { getMyTeamStaticPaths } from "../../../lib/staticPaths";
+import { getAllTeamStaticPaths } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +53,7 @@ function ManageMembersPage({ tid, errors }: Props) {
     const dispatch = useDispatch();
     const [removeUsers] = useRemoveMembersMutation();
     const [addCoaches] = useAddCoachesMutation();
+    const [quit] = useQuitTeamAsMemberMutation();
     let error1;
     const handleRemoveMembers = () => {
         dispatch(resetSelectedUsers());
@@ -69,6 +75,16 @@ function ManageMembersPage({ tid, errors }: Props) {
                 error1 = e;
             });
     };
+    const handleLeave = () => {
+        dispatch(resetSelectedUsers());
+        quit({ variables: { teamID: tid } })
+            .then(() => {
+                refetch();
+            })
+            .catch((e: any) => {
+                error1 = e;
+            });
+    };
 
     if (error || error1) return <TeamNotFound />;
 
@@ -79,15 +95,23 @@ function ManageMembersPage({ tid, errors }: Props) {
             ) : (
                 <div className={classes.root}>
                     <UsersToolbar>
-                        <Button color="primary" variant="contained" onClick={handlePromoteCoaches}>
-                            Promote Coaches
-                        </Button>
-                        <Button className={classes.importButton} onClick={handleRemoveMembers}>
-                            Remove Members
-                        </Button>
+                        {data.getMembers.isCoach ? (
+                            <Fragment>
+                                <Button color="primary" variant="contained" onClick={handlePromoteCoaches}>
+                                    Promote Coaches
+                                </Button>
+                                <Button className={classes.importButton} onClick={handleRemoveMembers}>
+                                    Remove Members
+                                </Button>
+                            </Fragment>
+                        ) : (
+                            <Button className={classes.importButton} onClick={handleLeave}>
+                                Leave Team
+                            </Button>
+                        )}
                     </UsersToolbar>
                     <div className={classes.content}>
-                        <UsersTable users={data.getMembers} />
+                        <UsersTable users={data.getMembers.users} />
                     </div>
                 </div>
             )}
@@ -97,7 +121,7 @@ function ManageMembersPage({ tid, errors }: Props) {
 
 export default ManageMembersPage;
 
-export const getStaticPaths: GetStaticPaths = getMyTeamStaticPaths;
+export const getStaticPaths: GetStaticPaths = getAllTeamStaticPaths;
 
 export const getStaticProps: GetStaticProps = async (url) => {
     try {

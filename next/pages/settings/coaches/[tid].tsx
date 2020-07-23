@@ -1,17 +1,15 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Layout from "../../../components/layouts/settings/Layout";
-import { useAddCoachesMutation, useGetCoachesQuery, useRemoveMembersMutation } from "../../../generated/graphql";
+import { useGetCoachesQuery, useQuitTeamAsCoachMutation } from "../../../generated/graphql";
 import { useRouter } from "next/router";
 import { TeamNotFound } from "../../../components/Error/TeamNotFound";
 import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
 import UsersTable from "../../../components/UserTable/UserTable";
 import UsersToolbar from "../../../components/UserToolbar/UserToolbar";
-import { useDispatch, useSelector } from "react-redux";
-import { resetSelectedUsers, selectSeletedUserState } from "../../../components/UserTable/userTableSlice";
+import { useDispatch } from "react-redux";
+import { resetSelectedUsers } from "../../../components/UserTable/userTableSlice";
 import { Button } from "@material-ui/core";
-import { GetStaticPaths } from "next";
-import { getMyTeamStaticPaths } from "../../../lib/staticPaths";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,42 +26,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ManageMembersPage() {
+function ManageCoachesPage() {
     const classes = useStyles();
     const router = useRouter();
     const { tid } = router.query;
     if (typeof tid !== "string") {
         return <TeamNotFound />;
     }
+    let error1;
     const { data, loading, error, refetch } = useGetCoachesQuery({
         variables: {
             teamID: tid,
         },
         pollInterval: 500,
     });
-
-    const selectedUsers: string[] = useSelector(selectSeletedUserState);
     const dispatch = useDispatch();
-    const [removeUsers] = useRemoveMembersMutation();
-    const [addCoaches] = useAddCoachesMutation();
-    let error1;
-    const handleRemoveMembers = () => {
+
+    const [quit] = useQuitTeamAsCoachMutation();
+    const handleLeave = () => {
         dispatch(resetSelectedUsers());
-        removeUsers({ variables: { userIDs: selectedUsers, teamID: tid } })
+        quit({ variables: { teamID: tid } })
             .then(() => {
                 refetch();
             })
             .catch((e: any) => {
-                error1 = e;
-            });
-    };
-    const handlePromoteCoaches = () => {
-        dispatch(resetSelectedUsers());
-        addCoaches({ variables: { userIDs: selectedUsers, teamID: tid } })
-            .then(() => {
-                refetch();
-            })
-            .catch((e) => {
                 error1 = e;
             });
     };
@@ -77,15 +63,16 @@ function ManageMembersPage() {
             ) : (
                 <div className={classes.root}>
                     <UsersToolbar>
-                        <Button color="primary" variant="contained" onClick={handlePromoteCoaches}>
-                            Promote Coaches
-                        </Button>
-                        <Button className={classes.importButton} onClick={handleRemoveMembers}>
-                            Remove Members
-                        </Button>
+                        {data.getCoaches.isCoach ? (
+                            <Fragment>
+                                <Button className={classes.importButton} onClick={handleLeave}>
+                                    Leave Team
+                                </Button>
+                            </Fragment>
+                        ) : null}
                     </UsersToolbar>
                     <div className={classes.content}>
-                        <UsersTable users={data.getCoaches} />
+                        <UsersTable users={data.getCoaches.users} />
                     </div>
                 </div>
             )}
@@ -93,6 +80,4 @@ function ManageMembersPage() {
     );
 }
 
-export default ManageMembersPage;
-
-export const getStaticPaths: GetStaticPaths = getMyTeamStaticPaths;
+export default ManageCoachesPage;

@@ -4,6 +4,7 @@ import eventReducer from "../components/eventList/eventSlice";
 import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
 import nestedTeamListOpenReducer from "../components/Sidebar/SidebarNav/sidebarNavSlicer";
+import teamReducer from "../components/CalendarPage/CalendarPageSlicer";
 import { useMemo } from "react";
 const dev = process.env.NODE_ENV === "development";
 
@@ -12,6 +13,7 @@ let redux: any;
 const initStore = (preloadedState: Record<string, unknown>) => {
     return configureStore({
         reducer: {
+            teamNameState: teamReducer,
             posts: postReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,

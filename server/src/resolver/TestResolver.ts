@@ -66,4 +66,19 @@ export class TestResolver {
         }
         return true;
     }
+
+    @Mutation(() => Boolean)
+    async removeAllEvent() {
+        try {
+            const teams = await TeamModel.find();
+            for (const team of teams) {
+                team.events = [];
+                team.save();
+            }
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    }
 }

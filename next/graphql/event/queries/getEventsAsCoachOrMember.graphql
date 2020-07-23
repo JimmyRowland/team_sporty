@@ -1,5 +1,5 @@
-query GetEventsForAllTeam {
-    getTeams {
+query GetEventsAsCoachOrMember {
+    getTeamsAsMemberOrCoach {
         team{
             name
             _id
@@ -11,10 +11,17 @@ query GetEventsForAllTeam {
                 name
                 eventType
                 address
+                usersResponse{
+                    isGoing
+                    user{
+                        name
+                        avatarUrl
+                        _id
+                    }
+                }
             }
         }
         isCoach
-        isMember
     }
 }
 

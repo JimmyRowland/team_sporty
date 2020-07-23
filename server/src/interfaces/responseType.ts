@@ -3,6 +3,7 @@ import { Team } from "../entities/Team";
 import { User } from "../entities/User";
 import { Post } from "../entities/Post";
 import { Event } from "../entities/Event";
+import { EventUserResEnum } from "./enum";
 
 @ObjectType()
 export class TeamUserResponse {
@@ -34,4 +35,38 @@ export class LoginResponse {
     accessToken: string;
     @Field(() => User)
     user: User | null;
+}
+
+@ObjectType()
+export class GetTeamsResponse {
+    @Field(() => Boolean)
+    isMember: boolean;
+    @Field(() => Boolean)
+    isCoach: boolean;
+    @Field(() => Team)
+    team: Team;
+}
+
+@ObjectType()
+export class GetTeamResponse {
+    @Field(() => Boolean)
+    isCoach: boolean;
+    @Field(() => Team)
+    team: Team;
+}
+
+@ObjectType()
+export class GetMembersResponse {
+    @Field(() => Boolean)
+    isCoach: boolean;
+    @Field(() => [User])
+    users: User[];
+}
+
+@ObjectType()
+export class UsersResponseToEvent {
+    @Field(() => EventUserResEnum)
+    isGoing: EventUserResEnum;
+    @Field(() => User)
+    user: User;
 }

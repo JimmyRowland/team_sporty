@@ -28,7 +28,7 @@ export class Post extends CreationAndModificationDate {
     isPrivate: boolean;
 
     @Field(() => [String])
-    @prop({ default: [] })
+    @prop({ default: [], items: String })
     imgUrls: string[];
 
     @Field(() => Int, { complexity: 4 })

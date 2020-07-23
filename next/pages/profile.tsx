@@ -1,7 +1,7 @@
 import Layout from "../components/layouts/index/Layout";
 import React from "react";
 
-import PersonalPage from "./PersonalPage/App";
+import PersonalPage from "../components/PersonalPage/App";
 const IndexPage = () => (
     <Layout title="TeamPage">
         <PersonalPage />

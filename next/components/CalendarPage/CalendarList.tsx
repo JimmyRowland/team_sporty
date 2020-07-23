@@ -1,7 +1,9 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useGetEventsForOneTeamQuery } from "../../generated/graphql";
+import { useGetEventsAsCoachOrMemberQuery, Event } from "../../generated/graphql";
+import { useSelector } from "react-redux";
+import { selectTeamState } from "./CalendarPageSlicer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,11 +25,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     const classes = useStyles();
     // graphql
-    const { data, loading, error } = useGetEventsForOneTeamQuery({
-        variables: {
-            teamID: "5f0d712db3addc027b9fab0a",
-        },
-    });
+    const { data, loading, error } = useGetEventsAsCoachOrMemberQuery();
+    const selectedTeam = useSelector(selectTeamState);
     if (loading) {
         return <div>loading...</div>;
     }
@@ -37,35 +36,33 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
         return <div>err</div>;
     }
 
-    if (!data) {
+    if (!data || !data.getTeamsAsMemberOrCoach) {
         return <div>no data</div>;
+    }
+
+    let events: Pick<Event, "name" | "_id" | "startDate" | "endDate" | "description" | "eventType" | "address">[] = [];
+    if (selectedTeam.name === "All") {
+        for (const team of data.getTeamsAsMemberOrCoach) {
+            events = team.team.events ? events.concat(team.team.events) : events;
+        }
+    } else {
+        const team = data.getTeamsAsMemberOrCoach.find((value) => {
+            return value.team._id === selectedTeam._id;
+        });
+        events = team && team.team.events ? team.team.events : [];
     }
     return (
         <div className={classes.root}>
-            {props.eventList.map((c) => (
-                <CalendarItem
-                    key={c.id}
-                    name={c.name}
-                    type={c.type}
-                    date={c.date}
-                    address={c.address}
-                    going={c.going}
-                    notGoing={c.notGoing}
-                    notResponded={c.notResponded}
-                />
-            ))}
-            {data?.getTeam?.team?.events?.map((event, index: number) => {
-                // graphql
+            {events.map((event, index: number) => {
+                console.log(event);
                 return (
                     <CalendarItem
                         key={index}
                         name={event.name}
-                        type={"Game"}
-                        date={event.startDate.toString}
-                        address={event.description}
-                        going={3}
-                        notGoing={3}
-                        notResponded={3}
+                        type={event.eventType}
+                        date={event.startDate}
+                        address={event.address}
+                        event={event}
                     />
                 );
             })}

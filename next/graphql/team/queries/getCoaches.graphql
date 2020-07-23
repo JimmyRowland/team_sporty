@@ -1,12 +1,15 @@
 query GetCoaches($teamID: String!) {
     getCoaches(teamID: $teamID) {
-        name
-        _id
-        sport
-        phone
-        email
-        address
-        avatarUrl
+        users{
+            name
+            _id
+            sport
+            phone
+            email
+            address
+            avatarUrl
+        }
+        isCoach
     }
 }
 

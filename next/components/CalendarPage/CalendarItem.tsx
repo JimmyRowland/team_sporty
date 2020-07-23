@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, Theme, createStyles, withStyles, createMuiTheme } from "@material-ui/core/styles";
 import { green, red, grey } from "@material-ui/core/colors";
 //import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -10,12 +10,20 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import Radio, { RadioProps } from "@material-ui/core/Radio";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-
+import { Event, EventUserResEnum, useMeQuery, useSetGoingMutation } from "../../generated/graphql";
+import { Avatar } from "@material-ui/core";
+import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: "100%",
             border: "1px solid rgba(0, 0, 0, .125)",
+        },
+        roaster: {
+            display: "flex",
+        },
+        avatar: {
+            marginRight: theme.spacing(1),
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -94,22 +102,64 @@ const ExpansionPanelSummary = withStyles({
     },
     expanded: {},
 })((props) => <MuiExpansionPanelSummary {...props} />);
-
-export default function CalendarItem(props: {
-    name: React.ReactNode;
-    type: React.ReactNode;
-    date: React.ReactNode;
-    address: React.ReactNode;
-    going: React.ReactNode;
-    notGoing: React.ReactNode;
-    notResponded: React.ReactNode;
+let renders = 0;
+export default function CalendarItem({
+    name,
+    type,
+    date,
+    address,
+    event,
+}: {
+    name: string;
+    type: string;
+    date: string;
+    address: string;
+    event: Event;
 }) {
+    let radio = 2;
+    console.log(renders++);
     const classes = useStyles();
-    const [selectedValue, setSelectedValue] = React.useState("c");
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedValue(event.target.value);
+    const [selectedValue, setSelectedValue] = React.useState(2);
+    const [setGoing] = useSetGoingMutation();
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedValue(+e.target.value);
+        radio = -1;
+        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } });
     };
-
+    const { data, loading } = useMeQuery();
+    if (loading) {
+        return <LoadingMembers />;
+    }
+    const usersNotGoing = [];
+    const usersGoing = [];
+    const usersNoResponse = [];
+    for (const response of event.usersResponse) {
+        if (response.isGoing === EventUserResEnum.NoResponse) {
+            usersNoResponse.push(
+                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                    {response.user.name[0].toUpperCase()}
+                </Avatar>,
+            );
+        } else if (response.isGoing === EventUserResEnum.Going) {
+            usersGoing.push(
+                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                    {response.user.name[0].toUpperCase()}
+                </Avatar>,
+            );
+            if (data && data.me && data.me._id === response.user._id) {
+                radio = 1;
+            }
+        } else {
+            usersNotGoing.push(
+                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                    {response.user.name[0].toUpperCase()}
+                </Avatar>,
+            );
+            if (data && data.me && data.me._id === response.user._id) {
+                radio = 0;
+            }
+        }
+    }
     return (
         <div className={classes.root}>
             <ExpansionPanel>
@@ -119,17 +169,17 @@ export default function CalendarItem(props: {
                     aria-controls="additional-actions1-content"
                 >
                     <Typography className={classes.heading} align="left">
-                        <h3>{props.name}</h3>
-                        <p>{props.date}</p>
-                        <p>{props.address}</p>
+                        <h3>{name}</h3>
+                        <p>{date}</p>
+                        <p>{address}</p>
                     </Typography>
                     <Typography className={classes.secondaryHeading} align="right">
                         <Typography align="right">
                             Going
                             <GreenRadio
-                                checked={selectedValue === "a"}
+                                checked={selectedValue === 1 || radio === 1}
                                 onChange={handleChange}
-                                value="a"
+                                value={1}
                                 name="radio-button-demo"
                                 inputProps={{ "aria-label": "A" }}
                                 onClick={(event) => event.stopPropagation()}
@@ -139,9 +189,9 @@ export default function CalendarItem(props: {
                         <Typography align="right">
                             Not going
                             <RedRadio
-                                checked={selectedValue === "b"}
+                                checked={selectedValue === 0 || radio === 0}
                                 onChange={handleChange}
-                                value="b"
+                                value={0}
                                 name="radio-button-demo"
                                 inputProps={{ "aria-label": "B" }}
                                 onClick={(event) => event.stopPropagation()}
@@ -151,9 +201,9 @@ export default function CalendarItem(props: {
                         <Typography align="right">
                             Not Responded
                             <GreyRadio
-                                checked={selectedValue === "c"}
+                                checked={selectedValue === 2}
                                 onChange={handleChange}
-                                value="c"
+                                value={2}
                                 name="radio-button-demo"
                                 inputProps={{ "aria-label": "C" }}
                                 onClick={(event) => event.stopPropagation()}
@@ -164,35 +214,18 @@ export default function CalendarItem(props: {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Going: {props.going}</p>
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
-                        <AccountCircleIcon className={classes.greenIcon} />
+                        <p>Going: {usersGoing.length}</p>
+                        <div className={classes.roaster}>{usersGoing}</div>
                     </Typography>
                     <Typography className={classes.spacing}></Typography>
                     <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Not Going: {props.notGoing}</p>
-                        <AccountCircleIcon className={classes.redIcon} />
-                        <AccountCircleIcon className={classes.redIcon} />
+                        <p>Not Going: {usersNotGoing.length}</p>
+                        <div className={classes.roaster}>{usersNotGoing}</div>
                     </Typography>
                     <Typography className={classes.spacing}></Typography>
                     <Typography className={classes.tertiaryHeading} align="left">
-                        <p>Not Responded: {props.notResponded}</p>
-                        <AccountCircleIcon />
-                        <AccountCircleIcon />
-                        <AccountCircleIcon />
+                        <p>Not Responded: {usersNoResponse.length}</p>
+                        <div className={classes.roaster}>{usersNoResponse}</div>
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>

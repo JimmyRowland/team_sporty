@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import { List, ListItem, Button } from "@material-ui/core";
-import { Team } from "../../../generated/graphql";
+import { GetTeamResponse } from "../../../generated/graphql";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
+const NestedTeamItem = ({ team: { team, isCoach } }: { team: GetTeamResponse }) => {
     const classes = useStyles();
     const router = useRouter();
     const { tid } = router.query;
@@ -88,16 +88,18 @@ const NestedTeamItem = ({ team }: { team: Pick<Team, "name" | "_id"> }) => {
                             </Button>
                         </Link>
                     </ListItem>
-                    <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${team._id}`}>
-                            <Button className={classes.button}>
-                                <div className={classes.icon}>
-                                    <SportsSoccer />
-                                </div>
-                                Pending request
-                            </Button>
-                        </Link>
-                    </ListItem>
+                    {isCoach ? (
+                        <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
+                            <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${team._id}`}>
+                                <Button className={classes.button}>
+                                    <div className={classes.icon}>
+                                        <SportsSoccer />
+                                    </div>
+                                    Pending request
+                                </Button>
+                            </Link>
+                        </ListItem>
+                    ) : null}
                 </List>
             </Collapse>
         </Fragment>

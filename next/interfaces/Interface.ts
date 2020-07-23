@@ -23,3 +23,10 @@ export enum EventUserResEnum {
     going,
     noResponse,
 }
+
+export enum EventTypeEnum {
+    match = "match",
+    training = "training",
+}
+
+export const eventTypeList: string[] = ["match", "training"];

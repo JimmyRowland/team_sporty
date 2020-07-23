@@ -1,13 +1,13 @@
-import { Resolver, Mutation, Query, Arg, Field, Ctx, UseMiddleware, ObjectType } from "type-graphql";
+import { Resolver, Mutation, Query, Arg, Field, Ctx, UseMiddleware, ObjectType, Root } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
 import { Event } from "../entities/Event";
 import { ResReq } from "../interfaces/interfaces";
 import { isCoach } from "../middleware/isCoach";
 import { EventTypeEnum, EventUserResEnum } from "../interfaces/enum";
-import { TeamModel } from "../entities/Team";
-import { TeamMemberMapModel } from "../entities/TeamMemberMap";
+import { Team, TeamModel } from "../entities/Team";
+import { TeamMemberMap, TeamMemberMapModel } from "../entities/TeamMemberMap";
 import { EventUserMapModel } from "../entities/EventUserMap";
-import { TeamCoachMapModel } from "../entities/TeamCoachMap";
+import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
 
 @Resolver()
 export class EventResolver {
@@ -35,28 +35,18 @@ export class EventResolver {
             event.description = description;
             event.name = name;
             event.eventType = eventType;
+            event.address = address;
             team.events.push(event);
             await team.save();
-            const memberTeamPairs = await TeamMemberMapModel.find({ "_id.team": teamID });
-            for (const {
-                _id: { user },
-            } of memberTeamPairs) {
+            const memberTeamPairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
+            const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.team": teamID });
+            const userIDs = new Set(
+                memberTeamPairs.map((pair) => pair._id.user).concat(coachTeamPair.map((pair) => pair._id.user)),
+            );
+            for (const user of userIDs) {
                 try {
                     const eventUserPair = new EventUserMapModel({
-                        _id: { event: event._id, user: user },
-                    });
-                    await eventUserPair.save();
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-            const coachTeamPairs = await TeamCoachMapModel.find({ "_id.team": teamID });
-            for (const {
-                _id: { user },
-            } of coachTeamPairs) {
-                try {
-                    const eventUserPair = new TeamCoachMapModel({
-                        _id: { event: event._id, user: user },
+                        _id: { event: team.events[team.events.length - 1]._id.toHexString(), user: user },
                     });
                     await eventUserPair.save();
                 } catch (e) {
@@ -73,17 +63,28 @@ export class EventResolver {
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async setGoing(
-        @Arg("teamID") teamID: string,
         @Arg("eventID") eventID: string,
         @Arg("isGoing") isGoing: EventUserResEnum,
         @Ctx() { payload }: ResReq,
     ) {
-        await EventUserMapModel.findOneAndUpdate(
-            { "_id.event": eventID, "_id.user": payload._id },
-            {
-                isGoing: isGoing,
-            },
-        );
+        try {
+            const eventUserMap = await EventUserMapModel.findOne({ "_id.event": eventID, "_id.user": payload._id });
+            if (eventUserMap) {
+                eventUserMap.isGoing = isGoing;
+                await eventUserMap.save();
+                return true;
+            } else {
+                const newResponse = new EventUserMapModel({
+                    _id: { event: eventID, user: payload._id },
+                    isGoing: isGoing,
+                });
+                await newResponse.save();
+                return true;
+            }
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 
     @Mutation(() => Boolean)

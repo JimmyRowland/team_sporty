@@ -6,16 +6,15 @@ import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import MessageBoard from "../../components/post/MessageBoard";
 import Layout from "../../components/layouts/index/Layout";
-import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
+import { GetTeamPageDocument, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
+import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
 
 const useStyles = makeStyles({
     container: {
-        backgroundColor: "#EFEFEF",
         paddingTop: 90,
         width: "100%",
         height: "100%",
@@ -35,11 +34,9 @@ const useStyles = makeStyles({
         position: "sticky",
         top: "6vh",
         flexBasis: "25%",
-        Width: "30vw",
+        maxWidth: "25vw",
     },
     rightColumn: {
-        // flexGrow:1
-
         marginLeft: "1em",
         flexBasis: "70%",
         maxWidth: "70vw",
@@ -49,20 +46,15 @@ const useStyles = makeStyles({
     },
     leftInnerContainer: {
         height: "87vh",
-        display: "grid",
+        display: "flex",
         flexDirection: "column",
         width: "100%",
         justifyContent: "space-evenly",
     },
     teamContainer: {
-        margin: "1em",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-    },
-    eventContainer: {
-        height: "50%",
-        overflowY: "scroll",
     },
     rosterCard: {
         borderRadius: "15px",
@@ -80,6 +72,7 @@ const useStyles = makeStyles({
         padding: 7,
     },
 });
+//TODO 100% height fixed column
 
 type Props = {
     id: string;
@@ -97,6 +90,9 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
+    if (loading || error || !data || !data.getTeam) {
+        return <LoadingMembers />;
+    }
 
     return (
         <Layout title={data?.getTeam.team.name}>
@@ -111,7 +107,7 @@ function TeamPage({ id, errors }: Props) {
                                 <Typography variant={"subtitle2"}>somethingElse</Typography>
                             </div>
                             <Typography variant={"h5"}>UPCOMING...</Typography>
-                            <div className={classes.eventContainer}>
+                            <div>
                                 <EventList />
                             </div>
                             <Link href="/teammanage">
