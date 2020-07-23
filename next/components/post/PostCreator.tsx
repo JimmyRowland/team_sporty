@@ -51,8 +51,6 @@ const useStyles = makeStyles({
         textAlign: "center",
         display: "flex",
         margin: "auto",
-        backgroundColor: "#346DFF",
-        color: "white",
         borderRadius: 15,
         width: 100,
         height: 30,
@@ -185,7 +183,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
                     />
                 </form>
                 <div>
-                    <Button color="primary" className={classes.send} onClick={handleSubmit}>
+                    <Button  color="secondary" variant="contained" className={classes.send} onClick={handleSubmit}>
                         {" "}
                         Send{" "}
                     </Button>
