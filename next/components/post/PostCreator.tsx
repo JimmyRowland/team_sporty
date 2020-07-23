@@ -26,8 +26,8 @@ const useStyles = makeStyles({
     },
     action: {
         height: "20%",
-        float:"right",
-        marginRight:"1em",
+        float: "right",
+        marginRight: "1em",
     },
     title: {
         fontWeight: "bold",
@@ -86,10 +86,10 @@ export default function PostCreator({ teamID }: { teamID: string }) {
     const [submitPost] = useAddPostMutation();
     const [id, setid] = useState(0);
     const handleSubmit = () => {
-        uploadContent().then(()=>{
+        uploadContent().then(() => {
             setContent("");
             setImages([]);
-        })
+        });
     };
 
     const redirectButton = () => {
@@ -118,7 +118,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
         });
         Promise.all(promises)
             .then((res) => {
-                let imgUrls = [];
+                const imgUrls = [];
                 res.map((img) => {
                     imgUrls.push(img.secure_url.toString());
                 });

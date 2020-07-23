@@ -8,7 +8,7 @@ const avatarPreset = "ax8ca8dq";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/df51z9s92/image/upload";
 
 export const CloudinaryImageUpload = async (base64EncodedImage: string) => {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         const formData = new FormData();
         formData.append("file", base64EncodedImage);
         formData.append("upload_preset", avatarPreset);

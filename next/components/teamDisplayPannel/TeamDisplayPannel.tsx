@@ -13,14 +13,13 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
         leftCard: {
-            height:"100%",
+            height: "100%",
             borderRadius: "15px",
-
         },
         leftInnerContainer: {
             height: "100%",
             width: "100%",
-            padding:"1em",
+            padding: "1em",
         },
         calendarContainer: {
             display: "block",
@@ -41,17 +40,17 @@ const useStyles = makeStyles((Theme: Theme) =>
             height: "90%",
             overflowY: "scroll",
         },
-        teammanageContainer:{
-            position:"absolute",
-            width:"100%",
-            bottom:"1em",
+        teammanageContainer: {
+            position: "absolute",
+            width: "100%",
+            bottom: "1em",
         },
-        teammanageButton:{
+        teammanageButton: {
             display: "block",
-            width:"60%",
-            maxWidth:"200px",
+            width: "60%",
+            maxWidth: "200px",
             margin: "auto",
-        }
+        },
     }),
 );
 
@@ -59,7 +58,7 @@ export default function TeamDisplayPannel({ data }: { data: any }) {
     const classes = useStyles();
     const team = data?.getTeam.team;
     const TeamMangementPortal = () => {
-        return team.isCoach? (
+        return team.isCoach ? (
             <Link href="/teammanage">
                 <Button className={classes.teammanageButton}> Team Management </Button>
             </Link>
@@ -81,7 +80,7 @@ export default function TeamDisplayPannel({ data }: { data: any }) {
                     </div>
                 </div>
                 <div className={classes.teammanageContainer}>
-                    <TeamMangementPortal/>
+                    <TeamMangementPortal />
                 </div>
             </div>
         </Card>

@@ -112,18 +112,18 @@ export default function EditPopUp() {
             </div>
             <div className={classes.container}>
                 <div>
-                <div className={classes.title}>Profile Picture</div>
+                    <div className={classes.title}>Profile Picture</div>
                 </div>
                 <div className={classes.icon}>
-                <AvatarUpload />
+                    <AvatarUpload />
                 </div>
             </div>
             <div className={classes.container}>
                 <div>
-                <div className={classes.title}>Cover Photo</div>
+                    <div className={classes.title}>Cover Photo</div>
                 </div>
                 <div className={classes.coverphoto}>
-                <BannerUpload/>
+                    <BannerUpload />
                 </div>
             </div>
             <div className={classes.container}>

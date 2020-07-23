@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { makeStyles, Theme, createStyles, withStyles, createMuiTheme } from "@material-ui/core/styles";
 import { green, red, grey } from "@material-ui/core/colors";
 //import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         roaster: {
             display: "flex",
-        },
-        avatar: {
-            marginRight: theme.spacing(1),
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -109,57 +106,33 @@ export default function CalendarItem({
     date,
     address,
     event,
+    isGoing,
+    usersNotGoing,
+    usersGoing,
+    usersNoResponse,
+    refetch,
 }: {
     name: string;
     type: string;
     date: string;
     address: string;
     event: Event;
+    isGoing: number;
+    usersNotGoing: ReactNode[];
+    usersGoing: ReactNode[];
+    usersNoResponse: ReactNode[];
+    refetch: () => Promise<any>;
 }) {
-    let radio = 2;
     console.log(renders++);
     const classes = useStyles();
-    const [selectedValue, setSelectedValue] = React.useState(-1);
+    const [selectedValue, setSelectedValue] = React.useState(isGoing);
     const [setGoing] = useSetGoingMutation();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(+e.target.value);
-        radio = -1;
-        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } });
+        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
+            refetch();
+        });
     };
-    const { data, loading } = useMeQuery();
-    if (loading) {
-        return <LoadingMembers />;
-    }
-    const usersNotGoing = [];
-    const usersGoing = [];
-    const usersNoResponse = [];
-    for (const response of event.usersResponse) {
-        if (response.isGoing === EventUserResEnum.NoResponse) {
-            usersNoResponse.push(
-                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
-                    {response.user.name[0].toUpperCase()}
-                </Avatar>,
-            );
-        } else if (response.isGoing === EventUserResEnum.Going) {
-            usersGoing.push(
-                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
-                    {response.user.name[0].toUpperCase()}
-                </Avatar>,
-            );
-            if (data && data.me && data.me._id === response.user._id) {
-                radio = 1;
-            }
-        } else {
-            usersNotGoing.push(
-                <Avatar className={classes.avatar} src={response.user.avatarUrl}>
-                    {response.user.name[0].toUpperCase()}
-                </Avatar>,
-            );
-            if (data && data.me && data.me._id === response.user._id) {
-                radio = 0;
-            }
-        }
-    }
     return (
         <div className={classes.root}>
             <ExpansionPanel>
@@ -177,7 +150,7 @@ export default function CalendarItem({
                         <Typography align="right">
                             Going
                             <GreenRadio
-                                checked={selectedValue === 1 || radio === 1}
+                                checked={selectedValue === 1}
                                 onChange={handleChange}
                                 value={1}
                                 name="radio-button-demo"
@@ -189,7 +162,7 @@ export default function CalendarItem({
                         <Typography align="right">
                             Not going
                             <RedRadio
-                                checked={selectedValue === 0 || radio === 0}
+                                checked={selectedValue === 0}
                                 onChange={handleChange}
                                 value={0}
                                 name="radio-button-demo"
@@ -201,7 +174,7 @@ export default function CalendarItem({
                         <Typography align="right">
                             Not Responded
                             <GreyRadio
-                                checked={selectedValue === 2 || radio === 2}
+                                checked={selectedValue === 2}
                                 onChange={handleChange}
                                 value={2}
                                 name="radio-button-demo"

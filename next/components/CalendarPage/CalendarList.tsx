@@ -1,9 +1,11 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useGetEventsAsCoachOrMemberQuery, Event } from "../../generated/graphql";
+import { useGetEventsAsCoachOrMemberQuery, Event, EventUserResEnum, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
+import { Avatar } from "@material-ui/core";
+import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,15 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
         },
+        avatar: {
+            marginRight: theme.spacing(1),
+        },
     }),
 );
 
 export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     const classes = useStyles();
     // graphql
-    const { data, loading, error } = useGetEventsAsCoachOrMemberQuery();
+    const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
     const selectedTeam = useSelector(selectTeamState);
-    if (loading) {
+    const mequery = useMeQuery();
+
+    if (loading || mequery.loading) {
         return <div>loading...</div>;
     }
 
@@ -36,7 +43,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
         return <div>err</div>;
     }
 
-    if (!data || !data.getTeamsAsMemberOrCoach) {
+    if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
         return <div>no data</div>;
     }
 
@@ -54,7 +61,37 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     return (
         <div className={classes.root}>
             {events.map((event, index: number) => {
-                console.log(event);
+                let isGoing = 2;
+                const usersNotGoing = [];
+                const usersGoing = [];
+                const usersNoResponse = [];
+                for (const response of event.usersResponse) {
+                    if (response.isGoing === EventUserResEnum.NoResponse) {
+                        usersNoResponse.push(
+                            <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                                {response.user.name[0].toUpperCase()}
+                            </Avatar>,
+                        );
+                    } else if (response.isGoing === EventUserResEnum.Going) {
+                        usersGoing.push(
+                            <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                                {response.user.name[0].toUpperCase()}
+                            </Avatar>,
+                        );
+                        if (mequery.data && mequery.data.me && mequery.data.me._id === response.user._id) {
+                            isGoing = 1;
+                        }
+                    } else {
+                        usersNotGoing.push(
+                            <Avatar className={classes.avatar} src={response.user.avatarUrl}>
+                                {response.user.name[0].toUpperCase()}
+                            </Avatar>,
+                        );
+                        if (mequery.data && mequery.data.me && mequery.data.me._id === response.user._id) {
+                            isGoing = 0;
+                        }
+                    }
+                }
                 return (
                     <CalendarItem
                         key={index}
@@ -63,6 +100,11 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
                         date={event.startDate}
                         address={event.address}
                         event={event}
+                        isGoing={isGoing}
+                        usersNotGoing={usersNotGoing}
+                        usersGoing={usersGoing}
+                        usersNoResponse={usersNoResponse}
+                        refetch={refetch}
                     />
                 );
             })}
