@@ -11,10 +11,10 @@ import Layout from "../../components/layouts/index/Layout";
 import { GetTeamIDsDocument, GetTeamPageDocument, Team, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
+import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
 
 const useStyles = makeStyles({
     container: {
-        backgroundColor: "#EFEFEF",
         paddingTop: 90,
         width: "100%",
         height: "100%",
@@ -22,19 +22,17 @@ const useStyles = makeStyles({
         flexDirection: "row",
         justifyContent: "space-evenly",
     },
-    avatar: {
-        height: 120,
-        width: 120,
-    },
+
     rosterAvatar: {
         padding: 7,
     },
     leftColumn: {
         height: "80vh",
         position: "sticky",
-        top: "6vh",
+        top: "10%",
         flexBasis: "25%",
         Width: "30vw",
+        minHeight:"700px",
     },
     rightColumn: {
         // flexGrow:1
@@ -46,23 +44,7 @@ const useStyles = makeStyles({
     columnItem: {
         marginBottom: 20,
     },
-    leftInnerContainer: {
-        height: "87vh",
-        display: "grid",
-        flexDirection: "column",
-        width: "100%",
-        justifyContent: "space-evenly",
-    },
-    teamContainer: {
-        margin: "1em",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    eventContainer: {
-        height: "50%",
-        overflowY: "scroll",
-    },
+
     rosterCard: {
         borderRadius: "15px",
     },
@@ -87,6 +69,7 @@ type Props = {
 
 function TeamPage({ id, errors }: Props) {
     if (errors) {
+        console.log(errors);
         return "Error component";
     }
     const classes = useStyles();
@@ -96,28 +79,11 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
-
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <Card raised={true}>
-                        <div className={classes.leftInnerContainer}>
-                            <div className={classes.teamContainer}>
-                                <Avatar className={classes.avatar}>T</Avatar>
-                                <Typography variant={"h4"}>Team name</Typography>
-                                <Typography variant={"subtitle1"}>something</Typography>
-                                <Typography variant={"subtitle2"}>somethingElse</Typography>
-                            </div>
-                            <Typography variant={"h5"}>UPCOMING...</Typography>
-                            <div className={classes.eventContainer}>
-                                <EventList />
-                            </div>
-                            <Link href="/teammanage">
-                                <Button> Team Management </Button>
-                            </Link>
-                        </div>
-                    </Card>
+                    <TeamDisplayPannel data={data} />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>
@@ -127,11 +93,13 @@ function TeamPage({ id, errors }: Props) {
                                     key={index}
                                     content={post.content}
                                     firstName={post.user.name}
+                                    avatarUrl={post.user.avatarUrl}
                                     lastModifyDate={post.lastModifyDate}
                                     isPinned={post.isPined}
                                     postID={post._id}
                                     teamID={id}
                                     isCoach={data?.getTeam.isCoach}
+                                    imgUrls={post.imgUrls}
                                 />
                             );
                         })}
@@ -168,6 +136,8 @@ function TeamPage({ id, errors }: Props) {
                                 postID={post._id}
                                 teamID={id}
                                 isCoach={data?.getTeam.isCoach}
+                                avatarUrl={post.user.avatarUrl}
+                                imgUrls={post.imgUrls}
                             />
                         );
                     })}

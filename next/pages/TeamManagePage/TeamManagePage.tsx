@@ -6,12 +6,11 @@ import MemberManagementTab from "../../components/TeamManagePage/MemberManagemen
 const useStyles = makeStyles({
     body: {
         paddingTop: 90,
-
         width: "100%",
         height: "100%",
     },
     membertab: {
-        marginTop: "5%",
+        marginTop: "20px",
         marginBottom: "5%",
     },
 });

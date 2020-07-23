@@ -1,13 +1,12 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import React, { useEffect } from "react";
-import {avatarPreset, cloudinary, CLOUDINARY_URL, CloudinaryImageUpload} from "../../../lib/cloudinary";
+import { avatarPreset, cloudinary, CLOUDINARY_URL, CloudinaryImageUpload } from "../../../lib/cloudinary";
 import { useMeQuery, useUploadAvatarMutation } from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        container: {
-        },
+        container: {},
         avatar: {
             width: theme.spacing(15),
             height: theme.spacing(15),
@@ -60,19 +59,21 @@ export default function AvatarUpload() {
     };
 
     const uploadImage = async (base64EncodedImage: any) => {
-        CloudinaryImageUpload(base64EncodedImage).then((data) => {
-            const uploadedFileUrl = data.secure_url;
-            updateAvatar({
-                variables:{
-                    url:uploadedFileUrl,
-                },
-            }).then((res)=>{
-                console.log(res);
-                refetch();
+        CloudinaryImageUpload(base64EncodedImage)
+            .then((data) => {
+                const uploadedFileUrl = data.secure_url;
+                updateAvatar({
+                    variables: {
+                        url: uploadedFileUrl,
+                    },
+                }).then((res) => {
+                    console.log(res);
+                    refetch();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
             });
-        }).catch((err)=>{
-            console.log(err);
-        })
     };
 
     const dragover = (e: any) => {

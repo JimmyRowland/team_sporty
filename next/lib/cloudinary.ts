@@ -18,7 +18,6 @@ export const CloudinaryImageUpload = async (base64EncodedImage: string) => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if (data.secure_url !== "") {
                     resolve(data);
                 }

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
             maxHeight:"700px",
             margin:"50px auto",
             padding:theme.spacing(2),
-
+            borderRadius: "15px",
         },
         avatar:{
             margin:"auto",
