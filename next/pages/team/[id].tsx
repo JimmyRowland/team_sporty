@@ -79,6 +79,7 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
+    const reversePosts = data?.getTeam.team.posts?.slice().reverse();
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
@@ -87,7 +88,7 @@ function TeamPage({ id, errors }: Props) {
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>
-                        {data?.getTeam.team.posts?.map((post, index) => {
+                        {reversePosts.map((post, index) => {
                             return !post.isPined ? null : (
                                 <PostComponent
                                     key={index}
@@ -125,7 +126,7 @@ function TeamPage({ id, errors }: Props) {
                     {/*        </div>*/}
                     {/*    </Card>*/}
                     {/*</div>*/}
-                    {data?.getTeam.team.posts?.map((post, index) => {
+                    {reversePosts?.map((post, index) => {
                         return post.isPined ? null : (
                             <PostComponent
                                 key={index}
