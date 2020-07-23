@@ -14,6 +14,7 @@ import { isAuth } from "../middleware/isAuth";
 import { verify } from "jsonwebtoken";
 import { RegisterInput } from "../interfaces/inputType";
 import { LoginResponse } from "../interfaces/responseType";
+import { getIDfromToken } from "../middleware/getIDfromToken";
 
 // TODO hide users query
 
@@ -26,21 +27,9 @@ export class UserResolver {
     }
 
     @Query(() => User, { nullable: true })
-    me(@Ctx() context: ResReq) {
-        const authorization = context.req.headers["authorization"];
-
-        if (!authorization) {
-            return null;
-        }
-
-        try {
-            const token = authorization.split(" ")[1];
-            const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-            return UserModel.findOne({ _id: payload._id });
-        } catch (err) {
-            console.log(err);
-            return null;
-        }
+    @UseMiddleware(getIDfromToken)
+    me(@Ctx() { payload }: ResReq) {
+        return UserModel.findById(payload._id);
     }
 
     @Mutation(() => Boolean)
