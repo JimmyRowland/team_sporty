@@ -84,5 +84,6 @@ export const createAccessToken = (user: User) => {
 
 export const getGravatarUrl = (email: string) => {
     const hash = createHash("md5").update(email).digest("hex");
+    // default options :identicon monsterid wavatar retro https://en.gravatar.com/site/implement/images/
     return `https://res.cloudinary.com/dfxanglyc/image/gravatar/d_monsterid/${hash}`;
 };
