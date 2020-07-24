@@ -185,7 +185,7 @@ export default function App() {
                                             label="Choose a team"
                                             variant="outlined"
                                             error={Boolean(errors?.team)}
-                                            helperText={errors}
+                                            helperText={errors?.team?._id.message}
                                         />
                                     )}
                                 />
