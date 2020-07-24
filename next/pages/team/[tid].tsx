@@ -84,7 +84,11 @@ function TeamPage({ id, errors }: Props) {
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <TeamDisplayPannel isCoach={data.getTeam.isCoach} imgUrl={data.getTeam.team.imgUrl} name={data.getTeam.team.name} />
+                    <TeamDisplayPannel
+                        isCoach={data.getTeam.isCoach}
+                        imgUrl={data.getTeam.team.imgUrl}
+                        name={data.getTeam.team.name}
+                    />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>
