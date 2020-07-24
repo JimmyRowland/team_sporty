@@ -19,7 +19,6 @@ import { TestResolver } from "./resolver/TestResolver";
     connectDatabase();
     app.use(
         cors({
-            origin:'*',
             credentials: true,
         }),
     );
