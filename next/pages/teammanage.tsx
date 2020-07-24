@@ -1,4 +1,4 @@
-import TeamManagePage from "./TeamManagePage/TeamManagePage";
+import TeamManagePage from "../components/TeamManagePage/TeamManagePage";
 import Layout from "../components/layouts/index/Layout";
 import React from "react";
 

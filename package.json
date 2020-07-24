@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "team_sporty",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "ts-node server/src/index.ts",
     "lint:fix": "./node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "dependencies": {

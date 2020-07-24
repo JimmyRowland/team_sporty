@@ -19,7 +19,6 @@ import { TestResolver } from "./resolver/TestResolver";
     connectDatabase();
     app.use(
         cors({
-            origin: "http://localhost:3000",
             credentials: true,
         }),
     );
@@ -28,7 +27,7 @@ import { TestResolver } from "./resolver/TestResolver";
     app.use(json({ limit: "50mb" }));
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver, TestResolver],
+            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver],
             globalMiddlewares: [TypegooseMiddleware],
         }),
         context: ({ req, res }) => ({ req, res }),
@@ -36,7 +35,8 @@ import { TestResolver } from "./resolver/TestResolver";
 
     apolloServer.applyMiddleware({ app, cors: false });
     app.use(routes);
-    app.listen(4000, () => {
-        console.log("express server started on http://localhost:4000/graphql");
+    const port = process.env.PORT || 5000;
+    app.listen(port, () => {
+        console.log(`express server started on http://localhost:${port}/graphql`);
     });
 })();
