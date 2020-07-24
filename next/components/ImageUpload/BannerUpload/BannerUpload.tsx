@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { CloudinaryImageUpload } from "../../../lib/cloudinary";
-import { useMeQuery, useUploadBannerMutation } from "../../../generated/graphql";
+import { useGetProfilePageQuery, useUploadBannerMutation } from "../../../generated/graphql";
 import { CardMedia } from "@material-ui/core";
 import React from "react";
 
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BannerUpload() {
     const classes = useStyles();
     const [updateBanner] = useUploadBannerMutation();
-    const { data, loading, refetch } = useMeQuery();
+    const { data, loading, refetch } = useGetProfilePageQuery();
     const readURL = async (e: any) => {
         e.preventDefault();
         const reader = new FileReader();
