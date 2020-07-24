@@ -2,7 +2,7 @@ import React from "react";
 import EditPopUp from "./EditPopUp/EditPopUp";
 import { useSelector } from "react-redux";
 import { selectPersonal } from "./EditPopUp/EditPersonalInfoSlice";
-import { useMeQuery } from "../../generated/graphql";
+import { useGetProfilePageQuery, useMeQuery } from "../../generated/graphql";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Avatar } from "@material-ui/core";
 import AvatarUpload from "../ImageUpload/AvatarUpload/AvatarUpload";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function PersonalInfoTab() {
     const info = useSelector(selectPersonal);
-    const { data, loading, refetch } = useMeQuery();
+    const { data, loading, refetch } = useGetProfilePageQuery();
     const classes = useStyles();
     return loading && data && data.me ? null : (
         <Card className={classes.body}>

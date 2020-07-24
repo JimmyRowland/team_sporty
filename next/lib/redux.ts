@@ -14,7 +14,6 @@ const initStore = (preloadedState: Record<string, unknown>) => {
     return configureStore({
         reducer: {
             teamNameState: teamReducer,
-            posts: postReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
             seletedUserInTable: selectedUsersInTableReducer,

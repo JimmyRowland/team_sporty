@@ -1,10 +1,8 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import React from "react";
-import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
-import { GTranslate } from "@material-ui/icons";
-import { Team, useApplyTeamMutation } from "../../generated/graphql";
+import { useApplyTeamMutation } from "../../generated/graphql";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({

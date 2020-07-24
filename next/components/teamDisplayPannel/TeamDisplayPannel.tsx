@@ -54,7 +54,7 @@ export default function TeamDisplayPannel({
     imgUrl,
     name,
 }: {
-    isCoach: string;
+    isCoach: boolean;
     imgUrl: string;
     name: string;
 }) {

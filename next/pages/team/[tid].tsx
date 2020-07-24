@@ -1,12 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Card, Avatar } from "@material-ui/core";
-import { EventList } from "../../components/eventList/EventList";
 import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
-import Link from "next/link";
-import Button from "@material-ui/core/Button";
-import PostBoard from "../../components/post/PostBoard";
 import Layout from "../../components/layouts/index/Layout";
 import { GetTeamPageDocument, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
@@ -85,7 +80,11 @@ function TeamPage({ id, errors }: Props) {
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <TeamDisplayPannel />
+                    <TeamDisplayPannel
+                        isCoach={data.getTeam.isCoach}
+                        imgUrl={data.getTeam.team.imgUrl}
+                        name={data.getTeam.team.name}
+                    />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>

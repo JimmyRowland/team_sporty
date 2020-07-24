@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import React, { useEffect } from "react";
-import { avatarPreset, cloudinary, CLOUDINARY_URL, CloudinaryImageUpload } from "../../../lib/cloudinary";
+import { cloudinary, CloudinaryImageUpload } from "../../../lib/cloudinary";
 import { useMeQuery, useUploadAvatarMutation } from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,7 +60,7 @@ export default function AvatarUpload() {
 
     const uploadImage = async (base64EncodedImage: any) => {
         CloudinaryImageUpload(base64EncodedImage)
-            .then((data) => {
+            .then((data: any) => {
                 const uploadedFileUrl = data.secure_url;
                 updateAvatar({
                     variables: {

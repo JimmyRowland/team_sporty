@@ -1,8 +1,9 @@
-query Me {
+query GetProfilePage {
     me {
         _id
         name
         avatarUrl
+        bannerUrls
     }
 }
 

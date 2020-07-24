@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchBar from "../components/SearchBar/SearchBar";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import CreateTeamModal from "../components/CreateTeamModal/CreateTeamModal";
 import Layout from "../components/layouts/index/Layout";
-import { useGetEventsLazyQuery, useGetTeamsLazyQuery, useGetTeamsQuery } from "../generated/graphql";
+import { useGetTeamsQuery } from "../generated/graphql";
 
 const useStyles = makeStyles({
     body: {
@@ -54,7 +54,7 @@ function TeamSearchPage() {
     // useEffect(() => {
     //     console.log("data", data);
     // }, [loading]);
-    const { data, loading, error } = useGetTeamsQuery();
+    const { data, loading } = useGetTeamsQuery();
     if (loading || !data || !data.getTeams) {
         return "loading";
     } else {

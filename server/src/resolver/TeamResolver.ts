@@ -69,10 +69,12 @@ export class TeamResolver {
         @Arg("teamID") teamID: string,
         @Arg("sport") sport: SportEnum,
         @Arg("name") name: string,
-        @Ctx() { res, payload }: ResReq,
+        @Arg("description") description: string,
+        @Ctx()
+        { res, payload }: ResReq,
     ) {
         try {
-            await TeamModel.findByIdAndUpdate(teamID, { name: name, sport: sport });
+            await TeamModel.findByIdAndUpdate(teamID, { name: name, sport: sport, description: description });
         } catch (e) {
             console.log(e);
             return false;
