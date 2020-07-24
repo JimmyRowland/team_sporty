@@ -1,5 +1,4 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import postReducer from "../components/post/postSlice";
 import eventReducer from "../components/eventList/eventSlice";
 import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
@@ -14,7 +13,6 @@ const initStore = (preloadedState: Record<string, unknown>) => {
     return configureStore({
         reducer: {
             teamNameState: teamReducer,
-            posts: postReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
             seletedUserInTable: selectedUsersInTableReducer,
