@@ -101,10 +101,10 @@ export default function registerPage() {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="FirstName *" placeholder="firstName" component={InputField} />
-                        <Field name="LastName *" placeholder="lastName" component={InputField} />
-                        <Field name="Email *" placeholder="email" component={InputField} />
-                        <Field name="Password *" placeholder="password" type="password" component={InputField} />
+                        <Field name="FirstName" placeholder="FirstName*" component={InputField} />
+                        <Field name="LastName" placeholder="LastName*" component={InputField} />
+                        <Field name="Email" placeholder="Email*" component={InputField} />
+                        <Field name="Password" placeholder="Password*" type="password" component={InputField} />
                         <Button type="submit" variant="contained" color="secondary" className={classes.signup}>
                             SIGN UP
                         </Button>

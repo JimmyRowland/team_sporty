@@ -84,6 +84,7 @@ export type Mutation = {
   register: Scalars['Boolean'];
   uploadAvatar: Scalars['Boolean'];
   uploadBanner: Scalars['Boolean'];
+  uploadIntro: Scalars['Boolean'];
   updateTeam: Scalars['Boolean'];
   addMember: Scalars['Boolean'];
   addMembers: Scalars['Boolean'];
@@ -136,6 +137,11 @@ export type MutationUploadAvatarArgs = {
 
 export type MutationUploadBannerArgs = {
   bannerUrl: Scalars['String'];
+};
+
+
+export type MutationUploadIntroArgs = {
+  intro: Scalars['String'];
 };
 
 
@@ -389,6 +395,7 @@ export type User = {
   tokenVersion: Scalars['Int'];
   address: Scalars['String'];
   phone: Scalars['String'];
+  introduction: Scalars['String'];
   ip: Array<Scalars['String']>;
   sport: Array<Sport>;
   bannerUrls: Scalars['String'];
@@ -867,8 +874,8 @@ export type GetTeamsQuery = (
 );
 
 export type LoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+  Email: Scalars['String'];
+  Password: Scalars['String'];
 }>;
 
 
@@ -893,10 +900,10 @@ export type LogoutMutation = (
 );
 
 export type RegisterMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+  Email: Scalars['String'];
+  Password: Scalars['String'];
+  FirstName: Scalars['String'];
+  LastName: Scalars['String'];
 }>;
 
 
@@ -925,6 +932,16 @@ export type UploadBannerMutation = (
   & Pick<Mutation, 'uploadBanner'>
 );
 
+export type UploadIntroMutationVariables = Exact<{
+  intro: Scalars['String'];
+}>;
+
+
+export type UploadIntroMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'uploadIntro'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -932,7 +949,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'name' | 'avatarUrl' | 'bannerUrls'>
+    & Pick<User, '_id' | 'name' | 'avatarUrl' | 'bannerUrls' | 'introduction'>
   )> }
 );
 
@@ -2148,8 +2165,8 @@ export type GetTeamsQueryHookResult = ReturnType<typeof useGetTeamsQuery>;
 export type GetTeamsLazyQueryHookResult = ReturnType<typeof useGetTeamsLazyQuery>;
 export type GetTeamsQueryResult = ApolloReactCommon.QueryResult<GetTeamsQuery, GetTeamsQueryVariables>;
 export const LoginDocument = gql`
-    mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
+    mutation Login($Email: String!, $Password: String!) {
+  login(email: $Email, password: $Password) {
     user {
       _id
       avatarUrl
@@ -2174,8 +2191,8 @@ export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, 
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
+ *      Email: // value for 'Email'
+ *      Password: // value for 'Password'
  *   },
  * });
  */
@@ -2215,8 +2232,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
-  register(input: {email: $email, password: $password, firstName: $firstName, lastName: $lastName})
+    mutation Register($Email: String!, $Password: String!, $FirstName: String!, $LastName: String!) {
+  register(input: {email: $Email, password: $Password, firstName: $FirstName, lastName: $LastName})
 }
     `;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
@@ -2234,10 +2251,10 @@ export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMuta
  * @example
  * const [registerMutation, { data, loading, error }] = useRegisterMutation({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
+ *      Email: // value for 'Email'
+ *      Password: // value for 'Password'
+ *      FirstName: // value for 'FirstName'
+ *      LastName: // value for 'LastName'
  *   },
  * });
  */
@@ -2307,6 +2324,36 @@ export function useUploadBannerMutation(baseOptions?: ApolloReactHooks.MutationH
 export type UploadBannerMutationHookResult = ReturnType<typeof useUploadBannerMutation>;
 export type UploadBannerMutationResult = ApolloReactCommon.MutationResult<UploadBannerMutation>;
 export type UploadBannerMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadBannerMutation, UploadBannerMutationVariables>;
+export const UploadIntroDocument = gql`
+    mutation UploadIntro($intro: String!) {
+  uploadIntro(intro: $intro)
+}
+    `;
+export type UploadIntroMutationFn = ApolloReactCommon.MutationFunction<UploadIntroMutation, UploadIntroMutationVariables>;
+
+/**
+ * __useUploadIntroMutation__
+ *
+ * To run a mutation, you first call `useUploadIntroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadIntroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadIntroMutation, { data, loading, error }] = useUploadIntroMutation({
+ *   variables: {
+ *      intro: // value for 'intro'
+ *   },
+ * });
+ */
+export function useUploadIntroMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UploadIntroMutation, UploadIntroMutationVariables>) {
+        return ApolloReactHooks.useMutation<UploadIntroMutation, UploadIntroMutationVariables>(UploadIntroDocument, baseOptions);
+      }
+export type UploadIntroMutationHookResult = ReturnType<typeof useUploadIntroMutation>;
+export type UploadIntroMutationResult = ApolloReactCommon.MutationResult<UploadIntroMutation>;
+export type UploadIntroMutationOptions = ApolloReactCommon.BaseMutationOptions<UploadIntroMutation, UploadIntroMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -2314,6 +2361,7 @@ export const MeDocument = gql`
     name
     avatarUrl
     bannerUrls
+    introduction
   }
 }
     `;

@@ -1,6 +1,6 @@
 import { Field, Formik } from "formik";
 import Router from "next/router";
-import React from "react";
+import React, {useState} from "react";
 import { InputField } from "../components/fields/InputField";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../lib/accessToken";
@@ -9,6 +9,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Link from "next/link";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,6 +62,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginPage = () => {
     const classes = useStyles();
     const [login] = useLoginMutation();
+    const [helperText, setHelperText] = useState('');
+
     return (
         <Card className={classes.body}>
             <CardMedia
@@ -96,16 +99,15 @@ const LoginPage = () => {
                         },
                     });
 
-                    console.log(res);
-
                     if (res && res.data) {
+                        console.log(res);
                         setAccessToken(res.data.login.accessToken);
                     }
-                    console.log(res);
                     if (res && res.data && !res.data.login) {
                         setErrors({
                             email: "invalid login",
                         });
+                        setHelperText("invalid login");
                         return;
                     }
 
@@ -118,11 +120,13 @@ const LoginPage = () => {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="Email" placeholder="email" component={InputField} />
-                        <Field name="Password" placeholder="password" type="password" component={InputField} />
+                        <Field name="Email" placeholder="Email" component={InputField} />
+                        <Field name="Password" placeholder="Password" type="password" component={InputField} />
+                        <FormHelperText>{helperText}</FormHelperText>
                         <Button type="submit" color="secondary" variant="contained" className={classes.login}>
                             Log in
                         </Button>
+
                     </form>
                 )}
             </Formik>
