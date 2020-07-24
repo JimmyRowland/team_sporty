@@ -67,16 +67,13 @@ function MemberTab() {
     return (
         <Card className={classes.memberbody}>
             <div className={classes.memberelement}>
-                <Avatar className={classes.inner} />
+                <Avatar />
             </div>
             <div className={classes.memberelement}>
-                <Typography className={classes.username} variant="h5">
-                    {" "}
-                    User Name{" "}
-                </Typography>
+                <Typography variant="h5"> User Name </Typography>
             </div>
             <div className={classes.memberelement2}>
-                <Button className={classes.inner}> Remove </Button>
+                <Button> Remove </Button>
             </div>
         </Card>
     );

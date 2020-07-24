@@ -6,7 +6,7 @@ import React, { ComponentType, useEffect, useState, Fragment } from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../assets/theme";
-import { getAccessToken, setAccessToken } from "../lib/accessToken";
+import { setAccessToken } from "../lib/accessToken";
 
 export default function App({ Component, pageProps }: { Component: ComponentType; pageProps: any }) {
     const store = useStore(pageProps.initialReduxState);

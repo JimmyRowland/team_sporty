@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { CardHeader } from "@material-ui/core";
-import { useDispatch } from "react-redux";
-import { addPost, addpostAsync } from "./postSlice";
-import { useAddPostMutation, useMeQuery } from "../../generated/graphql";
+import { useAddPostMutation } from "../../generated/graphql";
 import CardMedia from "@material-ui/core/CardMedia";
-import Avatar from "@material-ui/core/Avatar";
 import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -82,7 +78,7 @@ const useStyles = makeStyles({
 export default function PostCreator({ teamID }: { teamID: string }) {
     const classes = useStyles();
     const [content, setContent] = useState("");
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<{ id: string; url: string }>([]);
     const [submitPost] = useAddPostMutation();
     const [id, setid] = useState(0);
     const handleSubmit = () => {
@@ -111,14 +107,14 @@ export default function PostCreator({ teamID }: { teamID: string }) {
     };
 
     const uploadContent = async () => {
-        const promises = [];
+        const promises: Promise<any>[] = [];
         images.map((image) => {
             const promise = CloudinaryImageUpload(image.url);
             promises.push(promise);
         });
         Promise.all(promises)
             .then((res) => {
-                const imgUrls = [];
+                const imgUrls: string[] = [];
                 res.map((img) => {
                     imgUrls.push(img.secure_url.toString());
                 });
@@ -129,7 +125,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
             });
     };
 
-    const OnRemoveImage = (id) => {
+    const OnRemoveImage = (id: string) => {
         setImages(
             images.filter((image) => {
                 return image.id !== id;

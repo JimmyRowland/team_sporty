@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../../app/store";
-import ts from "typescript/lib/protocol";
+import { AppThunk, RootState } from "../../lib/redux";
 
 interface Event {
     title: string;

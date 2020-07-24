@@ -12,12 +12,6 @@ import moment from "moment";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useRouter } from "next/router";
 
-const theme = createMuiTheme({
-    palette: {
-        type: "dark",
-    },
-});
-
 type formData = {
     eventType: string;
     startDate: moment.Moment;
@@ -185,7 +179,7 @@ export default function App() {
                                             label="Choose a team"
                                             variant="outlined"
                                             error={Boolean(errors?.team)}
-                                            helperText={errors?.team?.message}
+                                            helperText={errors?.team?._id.message}
                                         />
                                     )}
                                 />

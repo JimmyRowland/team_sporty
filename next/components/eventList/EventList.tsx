@@ -17,7 +17,6 @@ export function EventList() {
     const classes = useStyles();
     const dispatch = useDispatch();
     useEffect(() => {
-        // console.log('on load');
         dispatch(eventAsync());
     }, []);
     return (

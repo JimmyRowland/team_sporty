@@ -47,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const NestedTeamItem = ({ team: { team, isCoach } }: { team: GetTeamResponse }) => {
+const NestedTeamItem = ({ _id, name, isCoach }: { _id: string; name: string; isCoach: boolean }) => {
     const classes = useStyles();
     const router = useRouter();
     const { tid } = router.query;
-    const [open, setOpen] = React.useState(tid === team._id);
+    const [open, setOpen] = React.useState(tid === _id);
     const handleClick = () => {
         setOpen(!open);
     };
@@ -62,14 +62,14 @@ const NestedTeamItem = ({ team: { team, isCoach } }: { team: GetTeamResponse }) 
                     <div className={classes.icon}>
                         <SportsSoccer />
                     </div>
-                    {team.name}
+                    {name}
                 </Button>
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={"/settings/members/[tid]"} as={`/settings/members/${team._id}`}>
+                        <Link href={"/settings/members/[tid]"} as={`/settings/members/${_id}`}>
                             <Button className={classes.button}>
                                 <div className={classes.icon}>
                                     <SportsSoccer />
@@ -79,7 +79,7 @@ const NestedTeamItem = ({ team: { team, isCoach } }: { team: GetTeamResponse }) 
                         </Link>
                     </ListItem>
                     <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                        <Link href={"/settings/coaches/[tid]"} as={`/settings/coaches/${team._id}`}>
+                        <Link href={"/settings/coaches/[tid]"} as={`/settings/coaches/${_id}`}>
                             <Button className={classes.button}>
                                 <div className={classes.icon}>
                                     <SportsSoccer />
@@ -90,7 +90,7 @@ const NestedTeamItem = ({ team: { team, isCoach } }: { team: GetTeamResponse }) 
                     </ListItem>
                     {isCoach ? (
                         <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                            <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${team._id}`}>
+                            <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${_id}`}>
                                 <Button className={classes.button}>
                                     <div className={classes.icon}>
                                         <SportsSoccer />
