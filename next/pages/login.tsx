@@ -1,6 +1,6 @@
 import { Field, Formik } from "formik";
 import Router from "next/router";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { InputField } from "../components/fields/InputField";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../lib/accessToken";
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const LoginPage = () => {
     const classes = useStyles();
     const [login] = useLoginMutation();
-    const [helperText, setHelperText] = useState('');
+    const [helperText, setHelperText] = useState("");
 
     return (
         <Card className={classes.body}>
@@ -126,7 +126,6 @@ const LoginPage = () => {
                         <Button type="submit" color="secondary" variant="contained" className={classes.login}>
                             Log in
                         </Button>
-
                     </form>
                 )}
             </Formik>

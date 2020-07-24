@@ -50,11 +50,11 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "250px",
         },
         footerContainer: {
-            marginBottom:theme.spacing(1),
+            marginBottom: theme.spacing(1),
         },
         footerButton: {
             width: "80%",
-            margin:"auto",
+            margin: "auto",
         },
     }),
 );
@@ -69,9 +69,15 @@ export default function registerPage() {
                 component="img"
                 alt="Cover"
                 title="Cover"
-                image={"https://res.cloudinary.com/df51z9s92/image/upload/v1595542836/FC_Cincinnati_Concept_BowlRendering_web_cjvelr.jpg"}
-                className={classes.image}/>
-            <Typography variant="h5" className={classes.signinText}> Sign up </Typography>
+                image={
+                    "https://res.cloudinary.com/df51z9s92/image/upload/v1595542836/FC_Cincinnati_Concept_BowlRendering_web_cjvelr.jpg"
+                }
+                className={classes.image}
+            />
+            <Typography variant="h5" className={classes.signinText}>
+                {" "}
+                Sign up{" "}
+            </Typography>
             <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
@@ -112,12 +118,10 @@ export default function registerPage() {
                 )}
             </Formik>
             <div className={classes.footerContainer}>
-                <Link href={"/login"} className={classes.footerButton}>
-                    <Button color="primary" >
-                        {"Already have an account? Sign in"}
-                    </Button>
+                <Link href={"/login"}>
+                    <Button color="primary">{"Already have an account? Sign in"}</Button>
                 </Link>
-                </div>
+            </div>
         </Card>
         // </Layout>
     );

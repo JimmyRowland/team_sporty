@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchBar from "../components/SearchBar/SearchBar";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
@@ -10,8 +10,8 @@ import Card from "@material-ui/core/Card";
 import theme from "../assets/theme";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles({
     body: {
@@ -21,15 +21,15 @@ const useStyles = makeStyles({
         margin: "auto",
     },
     searchbarContainer: {
-        width:"fit-content",
-        minWidth:"750px",
+        width: "fit-content",
+        minWidth: "750px",
         height: "30%",
         margin: "auto",
-        textAlign:"center",
-        padding:theme.spacing(1),
+        textAlign: "center",
+        padding: theme.spacing(1),
     },
-    searchbar:{
-        width:"600px"
+    searchbar: {
+        width: "600px",
     },
     teamContainer: {
         marginTop: theme.spacing(5),
@@ -47,26 +47,6 @@ const useStyles = makeStyles({
 
 function TeamSearchPage() {
     const classes = useStyles();
-    // TODO fix lazy load
-    // const [getTeams, { loading, error, data }] = useGetTeamsLazyQuery();
-    // const [teams, setTeams] = useState(data?.getTeams);
-    //
-    // if (data && data.getTeams) {
-    //     setTeams(data.getTeams);
-    // }
-    //
-    // // useEffect(() => {
-    // //     for (let i = 0; i < 5; i++) {
-    // //         try {
-    // //             getTeams();
-    // //         } catch (e) {
-    // //             console.log(e);
-    // //         }
-    // //     }
-    // // }, []);
-    // useEffect(() => {
-    //     console.log("data", data);
-    // }, [loading]);
     const { data, loading, error } = useGetTeamsQuery();
     const [search, setSearch] = useState("");
 
@@ -76,6 +56,8 @@ function TeamSearchPage() {
 
     if (loading || !data || !data.getTeams) {
         return "loading";
+    } else if (error) {
+        return "error";
     } else {
         return (
             <Layout title={"Teams"}>
@@ -87,14 +69,14 @@ function TeamSearchPage() {
                         <InputBase
                             className={classes.searchbar}
                             placeholder="Search Team"
-                            onChange={(e)=>handleSearch(e)}
+                            onChange={(e) => handleSearch(e)}
                         />
                         <IconButton type="submit" aria-label="search">
                             <SearchIcon />
                         </IconButton>
                     </Card>
                     <div className={classes.teamContainer}>
-                        {data.getTeams.map((team, index) => {
+                        {data.getTeams.map((team: any, index: any) => {
                             if (team.team.name.includes(search) || team.team.sport.includes(search))
                                 return (
                                     <div key={index} className={classes.teamtabContainer}>
