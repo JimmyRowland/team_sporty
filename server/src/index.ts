@@ -18,9 +18,7 @@ import { TestResolver } from "./resolver/TestResolver";
     const app = express();
     connectDatabase();
     app.use(
-        cors({
-            credentials: true,
-        }),
+        cors(),
     );
     //TODO: remove testResolver
     app.use(cookieParser());

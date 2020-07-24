@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: { Component: ComponentType
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:4000/refresh_token", {
+        fetch("https://lit-atoll-38483.herokuapp.com/refresh_token", {
             method: "POST",
             credentials: "include",
         }).then(async (x) => {
