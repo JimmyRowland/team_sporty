@@ -4,7 +4,7 @@ import SearchBar from "../components/SearchBar/SearchBar";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import CreateTeamModal from "../components/CreateTeamModal/CreateTeamModal";
 import Layout from "../components/layouts/index/Layout";
-import { useGetEventsLazyQuery, useGetTeamsLazyQuery, useGetTeamsQuery } from "../generated/graphql";
+import { useGetTeamsQuery } from "../generated/graphql";
 
 const useStyles = makeStyles({
     body: {

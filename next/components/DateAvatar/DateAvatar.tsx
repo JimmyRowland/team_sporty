@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import Avatar from "@material-ui/core/Avatar";
-import { Colors } from "../../interface/Interface";
+import { Colors } from "../../interfaces/Interface";
 import classnames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { EventListItemType } from "../../interface/Interface";
+import { EventListItemType } from "../../interfaces/Interface";
 import { Card, CardHeader } from "@material-ui/core";
 import { EventListItem } from "./EventListItem";
 import { useSelector, useDispatch } from "react-redux";

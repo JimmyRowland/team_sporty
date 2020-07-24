@@ -6,7 +6,6 @@ import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import PostBoard from "../../components/post/PostBoard";
 import Layout from "../../components/layouts/index/Layout";
 import { GetTeamPageDocument, useGetTeamPageQuery } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
@@ -85,7 +84,7 @@ function TeamPage({ id, errors }: Props) {
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <TeamDisplayPannel data={data} />
+                    <TeamDisplayPannel isCoach={data.getTeam.isCoach} imgUrl={data.getTeam.team.imgUrl} name={data.getTeam.team.name} />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>

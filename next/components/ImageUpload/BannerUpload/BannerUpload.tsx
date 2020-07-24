@@ -71,7 +71,7 @@ export default function BannerUpload() {
 
     const uploadImage = async (base64EncodedImage: any) => {
         CloudinaryImageUpload(base64EncodedImage)
-            .then((data) => {
+            .then((data: any) => {
                 const uploadedFileUrl = data.secure_url;
                 updateBanner({
                     variables: {
