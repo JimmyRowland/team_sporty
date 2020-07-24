@@ -6,7 +6,7 @@ import React, { ComponentType, useEffect, useState, Fragment } from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../assets/theme";
-import { getAccessToken, setAccessToken } from "../lib/accessToken";
+import { setAccessToken } from "../lib/accessToken";
 
 export default function App({ Component, pageProps }: { Component: ComponentType; pageProps: any }) {
     const store = useStore(pageProps.initialReduxState);
@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: { Component: ComponentType
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:4000/refresh_token", {
+        fetch("https://lit-atoll-38483.herokuapp.com/refresh_token", {
             method: "POST",
             credentials: "include",
         }).then(async (x) => {

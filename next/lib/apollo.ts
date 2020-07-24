@@ -65,7 +65,7 @@ function createApolloClient() {
                     }
                 },
                 fetchAccessToken: () => {
-                    return fetch("http://localhost:4000/refresh_token", {
+                    return fetch("https://lit-atoll-38483.herokuapp.com/refresh_token", {
                         method: "POST",
                         credentials: "include",
                     });
@@ -84,7 +84,7 @@ function createApolloClient() {
             }),
             requestLink,
             new HttpLink({
-                uri: "http://localhost:4000/graphql",
+                uri: "https://lit-atoll-38483.herokuapp.com/graphql",
                 credentials: "include",
             }),
         ]),
