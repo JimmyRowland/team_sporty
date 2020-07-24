@@ -1,6 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 import { colors } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
 
 const white = "#FFFFFF";
 const black = "#000000";

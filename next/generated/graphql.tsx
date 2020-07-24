@@ -582,7 +582,6 @@ export type UpdateTeamMutationVariables = Exact<{
     sport: Scalars["String"];
     teamID: Scalars["String"];
     name: Scalars["String"];
-    description: Scalars["String"];
 }>;
 
 export type UpdateTeamMutation = { __typename?: "Mutation" } & Pick<Mutation, "updateTeam">;

@@ -1,14 +1,9 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Avatar, Card, IconButton, Typography } from "@material-ui/core";
+import { Avatar, Card, Typography } from "@material-ui/core";
 import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React from "react";
-import { isCoach } from "../../../server/src/middleware/isCoach";
-import CardActionArea from "@material-ui/core/CardActionArea";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -54,23 +49,30 @@ const useStyles = makeStyles((Theme: Theme) =>
     }),
 );
 
-export default function TeamDisplayPannel({ data }: { data: any }) {
+export default function TeamDisplayPannel({
+    isCoach,
+    imgUrl,
+    name,
+}: {
+    isCoach: string;
+    imgUrl: string;
+    name: string;
+}) {
     const classes = useStyles();
-    const team = data?.getTeam.team;
     const TeamMangementPortal = () => {
-        return team.isCoach ? (
+        return isCoach ? (
             <Link href="/teammanage">
                 <Button className={classes.teammanageButton}> Team Management </Button>
             </Link>
         ) : null;
     };
 
-    return data ? (
+    return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>
                 <div className={classes.teamContainer}>
-                    <Avatar className={classes.avatar} src={team.imgUrl} />
-                    <Typography variant={"h4"}> {team.name} </Typography>
+                    <Avatar className={classes.avatar} src={imgUrl} />
+                    <Typography variant={"h4"}> {name} </Typography>
                     <Typography variant={"subtitle1"}>something</Typography>
                 </div>
                 <div className={classes.calendarContainer}>
@@ -84,5 +86,5 @@ export default function TeamDisplayPannel({ data }: { data: any }) {
                 </div>
             </div>
         </Card>
-    ) : null;
+    );
 }

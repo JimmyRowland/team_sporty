@@ -4,8 +4,6 @@ import Modal from "@material-ui/core/Modal";
 import CloseIcon from "@material-ui/icons/Close";
 import { IconButton } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -87,7 +85,9 @@ export default function CreateTeamModal() {
         setOpen(false);
     };
 
-    const onintroChange = (e: any) => {};
+    const onintroChange = (e: any) => {
+        console.log("change");
+    };
 
     const handleSubmit = () => {
         handleClose();
