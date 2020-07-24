@@ -19,7 +19,9 @@ import { TestResolver } from "./resolver/TestResolver";
     connectDatabase();
     app.use(
         cors({
+            origin: "http://localhost:3000",
             credentials: true,
+
         }),
     );
     //TODO: remove testResolver
