@@ -42,7 +42,7 @@ const useStyles = makeStyles((Theme: Theme) =>
         infoLine2items: {
             display: "inline",
             padding: "5px",
-            fontWeight: "300",
+            fontWeight: 300,
             fontSize: "12px",
         },
         infoLine3: {
