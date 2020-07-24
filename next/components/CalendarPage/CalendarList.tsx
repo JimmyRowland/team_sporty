@@ -1,11 +1,10 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useGetEventsAsCoachOrMemberQuery, Event, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 import { Avatar } from "@material-ui/core";
-import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function ControlledExpansionPanels(props: { eventList: any[] }) {
+export default function ControlledExpansionPanels() {
     const classes = useStyles();
     // graphql
     const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
@@ -47,7 +46,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
         return <div>no data</div>;
     }
 
-    let events: Pick<Event, "name" | "_id" | "startDate" | "endDate" | "description" | "eventType" | "address">[] = [];
+    let events: any = [];
     if (selectedTeam.name === "All") {
         for (const team of data.getTeamsAsMemberOrCoach) {
             events = team.team.events ? events.concat(team.team.events) : events;
@@ -60,7 +59,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
     }
     return (
         <div className={classes.root}>
-            {events.map((event, index: number) => {
+            {events.map((event: any, index: number) => {
                 let isGoing = 2;
                 const usersNotGoing = [];
                 const usersGoing = [];

@@ -133,6 +133,7 @@ export type MutationUploadBannerArgs = {
 };
 
 export type MutationUpdateTeamArgs = {
+    description: Scalars["String"];
     name: Scalars["String"];
     sport: Scalars["String"];
     teamID: Scalars["String"];

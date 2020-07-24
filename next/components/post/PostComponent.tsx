@@ -104,7 +104,7 @@ export default function PostComponent({
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation({ variables: { teamID: teamID, isPined: !isPinned, postID: postID } });
-    const divref = React.useRef();
+    const divref = React.useRef<any>();
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(divref.current);
     };
@@ -139,8 +139,8 @@ export default function PostComponent({
     const ImageDisplay = () => {
         return imgUrls ? (
             <div className={classes.imageDisplayContainer}>
-                {imgUrls.map((image) => (
-                    <Card className={classes.imageCard}>
+                {imgUrls.map((image, index) => (
+                    <Card className={classes.imageCard} key={index}>
                         <CardMedia
                             component="img"
                             alt="UploadedPhoto"
