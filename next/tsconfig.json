@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "alwaysStrict": true,
+//    "alwaysStrict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -9,13 +9,13 @@
     "lib": ["dom", "es2017"],
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
+//    "noEmit": true,
+//    "noFallthroughCasesInSwitch": true,
+//    "noUnusedLocals": true,
 //    "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
+//    "strict": true,
     "target": "esnext"
   },
   "exclude": ["node_modules"],

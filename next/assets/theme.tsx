@@ -1,5 +1,4 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import palette from "./palette";
 import { colors } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 
