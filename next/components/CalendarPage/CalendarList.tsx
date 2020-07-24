@@ -47,7 +47,7 @@ export default function ControlledExpansionPanels(props: { eventList: any[] }) {
         return <div>no data</div>;
     }
 
-    let events: Pick<Event, "name" | "_id" | "startDate" | "endDate" | "description" | "eventType" | "address">[] = [];
+    let events: any = [];
     if (selectedTeam.name === "All") {
         for (const team of data.getTeamsAsMemberOrCoach) {
             events = team.team.events ? events.concat(team.team.events) : events;
