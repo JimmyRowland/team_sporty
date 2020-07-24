@@ -1,0 +1,3 @@
+mutation UploadIntro($intro: String!) {
+    uploadIntro(intro: $intro)
+}

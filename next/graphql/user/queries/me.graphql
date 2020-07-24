@@ -3,6 +3,7 @@ query Me {
         _id
         name
         avatarUrl
+        bannerUrls
+        introduction
     }
 }
-

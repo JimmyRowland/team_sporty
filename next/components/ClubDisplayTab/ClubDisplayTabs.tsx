@@ -2,7 +2,9 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
-import { useApplyTeamMutation } from "../../generated/graphql";
+import { GTranslate } from "@material-ui/icons";
+import { Team, useApplyTeamMutation } from "../../generated/graphql";
+import Card from "@material-ui/core/Card";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -72,6 +74,7 @@ export default function ClubDisplayTab({
     description,
     teamID,
     isMember,
+    teamimage,
 }: {
     name: string;
     sport: string;
@@ -79,6 +82,7 @@ export default function ClubDisplayTab({
     description: string;
     teamID: string;
     isMember: boolean;
+    teamimage: string;
 }) {
     const classes = useStyles();
     const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
@@ -86,9 +90,9 @@ export default function ClubDisplayTab({
         joinTeam();
     };
     return (
-        <div className={classes.body}>
+        <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
-                <Avatar className={classes.clubIMG}>T</Avatar>
+                <Avatar className={classes.clubIMG} src={teamimage}></Avatar>
             </div>
             <div className={classes.infoContainer}>
                 <div className={classes.infocontainer}>
@@ -105,13 +109,20 @@ export default function ClubDisplayTab({
             </div>
             <div className={classes.addButtonContainer}>
                 {isMember ? (
-                    `${loading} ${isMember}`
+                    <Button disabled variant="contained" color="primary" className={classes.addButton}>
+                        Joined
+                    </Button>
                 ) : (
-                    <Button onClick={handleJoinTeam} variant="contained" color="primary" className={classes.addButton}>
+                    <Button
+                        onClick={handleJoinTeam}
+                        variant="contained"
+                        color="secondary"
+                        className={classes.addButton}
+                    >
                         Join
                     </Button>
                 )}
             </div>
-        </div>
+        </Card>
     );
 }

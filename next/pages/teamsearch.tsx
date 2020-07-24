@@ -4,7 +4,14 @@ import SearchBar from "../components/SearchBar/SearchBar";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import CreateTeamModal from "../components/CreateTeamModal/CreateTeamModal";
 import Layout from "../components/layouts/index/Layout";
-import { useGetTeamsQuery } from "../generated/graphql";
+import { useGetEventsLazyQuery, useGetTeamsLazyQuery, useGetTeamsQuery } from "../generated/graphql";
+import { TextField } from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import theme from "../assets/theme";
+import InputBase from "@material-ui/core/InputBase";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles({
     body: {
@@ -14,14 +21,20 @@ const useStyles = makeStyles({
         margin: "auto",
     },
     searchbarContainer: {
-        width: "80%",
-        height: "20%",
+        width:"fit-content",
+        minWidth:"750px",
+        height: "30%",
         margin: "auto",
+        textAlign:"center",
+        padding:theme.spacing(1),
+    },
+    searchbar:{
+        width:"600px"
     },
     teamContainer: {
-        marginTop: "5%",
+        marginTop: theme.spacing(5),
         width: "100%",
-        height: "600px",
+        height: "800px",
         overflowY: "scroll",
     },
     teamtabContainer: {
@@ -54,34 +67,49 @@ function TeamSearchPage() {
     // useEffect(() => {
     //     console.log("data", data);
     // }, [loading]);
-    const { data, loading } = useGetTeamsQuery();
+    const { data, loading, error } = useGetTeamsQuery();
+    const [search, setSearch] = useState("");
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+    };
+
     if (loading || !data || !data.getTeams) {
         return "loading";
     } else {
         return (
             <Layout title={"Teams"}>
                 <div className={classes.body}>
-                    <div className={classes.searchbarContainer}>
-                        <SearchBar />
-                    </div>
+                    <Card className={classes.searchbarContainer}>
+                        <IconButton aria-label="menu">
+                            <MenuIcon />
+                        </IconButton>
+                        <InputBase
+                            className={classes.searchbar}
+                            placeholder="Search Team"
+                            onChange={(e)=>handleSearch(e)}
+                        />
+                        <IconButton type="submit" aria-label="search">
+                            <SearchIcon />
+                        </IconButton>
+                    </Card>
                     <div className={classes.teamContainer}>
                         {data.getTeams.map((team, index) => {
-                            return (
-                                <div key={index} className={classes.teamtabContainer}>
-                                    <ClubDisplayTab
-                                        name={team.team.name}
-                                        description={team.team.description}
-                                        numberMembers={team.team.numberMembers}
-                                        sport={team.team.sport}
-                                        teamID={team.team._id}
-                                        isMember={team.isMember}
-                                    />
-                                </div>
-                            );
+                            if (team.team.name.includes(search) || team.team.sport.includes(search))
+                                return (
+                                    <div key={index} className={classes.teamtabContainer}>
+                                        <ClubDisplayTab
+                                            teamimage={team.team.imgUrl}
+                                            name={team.team.name}
+                                            description={team.team.description}
+                                            numberMembers={team.team.numberMembers}
+                                            sport={team.team.sport}
+                                            teamID={team.team._id}
+                                            isMember={team.isMember}
+                                        />
+                                    </div>
+                                );
                         })}
-                    </div>
-                    <div className={classes.createteamContainer}>
-                        <CreateTeamModal />
                     </div>
                 </div>
             </Layout>
