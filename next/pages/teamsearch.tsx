@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import SearchBar from "../components/SearchBar/SearchBar";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
-import CreateTeamModal from "../components/CreateTeamModal/CreateTeamModal";
 import Layout from "../components/layouts/index/Layout";
-import { useGetEventsLazyQuery, useGetTeamsLazyQuery, useGetTeamsQuery } from "../generated/graphql";
-import { TextField } from "@material-ui/core";
+import { useGetTeamsQuery } from "../generated/graphql";
 import Card from "@material-ui/core/Card";
 import theme from "../assets/theme";
 import InputBase from "@material-ui/core/InputBase";
