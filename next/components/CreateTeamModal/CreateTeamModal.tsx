@@ -85,7 +85,9 @@ export default function CreateTeamModal() {
         setOpen(false);
     };
 
-    const onintroChange = (e: any) => {};
+    const onintroChange = (e: any) => {
+        console.log("change");
+    };
 
     const handleSubmit = () => {
         handleClose();
