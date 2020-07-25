@@ -9,9 +9,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
-import { useSelector } from "react-redux";
-import { selectTeamState } from "../../components/CalendarPage/CalendarPageSlicer";
+import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
 
 
 const useStyles = makeStyles({
@@ -80,8 +78,7 @@ function TeamPage({ id, errors }: Props) {
         pollInterval: 500,
     });
 
-    const { data:eventsData, loading:eventsLoading, error:eventsError, refetch:eventsRefetch } = useGetEventsAsCoachOrMemberQuery();
-    const selectedTeam = useSelector(selectTeamState);
+    const { data:eventsData, loading:eventsLoading, error:eventsError } = useGetEventsAsCoachOrMemberQuery();
     const mequery = useMeQuery();
     if (eventsLoading || mequery.loading) {
         return <div>loading...</div>;
@@ -89,6 +86,9 @@ function TeamPage({ id, errors }: Props) {
     if (eventsError) {
         console.log(error);
         return <div>err</div>;
+    }
+    if (!eventsData || !eventsData.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
+        return <div>no data</div>;
     }
     let events: any = [];
     const team = eventsData.getTeamsAsMemberOrCoach.find((value) => {
