@@ -45,7 +45,7 @@ export class User extends CreationAndModificationDate {
     phone: string;
 
     @Field()
-    @prop({ default: "" })
+    @prop({ default: "Introdution" })
     introduction: string;
 
     @Field(() => [String])

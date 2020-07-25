@@ -111,7 +111,6 @@ export class UserResolver {
                 lastName: lastName,
                 email: email,
                 avatarUrl: avatarUrl,
-                introduction:"Nothing yet",
             });
             try {
                 await newUser.save();
