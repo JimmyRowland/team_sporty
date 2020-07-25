@@ -31,12 +31,13 @@ const useStyles = makeStyles({
         position: "sticky",
         top: "8%",
         flexBasis: "25%",
-        maxWidth: "25vw",
+        maxWidth: "30%",
+        minWidth:"250px",
     },
     rightColumn: {
         marginLeft: "1em",
         flexBasis: "70%",
-        maxWidth: "70vw",
+        maxWidth: "70%",
     },
     columnItem: {
         marginBottom: 20,
@@ -105,6 +106,7 @@ function TeamPage({ id, errors }: Props) {
     if (loading || error || !data || !data.getTeam) {
         return <LoadingMembers />;
     }
+    console.log(data);
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
@@ -114,6 +116,8 @@ function TeamPage({ id, errors }: Props) {
                         imgUrl={data.getTeam.team.imgUrl}
                         name={data.getTeam.team.name}
                         events={condensedList}
+                        id={data.getTeam.team._id}
+                        description={data.getTeam.team.description}
                     />
                 </div>
                 <div className={classes.rightColumn}>
