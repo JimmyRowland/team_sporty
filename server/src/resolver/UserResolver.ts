@@ -12,7 +12,7 @@ import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { verify } from "jsonwebtoken";
-import { RegisterInput } from "../interfaces/inputType";
+import { EditProfileInput, RegisterInput } from "../interfaces/inputType";
 import { LoginResponse } from "../interfaces/responseType";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 
@@ -163,6 +163,37 @@ export class UserResolver {
         const _id = payload._id;
         try {
             const message = await UserModel.updateOne({ _id }, { introduction: intro });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async editProfile(
+        @Arg("input") { email, firstName, lastName, address, phone, introduction, sport }: EditProfileInput,
+        @Ctx() { res, payload }: ResReq,
+    ): Promise<boolean> {
+        const _id = payload._id;
+        try {
+            const message = await UserModel.updateOne(
+                { _id },
+                {
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    address: address,
+                    phone: phone,
+                    introduction: introduction,
+                    sport: [sport],
+                },
+            );
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
