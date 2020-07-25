@@ -1,0 +1,6 @@
+mutation AddEvent($description: String!, $name: String!, $startDate: DateTime!, $endDate: DateTime!,
+    $isPrivate: Boolean!, $eventType:String!, $teamID: String!, $address: String! ){
+    addEvent(description:$description, name:$name, startDate: $startDate,
+        endDate: $endDate, isPrivate: $isPrivate, eventType: $eventType, teamID:$teamID, address:$address)
+
+}

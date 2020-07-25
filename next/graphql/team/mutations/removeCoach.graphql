@@ -1,0 +1,3 @@
+mutation RemoveCoach($teamID: String!, $userID: String!) {
+    removeCoach(teamID: $teamID, userID: $userID)
+}

@@ -1,0 +1,27 @@
+query GetEventsAsCoachOrMember {
+    getTeamsAsMemberOrCoach {
+        team{
+            name
+            _id
+            events{
+                _id
+                startDate
+                endDate
+                description
+                name
+                eventType
+                address
+                usersResponse{
+                    isGoing
+                    user{
+                        name
+                        avatarUrl
+                        _id
+                    }
+                }
+            }
+        }
+        isCoach
+    }
+}
+

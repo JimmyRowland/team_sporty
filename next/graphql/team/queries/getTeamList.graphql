@@ -1,0 +1,8 @@
+query GetMyTeamList {
+    getMyTeams {
+        name
+        _id
+        imgUrl
+    }
+}
+

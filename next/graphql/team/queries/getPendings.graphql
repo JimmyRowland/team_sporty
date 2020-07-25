@@ -1,0 +1,12 @@
+query GetPendings($teamID: String!) {
+    getPendings(teamID: $teamID) {
+        name
+        _id
+        sport
+        phone
+        email
+        address
+        avatarUrl
+    }
+}
+

@@ -1,0 +1,3 @@
+mutation PinPost($isPined: Boolean!,$postID: String!,$teamID: String!) {
+    pinPost(isPined: $isPined, postID: $postID, teamID: $teamID)
+}
