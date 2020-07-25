@@ -2,12 +2,8 @@ import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import { DateAvatar } from "../PersonalPage/DateAvatarNew";
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,11 +32,6 @@ export default function CalendarItem(props: {
     refetch: React.ReactNode;
 }) {
     const classes = useStyles();
-    // console.log(props.date);
-    // const month = props.date.slice(5,7);
-    // console.log(month);
-    // const day = props.date.slice(8,10);
-    // console.log(day);
 
     const eventDate = new Date(props.date);
     function formatAMPM(date: Date) {
