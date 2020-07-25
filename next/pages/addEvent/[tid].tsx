@@ -114,7 +114,7 @@ export default function App() {
                 name,
                 description,
                 address,
-                teamID: tid.tid,
+                teamID: tid.tid.toString(),
                 isPrivate,
                 eventType,
             },
