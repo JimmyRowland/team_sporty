@@ -4,6 +4,7 @@ query GetTeamPage($teamID: String!) {
             name
             _id
             imgUrl
+            description
             posts{
                 content
                 _id

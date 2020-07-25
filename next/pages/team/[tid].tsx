@@ -11,7 +11,6 @@ import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
 import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
 
-
 const useStyles = makeStyles({
     container: {
         paddingTop: 50,
@@ -32,7 +31,7 @@ const useStyles = makeStyles({
         top: "8%",
         flexBasis: "25%",
         maxWidth: "30%",
-        minWidth:"250px",
+        minWidth: "250px",
     },
     rightColumn: {
         marginLeft: "1em",
