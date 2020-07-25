@@ -22,12 +22,12 @@ The target audience for this project is aimed at the sports-reltaed public, such
 ## Project Task Requirements
 
 Minimal Requirements
-
-- Create, view, and manage teams
-- Manage schedules and availiability
-- Customized Home pages for the individual
+- Create teams
+- View teams
+- Create events
+- Edit personal information for the individuals
 - Team message board
-
+- Login/authentication
 
 Standard Requirements
 - Search function for teams / players
@@ -35,11 +35,17 @@ Standard Requirements
 - Add Google calendar support (using Google Calendar API)
 - Recruiting / team portal
 - Sprucing up the team page, announcements on team page
+- Ability to add profile image and cover image
+- Manage teams - promote players to coaches/managers; kick players
+- Join teams/team portal
+- Mark off availability for events
 
 Stretch
+- Server Side Rendering (NextJS)
+- Search function for teams
 - Managing Clubs (can have more than one team in a club)
 - Social media feeds
-- Sports Statistics (individual and team)
+- Sports Statistics (individual and team) - eg. W/L record, goals/assists, etc.
 
 #
 
