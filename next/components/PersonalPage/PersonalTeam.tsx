@@ -52,7 +52,7 @@ function PersonalCalendar() {
                     {loading
                         ? "loading"
                         : data?.getMyTeams.map((team, index) => {
-                              return <TeamItem key={index} name={team.name} _id={team._id} record={"4-7-11"} />;
+                              return <TeamItem key={index} name={team.name} _id={team._id} record={"0-0-0"} imgUrl={team.imgUrl} />;
                           })}
                 </List>
             </CardContent>
