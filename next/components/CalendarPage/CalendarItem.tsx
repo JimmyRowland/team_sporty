@@ -13,7 +13,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Event, EventUserResEnum, useMeQuery, useSetGoingMutation } from "../../generated/graphql";
 import { Avatar } from "@material-ui/core";
 import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
@@ -28,20 +28,23 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: "80.00%",
+            flexBasis: "84.00%",
             flexShrink: 0,
+            align: "left"
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "20.00%",
+            flexBasis: "16.00%",
             flexShrink: 0,
+            align: "right"
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
             flexBasis: "27%",
             flexShrink: 0,
+            align: "left",
         },
         spacing: {
             fontSize: theme.typography.pxToRem(15),
@@ -142,9 +145,8 @@ export default function CalendarItem({
         });
     };
     const [availability, setAvailability] = React.useState(isGoing);
-    const handleChangeAvailability = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeAvailability = (e: any) => {
         setSelectedValue(+e.target.value);
-        setSelectedValue(+e.target.value as string);
         setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
             refetch();
         });
@@ -157,13 +159,13 @@ export default function CalendarItem({
                     aria-label="Expand"
                     aria-controls="additional-actions1-content"
                 >
-                    <div className={classes.heading} align="left">
+                    <div className={classes.heading}>
                         <h3>{name}</h3>
                         <p>{date}</p>
                         <p>{address}</p>
                     </div>
-                    <div className={classes.secondaryHeading} align="right">
-                        <FormControl variant="filled" className={classes.formControl} align="left">
+                    <div className={classes.secondaryHeading}>
+                        <FormControl variant="filled" className={classes.formControl}>
                             <InputLabel>Availability</InputLabel>
                             <Select
                                 value={selectedValue}
@@ -173,8 +175,8 @@ export default function CalendarItem({
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             >
-                                <MenuItem value={1} checked={selectedValue === 1}>Going</MenuItem>
-                                <MenuItem value={0} checked={selectedValue === 0}>Not Going</MenuItem>
+                                <MenuItem value={1} >Going</MenuItem>
+                                <MenuItem value={0} >Not Going</MenuItem>
                                 {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
                             </Select>
                         </FormControl>
@@ -217,17 +219,17 @@ export default function CalendarItem({
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <div className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Going: {usersGoing.length}</p>
                         <div className={classes.roaster}>{usersGoing}</div>
                     </div>
                     <Typography className={classes.spacing}></Typography>
-                    <div className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Not Going: {usersNotGoing.length}</p>
                         <div className={classes.roaster}>{usersNotGoing}</div>
                     </div>
                     <Typography className={classes.spacing}></Typography>
-                    <div className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Not Responded: {usersNoResponse.length}</p>
                         <div className={classes.roaster}>{usersNoResponse}</div>
                     </div>
