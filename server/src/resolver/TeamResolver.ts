@@ -47,6 +47,9 @@ export class TeamResolver {
         const teams: Team[] = await TeamModel.find();
         const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
         const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const applicantTeamPair: TeamCoachMap[] = await TeamApplicationPendingListModel.find({
+            "_id.user": payload._id,
+        });
         return teams.map((team) => {
             const idString = team._id.toHexString();
             const isMember = memberTeamPair.find((pair) => {
@@ -55,10 +58,14 @@ export class TeamResolver {
             const isCoach = coachTeamPair.find((pair) => {
                 return pair._id.team === idString;
             });
+            const isPending = applicantTeamPair.find((pair) => {
+                return pair._id.team === idString;
+            });
             const teamResponse = new GetTeamsResponse();
             teamResponse.isMember = !!isMember || !!isCoach;
             teamResponse.team = team;
             teamResponse.isCoach = !!isCoach;
+            teamResponse.isPending = !!isPending;
             return teamResponse;
         });
     }

@@ -43,6 +43,8 @@ export class GetTeamsResponse {
     isMember: boolean;
     @Field(() => Boolean)
     isCoach: boolean;
+    @Field(() => Boolean)
+    isPending: boolean;
     @Field(() => Team)
     team: Team;
 }
