@@ -10,7 +10,7 @@ import { setAccessToken } from "../lib/accessToken";
 import { LOCALSERVER, HEROKU } from "../lib/serveruri";
 
 export default function App({ Component, pageProps }: { Component: ComponentType; pageProps: any }) {
-    const URI = process.env.VERCEL === "VERCEL" ? HEROKU : LOCALSERVER;
+    const URI = HEROKU;
     const store = useStore(pageProps.initialReduxState);
     const apolloClient = useApollo(pageProps.initialApolloState);
     useEffect(() => {

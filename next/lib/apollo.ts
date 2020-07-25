@@ -41,7 +41,7 @@ const requestLink = new ApolloLink(
         }),
 );
 
-const URI = process.env.VERCEL === "VERCEL" ? HEROKU : LOCALSERVER;
+const URI = HEROKU;
 function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === "undefined",
