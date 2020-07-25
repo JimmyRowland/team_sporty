@@ -3,22 +3,14 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import GroupIcon from '@material-ui/icons/Group';
+import { useGetMyTeamListQuery } from "../../generated/graphql";
 import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
+import TeamItem from "../../components/teamList/TeamItem";
 import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,33 +35,13 @@ function PersonalCalendar({ children, title, link }: { children?: ReactNode; tit
         setExpanded(!expanded);
     };
 
-    const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
-    const mequery = useMeQuery();
-
-    if (loading || mequery.loading) {
-        return <div>loading...</div>;
-    }
-
-    if (error) {
-        console.log(error);
-        return <div>err</div>;
-    }
-
-    if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
-        return <div>no data</div>;
-    }
-
-    let events: any = [];
-    for (const team of data.getTeamsAsMemberOrCoach) {
-        events = team.team.events ? events.concat(team.team.events) : events;
-    }
-    const condensedList = events.slice(0, 3);
-    console.log(condensedList);
+    const { data, loading, error } = useGetMyTeamListQuery({});
+    
     return (
         <Card className={classes.root}>
             <CardHeader className={classes.heading}
                 avatar={
-                    <CalendarTodayIcon />
+                    <GroupIcon />
 
                 }
                 action={
@@ -78,22 +50,16 @@ function PersonalCalendar({ children, title, link }: { children?: ReactNode; tit
                     </IconButton>
                 }
                 titleTypographyProps={{variant:'h5' }}
-                title="Your Upcoming Events"
+                title="Your Teams"
             />
             <CardContent>
-                <List className={classes.root}>
-                    {condensedList.map((c) => (
-                        <PersonalCalendarItem
-                            key={c._id}
-                            name={c.name}
-                            type={c.eventType}
-                            date={c.startDate}
-                            address={c.address}
-                            event={c.event}
-                            refetch={refetch}
-                        />
-                    ))}
-                </List>
+            <List className={classes.root}>
+                {loading
+                    ? "loading"
+                    : data?.getMyTeams.map((team, index) => {
+                          return <TeamItem key={index} name={team.name} _id={team._id} record={"4-7-11"} />;
+                      })}
+            </List>
             </CardContent>
         </Card>
     );
