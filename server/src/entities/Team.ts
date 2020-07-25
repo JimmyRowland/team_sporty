@@ -35,7 +35,7 @@ export class Team extends CreationAndModificationDate {
     @prop({ default: SportEnum.unspecified })
     sport: SportEnum;
 
-    @Field({ nullable: true })
+    @Field()
     @prop({ default: defaultBannerUrl })
     imgUrl: string;
 

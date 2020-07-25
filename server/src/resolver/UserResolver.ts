@@ -156,4 +156,21 @@ export class UserResolver {
         }
         return true;
     }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async uploadIntro(@Arg("intro") intro: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
+        const _id = payload._id;
+        try {
+            const message = await UserModel.updateOne({ _id }, { introduction: intro });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
+    }
 }
