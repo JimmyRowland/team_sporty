@@ -82,7 +82,7 @@ export default function TeamDisplayPannel({
                 </div>
                 <br></br>
                 <div className={classes.calendarContainer}>
-                    <Typography variant={"h6"}>Upcoming Events</Typography>
+                    <Typography variant={"h6"} align="center">Upcoming Events</Typography>
                     <div>
                         {console.log(events)}
                         <List>
