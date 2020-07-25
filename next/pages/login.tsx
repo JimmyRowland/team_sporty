@@ -120,8 +120,8 @@ const LoginPage = () => {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="Email" placeholder="Email" component={InputField} />
-                        <Field name="Password" placeholder="Password" type="password" component={InputField} />
+                        <Field name="email" placeholder="Email" component={InputField} />
+                        <Field name="password" placeholder="Password" type="password" component={InputField} />
                         <FormHelperText>{helperText}</FormHelperText>
                         <Button type="submit" color="secondary" variant="contained" className={classes.login}>
                             Log in

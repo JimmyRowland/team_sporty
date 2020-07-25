@@ -66,6 +66,7 @@ export type GetTeamsResponse = {
     __typename?: "GetTeamsResponse";
     isMember: Scalars["Boolean"];
     isCoach: Scalars["Boolean"];
+    isPending: Scalars["Boolean"];
     team: Team;
 };
 
@@ -648,6 +649,19 @@ export type GetPendingsQueryVariables = Exact<{
 export type GetPendingsQuery = { __typename?: "Query" } & {
     getPendings: Array<
         { __typename?: "User" } & Pick<User, "name" | "_id" | "sport" | "phone" | "email" | "address" | "avatarUrl">
+    >;
+};
+
+export type GetSearchTeamsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSearchTeamsQuery = { __typename?: "Query" } & {
+    getTeams: Array<
+        { __typename?: "GetTeamsResponse" } & Pick<GetTeamsResponse, "isMember" | "isCoach" | "isPending"> & {
+                team: { __typename?: "Team" } & Pick<
+                    Team,
+                    "name" | "_id" | "sport" | "imgUrl" | "numberMembers" | "description"
+                >;
+            }
     >;
 };
 
@@ -2044,6 +2058,61 @@ export function useGetPendingsLazyQuery(
 export type GetPendingsQueryHookResult = ReturnType<typeof useGetPendingsQuery>;
 export type GetPendingsLazyQueryHookResult = ReturnType<typeof useGetPendingsLazyQuery>;
 export type GetPendingsQueryResult = ApolloReactCommon.QueryResult<GetPendingsQuery, GetPendingsQueryVariables>;
+export const GetSearchTeamsDocument = gql`
+    query GetSearchTeams {
+        getTeams {
+            team {
+                name
+                _id
+                sport
+                imgUrl
+                numberMembers
+                description
+            }
+            isMember
+            isCoach
+            isPending
+        }
+    }
+`;
+
+/**
+ * __useGetSearchTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetSearchTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSearchTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSearchTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSearchTeamsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>(
+        GetSearchTeamsDocument,
+        baseOptions,
+    );
+}
+export function useGetSearchTeamsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>(
+        GetSearchTeamsDocument,
+        baseOptions,
+    );
+}
+export type GetSearchTeamsQueryHookResult = ReturnType<typeof useGetSearchTeamsQuery>;
+export type GetSearchTeamsLazyQueryHookResult = ReturnType<typeof useGetSearchTeamsLazyQuery>;
+export type GetSearchTeamsQueryResult = ApolloReactCommon.QueryResult<
+    GetSearchTeamsQuery,
+    GetSearchTeamsQueryVariables
+>;
 export const GetTeamIDsDocument = gql`
     query GetTeamIDs {
         getTeams {

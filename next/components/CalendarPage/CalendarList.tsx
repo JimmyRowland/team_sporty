@@ -42,7 +42,13 @@ export default function ControlledExpansionPanels() {
         return <div>err</div>;
     }
 
-    if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
+    if (
+        !data ||
+        !data.getTeamsAsMemberOrCoach ||
+        !data.getTeamsAsMemberOrCoach[0] ||
+        !mequery.data ||
+        !mequery.data.me
+    ) {
         return <div>no data</div>;
     }
 

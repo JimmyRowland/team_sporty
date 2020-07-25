@@ -49,13 +49,6 @@ function PersonalCalendar() {
     if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
         return <div>no data</div>;
     }
-
-    let events = data.getTeamsAsMemberOrCoach[0].team.events;
-    for (const team of data.getTeamsAsMemberOrCoach) {
-        events = team.team.events === events ? events : events.concat(team.team.events);
-    }
-    events.sort((event1, event2) => new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime());
-    const condensedList = events.slice(0, 3);
     return (
         <Card className={classes.root}>
             <CardHeader
@@ -70,11 +63,31 @@ function PersonalCalendar() {
                 title="Your Upcoming Events"
             />
             <CardContent>
-                <List className={classes.root}>
-                    {condensedList.map((c) => (
-                        <PersonalCalendarItem key={c._id} name={c.name} date={c.startDate} address={c.address} />
-                    ))}
-                </List>
+                {() => {
+                    if (data.getTeamsAsMemberOrCoach.length > 0) {
+                        let events = data.getTeamsAsMemberOrCoach[0].team.events;
+                        for (const team of data.getTeamsAsMemberOrCoach) {
+                            events = team.team.events === events ? events : events.concat(team.team.events);
+                        }
+                        events.sort(
+                            (event1, event2) =>
+                                new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime(),
+                        );
+                        const condensedList = events.slice(0, 3);
+                        return (
+                            <List className={classes.root}>
+                                {condensedList.map((c) => (
+                                    <PersonalCalendarItem
+                                        key={c._id}
+                                        name={c.name}
+                                        date={c.startDate}
+                                        address={c.address}
+                                    />
+                                ))}
+                            </List>
+                        );
+                    }
+                }}
             </CardContent>
         </Card>
     );

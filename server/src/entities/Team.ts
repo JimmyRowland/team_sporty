@@ -41,7 +41,7 @@ export class Team extends CreationAndModificationDate {
 
     @Field(() => Int, { complexity: 4 })
     async numberMembers(@Root() team: Team): Promise<number> {
-        const pairs = await TeamMemberMapModel.find({ "_id.post": team._id });
+        const pairs = await TeamMemberMapModel.find({ "_id.team": team._id.toHexString() });
         return pairs.length;
     }
 }

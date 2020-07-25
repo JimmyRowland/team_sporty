@@ -1,5 +1,5 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
 import { GTranslate } from "@material-ui/icons";
@@ -75,6 +75,7 @@ export default function ClubDisplayTab({
     teamID,
     isMember,
     teamimage,
+    isPending,
 }: {
     name: string;
     sport: string;
@@ -83,12 +84,15 @@ export default function ClubDisplayTab({
     teamID: string;
     isMember: boolean;
     teamimage: string;
+    isPending: boolean;
 }) {
     const classes = useStyles();
     const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
     const handleJoinTeam = () => {
+        setApplied(true);
         joinTeam();
     };
+    const [applied, setApplied] = useState(isPending);
     return (
         <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
@@ -108,9 +112,9 @@ export default function ClubDisplayTab({
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
-                {isMember ? (
+                {isMember || applied ? (
                     <Button disabled variant="contained" color="primary" className={classes.addButton}>
-                        Joined
+                        {isMember ? "Joined" : "Pending"}
                     </Button>
                 ) : (
                     <Button

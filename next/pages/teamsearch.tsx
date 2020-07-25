@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import Layout from "../components/layouts/index/Layout";
-import { useGetTeamsQuery } from "../generated/graphql";
+import { useGetSearchTeamsQuery, useGetTeamsQuery } from "../generated/graphql";
 import Card from "@material-ui/core/Card";
 import theme from "../assets/theme";
 import InputBase from "@material-ui/core/InputBase";
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 
 function TeamSearchPage() {
     const classes = useStyles();
-    const { data, loading, error } = useGetTeamsQuery();
+    const { data, loading, error } = useGetSearchTeamsQuery();
     const [search, setSearch] = useState("");
 
     const handleSearch = (e) => {
@@ -73,7 +73,7 @@ function TeamSearchPage() {
                         </IconButton>
                     </Card>
                     <div className={classes.teamContainer}>
-                        {data.getTeams.map((team: any, index: any) => {
+                        {data.getTeams.map((team, index: number) => {
                             if (team.team.name.includes(search) || team.team.sport.includes(search))
                                 return (
                                     <div key={index} className={classes.teamtabContainer}>
@@ -84,7 +84,8 @@ function TeamSearchPage() {
                                             numberMembers={team.team.numberMembers}
                                             sport={team.team.sport}
                                             teamID={team.team._id}
-                                            isMember={team.isMember}
+                                            isMember={team.isMember || team.isCoach}
+                                            isPending={team.isPending}
                                         />
                                     </div>
                                 );
