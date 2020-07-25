@@ -2,17 +2,15 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import red from "@material-ui/core/colors/red";
+// import red from "@material-ui/core/colors/red";
 import { grey } from '@material-ui/core/colors';
-import theme from "../../assets/theme";
 
-const secondary = red[500];
+// const secondary = red[500];
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         avatar: {
             width: "60px",
             height: "60px",
-            backgroundColor: "white",
             margin: "7px 20px 0px 0px",
             color: theme.palette.getContrastText(grey[500]),
             backgroundColor: grey[400],
