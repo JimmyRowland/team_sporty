@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function PersonalCalendar({ children, title, link }: { children?: ReactNode; title: string; link?: string }) {
+function PersonalCalendar() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
     const handleExpandClick = () => {
@@ -72,7 +72,7 @@ function PersonalCalendar({ children, title, link }: { children?: ReactNode; tit
             />
             <CardContent>
                 <List className={classes.root}>
-                    {condensedList.map((c) => (
+                    {condensedList.map((c: any) => (
                         <PersonalCalendarItem
                             key={c._id}
                             name={c.name}
