@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,9 +8,7 @@ import List from '@material-ui/core/List';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import GroupIcon from '@material-ui/icons/Group';
 import { useGetMyTeamListQuery } from "../../generated/graphql";
-import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
 import TeamItem from "../../components/teamList/TeamItem";
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,12 +27,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function PersonalCalendar() {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
     const { data, loading, error } = useGetMyTeamListQuery({});
+    if (error) {
+        console.log(error);
+        return <div>err</div>;
+    }
     
     return (
         <Card className={classes.root}>

@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -8,9 +7,8 @@ import IconButton from "@material-ui/core/IconButton";
 import List from '@material-ui/core/List';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
 import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,10 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function PersonalCalendar() {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
     const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
     const mequery = useMeQuery();
