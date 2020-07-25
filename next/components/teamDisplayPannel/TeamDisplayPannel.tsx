@@ -7,7 +7,7 @@ import React from "react";
 import List from "@material-ui/core/List";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 
-const useStyles = makeStyles((Theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         leftCard: {
             height: "100%",
@@ -17,8 +17,10 @@ const useStyles = makeStyles((Theme: Theme) =>
             height: "100%",
             width: "100%",
             padding: "1em",
+            align: "center",
         },
         calendarContainer: {
+            marginTop:theme.spacing(1),
             display: "block",
             padding: "1em",
             height: "60%",
@@ -33,20 +35,16 @@ const useStyles = makeStyles((Theme: Theme) =>
         avatar: {
             height: 120,
             width: 120,
+            marginBottom:theme.spacing(1),
         },
-        eventContainer: {
-            height: "90%",
-            overflowY: "scroll",
+        eventButtonContainer: {
+            position:"absolute",
+            bottom:theme.spacing(1),
+            left:"50%",
+            transform:"translateX(-50%)",
+            textAlign:"center",
         },
-        teammanageContainer: {
-            position: "absolute",
-            width: "100%",
-            bottom: "1em",
-        },
-        teammanageButton: {
-            display: "block",
-            width: "60%",
-            maxWidth: "200px",
+        eventButton: {
             margin: "auto",
         },
     }),
@@ -57,17 +55,21 @@ export default function TeamDisplayPannel({
     imgUrl,
     name,
     events,
+    id,
+    description,
 }: {
     isCoach: boolean;
     imgUrl: string;
     name: string;
     events: any;
+    id: string;
+    description: string;
 }) {
     const classes = useStyles();
-    const TeamMangementPortal = () => {
+    const TeamMangementPortal = (tid) => {
         return isCoach ? (
-            <Link href="/teammanage">
-                <Button className={classes.teammanageButton}> Team Management </Button>
+            <Link href="/addEvent/[tid]" as={`/addEvent/${tid.tid}`}>
+                <Button className={classes.eventButton}> Create Event </Button>
             </Link>
         ) : null;
     };
@@ -78,13 +80,12 @@ export default function TeamDisplayPannel({
                 <div className={classes.teamContainer}>
                     <Avatar className={classes.avatar} src={imgUrl} />
                     <Typography variant={"h4"}> {name} </Typography>
-                    <Typography variant={"subtitle1"}>The best team</Typography>
+                    <Typography variant={"subtitle1"}>{description}</Typography>
                 </div>
                 <br></br>
                 <div className={classes.calendarContainer}>
-                    <Typography variant={"h6"}>Upcoming Events</Typography>
+                    <Typography variant={"h6"} align="center">Upcoming Events</Typography>
                     <div>
-                        {console.log(events)}
                         <List>
                             {events.map((c: any) => (
                                 <PersonalCalendarItem
@@ -98,8 +99,8 @@ export default function TeamDisplayPannel({
                         {/* <EventList /> */}
                     </div>
                 </div>
-                <div className={classes.teammanageContainer}>
-                    <TeamMangementPortal />
+                <div className={classes.eventButtonContainer}>
+                    <TeamMangementPortal tid={id} />
                 </div>
             </div>
         </Card>
