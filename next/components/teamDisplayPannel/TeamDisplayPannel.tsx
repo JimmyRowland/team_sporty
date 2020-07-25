@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
             align: "center",
         },
         calendarContainer: {
-            marginTop:theme.spacing(1),
+            marginTop: theme.spacing(1),
             display: "block",
             padding: "1em",
             height: "60%",
@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme: Theme) =>
         avatar: {
             height: 120,
             width: 120,
-            marginBottom:theme.spacing(1),
+            marginBottom: theme.spacing(1),
         },
         eventButtonContainer: {
-            position:"absolute",
-            bottom:theme.spacing(1),
-            left:"50%",
-            transform:"translateX(-50%)",
-            textAlign:"center",
+            position: "absolute",
+            bottom: theme.spacing(1),
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
         },
         eventButton: {
             margin: "auto",
@@ -84,7 +84,9 @@ export default function TeamDisplayPannel({
                 </div>
                 <br></br>
                 <div className={classes.calendarContainer}>
-                    <Typography variant={"h6"} align="center">Upcoming Events</Typography>
+                    <Typography variant={"h6"} align="center">
+                        Upcoming Events
+                    </Typography>
                     <div>
                         <List>
                             {events.map((c: any) => (

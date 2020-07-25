@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         top: "8%",
         flexBasis: "25%",
         maxWidth: "30%",
-        minWidth:"250px",
+        minWidth: "250px",
     },
     rightColumn: {
         marginLeft: "1em",
