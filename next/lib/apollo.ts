@@ -7,6 +7,7 @@ import { ApolloLink, Observable } from "apollo-link";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import jwtDecode from "jwt-decode";
 import { onError } from "apollo-link-error";
+import { HEROKU, LOCALSERVER } from "./serveruri";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -40,6 +41,7 @@ const requestLink = new ApolloLink(
         }),
 );
 
+const URI = process.env.VERCEL === "VERCEL" ? HEROKU : LOCALSERVER;
 function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === "undefined",
@@ -65,7 +67,7 @@ function createApolloClient() {
                     }
                 },
                 fetchAccessToken: () => {
-                    return fetch("http://localhost:4000/refresh_token", {
+                    return fetch(`${URI}/refresh_token`, {
                         method: "POST",
                         credentials: "include",
                     });
@@ -84,7 +86,7 @@ function createApolloClient() {
             }),
             requestLink,
             new HttpLink({
-                uri: "http://localhost:4000/graphql",
+                uri: `${URI}/graphql`,
                 credentials: "include",
             }),
         ]),
