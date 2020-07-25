@@ -1,42 +1,36 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import { DateAvatar } from "../PersonalPage/DateAvatarNew";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: "100%",
-            borderRadius: "1rem",
-            minHeight: 414,
-        },
-        media: {
-            height: 0,
-            paddingTop: "56.25%", // 16:9
-        },
-        inline: {
-            display: "inline",
-        },
-    }),
-);
 
-export default function CalendarItem(props: { name: string; date: string; address: string }) {
-    const classes = useStyles();
+export default function CalendarItem(props: {
+    key: React.ReactNode;
+    name: React.ReactNode;
+    type: React.ReactNode;
+    date: Date;
+    address: React.ReactNode;
+    event: React.ReactNode;
+    refetch: React.ReactNode;
+}) {
 
     const eventDate = new Date(props.date);
     function formatAMPM(date: Date) {
-        let hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? "pm" : "am";
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        const minutesString = minutes < 10 ? "0" + minutes : minutes;
-        const strTime = hours + ":" + minutesString + " " + ampm;
-        return strTime;
+        if (minutes < 10){
+            return hours + ':0' + minutes + ' ' + ampm;
+        } else {
+            return hours + ':' + minutes + ' ' + ampm;
+        }
     }
     const timeString = formatAMPM(eventDate);
+
+
 
     return (
         <div>
@@ -46,8 +40,13 @@ export default function CalendarItem(props: { name: string; date: string; addres
                     primary={props.name}
                     secondary={
                         <React.Fragment>
-                            <Typography>{timeString}</Typography>
-                            <Typography>{props.address}</Typography>
+                            <Typography>
+                                {timeString}
+                            </Typography>
+                            <Typography>
+                                {props.address}
+                            </Typography>
+
                         </React.Fragment>
                     }
                 />

@@ -4,6 +4,8 @@ import { Avatar, Card, Typography } from "@material-ui/core";
 import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React from "react";
+import List from '@material-ui/core/List';
+import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -53,10 +55,12 @@ export default function TeamDisplayPannel({
     isCoach,
     imgUrl,
     name,
+    events
 }: {
     isCoach: boolean;
     imgUrl: string;
     name: string;
+    events: any;
 }) {
     const classes = useStyles();
     const TeamMangementPortal = () => {
@@ -73,12 +77,27 @@ export default function TeamDisplayPannel({
                 <div className={classes.teamContainer}>
                     <Avatar className={classes.avatar} src={imgUrl} />
                     <Typography variant={"h4"}> {name} </Typography>
-                    <Typography variant={"subtitle1"}>something</Typography>
+                    <Typography variant={"subtitle1"}>The best team</Typography>
                 </div>
-                <div className={classes.calendarContainer}>
-                    <Typography variant={"h5"}>UPCOMING...</Typography>
-                    <div className={classes.eventContainer}>
-                        <EventList />
+                <br></br>
+                <div className={classes.calendarContainer} align="center">
+                    <Typography variant={"h6"}>Upcoming Events</Typography>
+                    <div>
+                        {console.log(events)}
+                        <List className={classes.root}>
+                    {events.map((c: any) => (
+                        <PersonalCalendarItem
+                            key={c._id}
+                            name={c.name}
+                            type={c.eventType}
+                            date={c.startDate}
+                            address={c.address}
+                            event={c.event}
+                            refetch={c.eventsRefetch}
+                        />
+                    ))}
+                </List>
+                        {/* <EventList /> */}
                     </div>
                 </div>
                 <div className={classes.teammanageContainer}>
