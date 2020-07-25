@@ -2,7 +2,7 @@ import React from "react";
 import EditPopUp from "./EditPopUp/EditPopUp";
 import { useSelector } from "react-redux";
 import { selectPersonal } from "./EditPopUp/EditPersonalInfoSlice";
-import { useGetProfilePageQuery, useMeQuery } from "../../generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Avatar } from "@material-ui/core";
 import AvatarUpload from "../ImageUpload/AvatarUpload/AvatarUpload";
