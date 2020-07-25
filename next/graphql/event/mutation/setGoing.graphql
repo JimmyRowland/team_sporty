@@ -1,0 +1,4 @@
+mutation SetGoing( $isGoing: Float!, $eventID: String! ){
+    setGoing( isGoing:$isGoing, eventID:$eventID)
+
+}

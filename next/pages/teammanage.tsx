@@ -1,5 +1,5 @@
-import TeamManagePage from "./TeamManagePage/TeamManagePage";
-import Layout from "../components/Layout";
+import TeamManagePage from "../components/TeamManagePage/TeamManagePage";
+import Layout from "../components/layouts/index/Layout";
 import React from "react";
 
 const TeamManage = () => {

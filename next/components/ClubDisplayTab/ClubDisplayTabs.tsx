@@ -1,8 +1,10 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import {Button} from "@material-ui/core";
-import {GTranslate} from "@material-ui/icons";
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import { Button } from "@material-ui/core";
+import { GTranslate } from "@material-ui/icons";
+import { Team, useApplyTeamMutation } from "../../generated/graphql";
+import Card from "@material-ui/core/Card";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -10,17 +12,17 @@ const useStyles = makeStyles((Theme: Theme) =>
             width: "800px",
             height: "150px",
             borderRadius: "15px",
-            boxShadow:"0px 4px 4px rgba(0, 0, 0, 0.25)",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
             display: "flex",
-            margin:"auto"
+            margin: "auto",
         },
         clubIMGContainer: {
             height: "80%",
             width: "15%",
             margin: "auto",
         },
-        clubIMG:{
-            margin:"10px auto",
+        clubIMG: {
+            margin: "10px auto",
             height: "80%",
             width: "80%",
         },
@@ -28,25 +30,24 @@ const useStyles = makeStyles((Theme: Theme) =>
             height: "80%",
             width: "60%",
             margin: "auto",
-            display:"block"
+            display: "block",
         },
-        infocontainer: {
-        },
+        infocontainer: {},
         infoLine1items: {
             display: "inline",
             padding: "5px",
-            fontSize:"24px",
-            fontWeight:"bold"
+            fontSize: "24px",
+            fontWeight: "bold",
         },
         infoLine2items: {
             display: "inline",
             padding: "5px",
-            fontWeight:"300",
+            fontWeight: 300,
             fontSize: "12px",
         },
         infoLine3: {
-            marginTop:"5px",
-            textAlign:"center",
+            marginTop: "5px",
+            textAlign: "center",
         },
         infoLine3items: {
             padding: "5px",
@@ -57,44 +58,75 @@ const useStyles = makeStyles((Theme: Theme) =>
             width: "15%",
             margin: "auto",
         },
-        addButton:{
-            position:"relative",
-            margin:"50%",
-            transform:"translate(-50%, -50%)",
+        addButton: {
+            position: "relative",
+            margin: "50%",
+            transform: "translate(-50%, -50%)",
             borderRadius: "20px",
         },
     }),
 );
 
-export default function ClubDisplayTab() {
+export default function ClubDisplayTab({
+    name,
+    sport,
+    numberMembers,
+    description,
+    teamID,
+    isMember,
+    teamimage,
+    isPending,
+}: {
+    name: string;
+    sport: string;
+    numberMembers: number;
+    description: string;
+    teamID: string;
+    isMember: boolean;
+    teamimage: string;
+    isPending: boolean;
+}) {
     const classes = useStyles();
+    const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
+    const handleJoinTeam = () => {
+        setApplied(true);
+        joinTeam();
+    };
+    const [applied, setApplied] = useState(isPending);
     return (
-        <div className={classes.body}>
+        <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
-                <Avatar className={classes.clubIMG}>T</Avatar>
+                <Avatar className={classes.clubIMG} src={teamimage}></Avatar>
             </div>
             <div className={classes.infoContainer}>
                 <div className={classes.infocontainer}>
-                    <div className={classes.infoLine1items}>
-                        Club Name
-                    </div>
-                    <div className={classes.infoLine1items}>
-                        Team Name
-                    </div>
+                    {/*<div className={classes.infoLine1items}>Club Name</div>*/}
+                    <div className={classes.infoLine1items}>{name}</div>
                 </div>
                 <div className={classes.infocontainer}>
-                    <div className={classes.infoLine2items}> Type of Sport </div>
-                    <div className={classes.infoLine2items}> 20 members </div>
+                    <div className={classes.infoLine2items}> {sport} </div>
+                    <div className={classes.infoLine2items}> {numberMembers} members </div>
                 </div>
                 <div className={classes.infoLine3}>
-                    <div className={classes.infoLine3items}> Some descriptions over here </div>
+                    <div className={classes.infoLine3items}> {description} </div>
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
-                <Button variant="contained" color="primary" className={classes.addButton}>
-                    Join
-                </Button>
+                {isMember || applied ? (
+                    <Button disabled variant="contained" color="primary" className={classes.addButton}>
+                        {isMember ? "Joined" : "Pending"}
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={handleJoinTeam}
+                        variant="contained"
+                        color="secondary"
+                        className={classes.addButton}
+                    >
+                        Join
+                    </Button>
+                )}
             </div>
-        </div>
+        </Card>
     );
 }

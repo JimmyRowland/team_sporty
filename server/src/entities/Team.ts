@@ -1,30 +1,48 @@
-import { ObjectType, Field, ID } from "type-graphql";
-import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
-import { User } from "./User";
+import { ObjectType, Field, Int, Root } from "type-graphql";
+import { getModelForClass, prop } from "@typegoose/typegoose";
+import { CreationAndModificationDate } from "./CreationAndModificationDate";
+import { Post } from "./Post";
+import { Event } from "./Event";
+import { SportEnum } from "../interfaces/enum";
+import { registerEnumType } from "type-graphql";
+import { defaultBannerUrl } from "../interfaces/const";
+import { LikesMapModel } from "./LikesMap";
+import { TeamMemberMapModel } from "./TeamMemberMap";
+
+registerEnumType(SportEnum, {
+    name: "Sport",
+    description: "Types of sports",
+});
 @ObjectType()
-export class Team {
-    @Field(() => ID)
-    @prop({ required: true })
-    _id: string;
-
-    @Field()
-    @prop({ required: true })
-    creationDate: Date;
-
-    @Field()
-    @prop({ required: true })
-    lastModifyDate: Date;
-
+export class Team extends CreationAndModificationDate {
     @Field()
     @prop({ required: true })
     name: string;
 
-    @Field(() => [User], { nullable: true })
-    @prop({ Ref: "User" })
-    couches?: Ref<User>[];
+    @Field()
+    @prop({ default: "" })
+    description: string;
 
-    @Field(() => [User], { nullable: true })
-    @prop({ Ref: "User" })
-    members?: Ref<User>[];
+    @Field(() => [Post], { nullable: true })
+    @prop({ items: Post, default: [] })
+    posts: Post[];
+
+    @Field(() => [Event], { nullable: true })
+    @prop({ items: Event, default: [] })
+    events: Event[];
+
+    @Field(() => SportEnum)
+    @prop({ default: SportEnum.unspecified })
+    sport: SportEnum;
+
+    @Field()
+    @prop({ default: defaultBannerUrl })
+    imgUrl: string;
+
+    @Field(() => Int, { complexity: 4 })
+    async numberMembers(@Root() team: Team): Promise<number> {
+        const pairs = await TeamMemberMapModel.find({ "_id.team": team._id.toHexString() });
+        return pairs.length;
+    }
 }
 export const TeamModel = getModelForClass(Team);

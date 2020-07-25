@@ -30,15 +30,14 @@ const PUB_KEY = readFileSync(pathToPubKey, "utf8");
         // token is valid and
         // we can send back an access token
         const user = await UserModel.findOne({ _id: payload._id });
-
         if (!user) {
             return res.status(401).json({ success: false, msg: "Invalid User", accessToken: "" });
         }
-
+        // TODO Stretch only revoke one refresh token
         if (user.tokenVersion !== payload.tokenVersion) {
-            return res.send({ ok: false, accessToken: "" });
+            return res.send({ success: false, accessToken: "" });
         }
-
+        // console.log("refresh");
         sendRefreshToken(res, createRefreshToken(user));
 
         return res.send({ ok: true, accessToken: createAccessToken(user) });

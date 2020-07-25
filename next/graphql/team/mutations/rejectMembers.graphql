@@ -1,0 +1,3 @@
+mutation RejectMembers($teamID: String!, $userIDs: [String!]!) {
+    rejectMembers(teamID: $teamID, userIDs: $userIDs)
+}

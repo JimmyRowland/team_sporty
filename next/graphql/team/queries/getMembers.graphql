@@ -1,0 +1,15 @@
+query GetMembers($teamID: String!) {
+    getMembers(teamID: $teamID) {
+        users{
+            name
+            _id
+            sport
+            phone
+            email
+            address
+            avatarUrl
+        }
+        isCoach
+    }
+}
+

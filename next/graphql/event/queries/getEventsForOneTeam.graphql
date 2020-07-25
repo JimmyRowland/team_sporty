@@ -1,0 +1,18 @@
+query GetEventsForOneTeam($teamID: String!) {
+    getTeam(teamID:$teamID) {
+        team{
+            name
+            _id
+            events{
+                _id
+                startDate
+                endDate
+                description
+                name
+                eventType
+            }
+        }
+        isCoach
+    }
+}
+

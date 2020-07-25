@@ -6,9 +6,11 @@ import Avatar from "@material-ui/core/Avatar";
 import ImageIcon from "@material-ui/icons/Image";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
-function TeamItem(props: { name: React.ReactNode; record: React.ReactNode }) {
+import { Team } from "../../generated/graphql";
+
+function TeamItem({ name, _id, record }: { name: string; _id: string; record: string }) {
     return (
-        <Link href={"/"}>
+        <Link href={"/team/[tid]"} as={`/team/${_id}`}>
             <Button fullWidth>
                 <ListItem>
                     <ListItemAvatar>
@@ -16,7 +18,7 @@ function TeamItem(props: { name: React.ReactNode; record: React.ReactNode }) {
                             <ImageIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={props.name} secondary={props.record} />
+                    <ListItemText primary={name} secondary={record} />
                 </ListItem>
             </Button>
         </Link>

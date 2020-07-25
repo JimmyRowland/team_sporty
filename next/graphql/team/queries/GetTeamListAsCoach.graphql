@@ -1,0 +1,7 @@
+query GetTeamListAsCoach {
+    getTeamsAsCoach {
+        name
+        _id
+    }
+}
+

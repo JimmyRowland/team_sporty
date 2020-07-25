@@ -1,8 +1,9 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "../components/counter/counterSlice";
-import postReducer from "../components/post/postSlice";
 import eventReducer from "../components/eventList/eventSlice";
+import selectedUsersInTableReducer from "../components/UserTable/userTableSlice";
 import personalinfoReducer from "../components/PersonalInfoTab/EditPopUp/EditPersonalInfoSlice";
+import nestedTeamListOpenReducer from "../components/Sidebar/SidebarNav/sidebarNavSlicer";
+import teamReducer from "../components/CalendarPage/CalendarPageSlicer";
 import { useMemo } from "react";
 const dev = process.env.NODE_ENV === "development";
 
@@ -11,10 +12,11 @@ let redux: any;
 const initStore = (preloadedState: Record<string, unknown>) => {
     return configureStore({
         reducer: {
-            counter: counterReducer,
-            posts: postReducer,
+            teamNameState: teamReducer,
             events: eventReducer,
             PersonalInfo: personalinfoReducer,
+            seletedUserInTable: selectedUsersInTableReducer,
+            nestedTeamListOpen: nestedTeamListOpenReducer,
         },
         devTools: dev,
         preloadedState: preloadedState,

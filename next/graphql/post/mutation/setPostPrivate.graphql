@@ -1,0 +1,3 @@
+mutation SetPostPrivate($isPrivate: Boolean!,$postID: String!,$teamID: String!) {
+    setPostPrivate(isPrivate: $isPrivate, postID: $postID, teamID: $teamID)
+}

@@ -1,4 +1,4 @@
-import { pbkdf2Sync, randomBytes } from "crypto";
+import { pbkdf2Sync, randomBytes, createHash } from "crypto";
 import { sign } from "jsonwebtoken";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -57,8 +57,9 @@ export function createRefreshToken(user: User): string {
     const expiresIn = "7d";
 
     const payload = {
-        sub: _id,
+        _id: _id,
         iat: Date.now(),
+        tokenVersion: user.tokenVersion,
     };
 
     const signedToken = sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: "RS256" });
@@ -75,7 +76,14 @@ export function sendRefreshToken(res: Response, token: string): void {
 }
 
 export const createAccessToken = (user: User) => {
-    return sign({ sub: user._id }, process.env.ACCESS_TOKEN_SECRET!, {
-        expiresIn: "15m",
+    return sign({ _id: user._id, tokenVersion: user.tokenVersion }, process.env.ACCESS_TOKEN_SECRET!, {
+        // TODO fix expiredInt
+        expiresIn: "15d",
     });
+};
+
+export const getGravatarUrl = (email: string) => {
+    const hash = createHash("md5").update(email).digest("hex");
+    // default options :identicon monsterid wavatar retro https://en.gravatar.com/site/implement/images/
+    return `https://res.cloudinary.com/dfxanglyc/image/gravatar/d_monsterid/${hash}`;
 };

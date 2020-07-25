@@ -1,0 +1,3 @@
+mutation AddMember($teamID: String!, $userID: String!) {
+    addMember(teamID: $teamID, userID: $userID)
+}

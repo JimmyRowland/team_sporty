@@ -9,7 +9,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import ComputerIcon from "@material-ui/icons/Computer";
 import SportsFootballIcon from "@material-ui/icons/SportsFootball";
-
+import { useGetTeamListAsMemberOrCoachQuery, useGetTeamListAsMemberQuery } from "../../generated/graphql";
+import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
+import { useDispatch } from "react-redux";
+import { setTeam } from "../CalendarPage/CalendarPageSlicer";
 const StyledMenu = withStyles({
     paper: {
         border: "1px solid #d3d4d5",
@@ -43,55 +46,67 @@ const StyledMenuItem = withStyles((theme) => ({
 
 export default function CustomizedMenus() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+    const { data, loading } = useGetTeamListAsMemberOrCoachQuery();
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    return (
-        <div>
-            <Button
-                aria-controls="customized-menu"
-                aria-haspopup="true"
-                variant="contained"
-                color="primary"
-                onClick={handleClick}
-            >
-                Switch Teams
-                <ListItemIcon>
-                    <ExpandMoreIcon fontSize="small" />
-                </ListItemIcon>
-            </Button>
-            <StyledMenu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                <StyledMenuItem>
+    if (!loading && data && data.getTeamsAsMemberOrCoach) {
+        return (
+            <div>
+                <Button
+                    aria-controls="customized-menu"
+                    aria-haspopup="true"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClick}
+                >
+                    Switch Teams
                     <ListItemIcon>
-                        <SportsSoccerIcon fontSize="small" />
+                        <ExpandMoreIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText primary="Richmond FC" />
-                </StyledMenuItem>
-                <StyledMenuItem>
-                    <ListItemIcon>
-                        <SportsFootballIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Richmond Raiders" />
-                </StyledMenuItem>
-                <StyledMenuItem>
-                    <ListItemIcon>
-                        <ComputerIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Richmond CSGO" />
-                </StyledMenuItem>
-            </StyledMenu>
-        </div>
-    );
+                </Button>
+                <StyledMenu
+                    id="customized-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <StyledMenuItem
+                        onClick={() => {
+                            dispatch(setTeam({ name: "All", _id: "" }));
+                        }}
+                    >
+                        <ListItemIcon>
+                            <ComputerIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="All" />
+                    </StyledMenuItem>
+                    {data.getTeamsAsMemberOrCoach.map((team, index) => {
+                        return (
+                            <StyledMenuItem
+                                key={index}
+                                onClick={() => {
+                                    dispatch(setTeam({ name: team.team.name, _id: team.team._id }));
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <SportsSoccerIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText primary={team.team.name} />
+                            </StyledMenuItem>
+                        );
+                    })}
+                </StyledMenu>
+            </div>
+        );
+    } else {
+        return <LoadingMembers />;
+    }
 }

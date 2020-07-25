@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Typography from "@material-ui/core/Typography";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { EventListItemType } from "../../interface/Interface";
-import { Card, CardHeader } from "@material-ui/core";
 import { EventListItem } from "./EventListItem";
 import { useSelector, useDispatch } from "react-redux";
 import { eventAsync, selectEvents } from "./eventSlice";
@@ -20,12 +17,11 @@ export function EventList() {
     const classes = useStyles();
     const dispatch = useDispatch();
     useEffect(() => {
-        // console.log('on load');
         dispatch(eventAsync());
     }, []);
     return (
         <div className={classes.eventItemContainer}>
-            {events.map((event, index) => {
+            {events.map((event: any, index: number) => {
                 return index < 3 ? <EventListItem event={event} key={index} /> : null;
             })}
         </div>

@@ -1,0 +1,3 @@
+mutation AddCoach($teamID: String!, $userID: String!  ) {
+    addCoach(teamID:$teamID,userID:$userID)
+}

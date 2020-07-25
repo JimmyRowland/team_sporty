@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "alwaysStrict": true,
+//    "alwaysStrict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -10,12 +10,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+//    "noFallthroughCasesInSwitch": true,
+//    "noUnusedLocals": true,
+//    "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "target": "esnext"
   },
   "exclude": ["node_modules"],

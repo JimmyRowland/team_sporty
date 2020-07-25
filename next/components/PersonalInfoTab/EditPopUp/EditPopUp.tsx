@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import CloseIcon from "@material-ui/icons/Close";
@@ -7,6 +7,11 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
+import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
+import { useMeQuery, useUploadIntroMutation } from "../../../generated/graphql";
+import BannerUpload from "../../ImageUpload/BannerUpload/BannerUpload";
+import Card from "@material-ui/core/Card";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "30%",
             width: "100%",
             margin: "auto",
+            padding: "2em",
         },
         title: {
             fontWeight: "bold",
@@ -34,10 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         coverphoto: {
             textAlign: "center",
-            height: "60%",
-            width: "80%",
-            borderRadius: 15,
-            backgroundColor: "#C4C4C4",
             margin: "auto",
             marginTop: "1em",
         },
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         field: {
             display: "block",
-            width: "60%",
+            width: "100%",
             height: "50%",
             borderRadius: 15,
             resize: "none",
@@ -60,13 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 18,
         },
         icon: {
-            textAlign: "center",
-            height: 100,
-            width: 100,
-            borderRadius: "50%",
-            backgroundColor: "#C4C4C4",
+            width: "100%",
+            height: "100%",
             margin: "auto",
-            marginTop: "1em",
+            paddingTop: "2em",
         },
         edit: {
             textAlign: "center",
@@ -81,13 +80,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EditPopUp() {
-    const info = useSelector(selectPersonal);
-    const dispatch = useDispatch();
-    let intro = info.intro;
+export default function EditPopUp({ info }: { info: string }) {
+    console.log(info);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-
+    const [editIntro] = useUploadIntroMutation();
+    const [intro, setIntro] = useState("");
+    const { refetch } = useMeQuery();
     const handleOpen = () => {
         setOpen(true);
     };
@@ -97,33 +96,43 @@ export default function EditPopUp() {
     };
 
     const onintroChange = (e: any) => {
-        intro = e.target.value;
+        setIntro(e.target.value);
     };
 
     const handleSubmit = () => {
         handleClose();
-        dispatch(changeintro(intro));
+        editIntro({ variables: { intro: intro } }).then(() => {
+            refetch();
+        });
     };
     const body = (
-        <div className={classes.paper}>
+        <Card className={classes.paper}>
             <div className={classes.closecontainer}>
                 <IconButton aria-label="close" className={classes.close} onClick={handleClose}>
                     <CloseIcon />
                 </IconButton>
             </div>
             <div className={classes.container}>
-                <div className={classes.title}>Profile Picture</div>
-                <div className={classes.icon}> Icon </div>
+                <div>
+                    <div className={classes.title}>Profile Picture</div>
+                </div>
+                <div className={classes.icon}>
+                    <AvatarUpload />
+                </div>
             </div>
             <div className={classes.container}>
-                <div className={classes.title}>Cover Photo</div>
-                <div className={classes.coverphoto}> Photo</div>
+                <div>
+                    <div className={classes.title}>Cover Photo</div>
+                </div>
+                <div className={classes.coverphoto}>
+                    <BannerUpload />
+                </div>
             </div>
             <div className={classes.container}>
                 <div className={classes.title}>Personal Info</div>
                 <textarea
                     className={classes.field}
-                    placeholder={info.intro}
+                    placeholder={info}
                     onChange={(e) => {
                         onintroChange(e);
                     }}
@@ -138,7 +147,7 @@ export default function EditPopUp() {
             >
                 Edit
             </Button>
-        </div>
+        </Card>
     );
 
     return (
