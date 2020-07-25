@@ -30,14 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.typography.pxToRem(15),
             flexBasis: "84.00%",
             flexShrink: 0,
-            align: "left"
+            align: "left",
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
             flexBasis: "16.00%",
             flexShrink: 0,
-            align: "right"
+            align: "right",
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
@@ -175,8 +175,8 @@ export default function CalendarItem({
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             >
-                                <MenuItem value={1} >Going</MenuItem>
-                                <MenuItem value={0} >Not Going</MenuItem>
+                                <MenuItem value={1}>Going</MenuItem>
+                                <MenuItem value={0}>Not Going</MenuItem>
                                 {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
                             </Select>
                         </FormControl>

@@ -11,7 +11,6 @@ import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
 import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
 
-
 const useStyles = makeStyles({
     container: {
         paddingTop: 50,
