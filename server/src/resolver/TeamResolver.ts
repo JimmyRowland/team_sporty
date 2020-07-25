@@ -459,14 +459,10 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async newTeam(
-        @Arg("name") name: string,
-        @Ctx() { payload, res }: ResReq,
-        @Arg("imgUrl", { nullable: true }) imgUrl: string,
-        @Arg("sport", { nullable: true }) sport: SportEnum,
-    ) {
+    async newTeam(@Arg("name") name: string, @Ctx() { payload, res }: ResReq, @Arg("sport") sport: SportEnum) {
         const newTeam = new TeamModel({
             name: name,
+            sport: sport,
         });
         const newKeyPair = new TeamCoachMapModel({
             _id: {

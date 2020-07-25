@@ -1,0 +1,15 @@
+mutation EditProfile($firstName: String!,
+$lastName: String!,
+$email: String!,
+$address: String!,
+$phone: String!,
+$introduction: String!,
+$sport: String!) {
+    editProfile(input:{firstName: $firstName,
+        lastName: $lastName
+        email: $email
+        address: $address
+        phone: $phone
+        introduction: $introduction
+        sport: $sport})
+}

@@ -72,7 +72,7 @@ const SidebarNav = () => {
         },
         {
             title: "Account change avatar, address sport and more",
-            href: "/account",
+            href: "/settings/account",
             icon: <AccountBoxIcon />,
         },
         {

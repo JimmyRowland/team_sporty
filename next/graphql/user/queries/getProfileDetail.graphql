@@ -1,0 +1,13 @@
+query getProfileDetail {
+    me {
+        _id
+        firstName
+        lastName
+        email
+        address
+        phone
+        introduction
+        sport
+    }
+}
+

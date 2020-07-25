@@ -8,7 +8,8 @@ import theme from "../assets/theme";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
+import { Add } from "@material-ui/icons";
+import Link from "next/link";
 
 const useStyles = makeStyles({
     body: {
@@ -68,9 +69,11 @@ function TeamSearchPage() {
                             placeholder="Search Team"
                             onChange={(e) => handleSearch(e)}
                         />
-                        <IconButton type="submit" aria-label="search">
-                            <SearchIcon />
-                        </IconButton>
+                        <Link href={"/createTeam"}>
+                            <IconButton type="submit" aria-label="add">
+                                <Add />
+                            </IconButton>
+                        </Link>
                     </Card>
                     <div className={classes.teamContainer}>
                         {data.getTeams.map((team, index: number) => {
