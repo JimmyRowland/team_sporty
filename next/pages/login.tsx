@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { InputField } from "../components/fields/InputField";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../lib/accessToken";
-import { Card, Button } from "@material-ui/core";
+import { Card, Button, Theme } from "@material-ui/core";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";

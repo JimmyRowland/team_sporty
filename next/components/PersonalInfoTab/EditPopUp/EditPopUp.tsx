@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EditPopUp(info:string) {
+export default function EditPopUp({ info }: { info: string }) {
     console.log(info);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -132,7 +132,7 @@ export default function EditPopUp(info:string) {
                 <div className={classes.title}>Personal Info</div>
                 <textarea
                     className={classes.field}
-                    placeholder={info.info}
+                    placeholder={info}
                     onChange={(e) => {
                         onintroChange(e);
                     }}

@@ -76,7 +76,7 @@ const useStyles = makeStyles({
 export default function PostCreator({ teamID }: { teamID: string }) {
     const classes = useStyles();
     const [content, setContent] = useState("");
-    const [images, setImages] = useState<{ id: string; url: string }>([]);
+    const [images, setImages] = useState<{ id: number; url: string }[]>([]);
     const [submitPost] = useAddPostMutation();
     const [id, setid] = useState(0);
     const handleSubmit = () => {
@@ -123,7 +123,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
             });
     };
 
-    const OnRemoveImage = (id: string) => {
+    const OnRemoveImage = (id: number) => {
         setImages(
             images.filter((image) => {
                 return image.id !== id;
@@ -179,7 +179,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
                     />
                 </form>
                 <div>
-                    <Button  color="secondary" variant="contained" className={classes.send} onClick={handleSubmit}>
+                    <Button color="secondary" variant="contained" className={classes.send} onClick={handleSubmit}>
                         {" "}
                         Send{" "}
                     </Button>

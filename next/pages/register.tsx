@@ -3,7 +3,7 @@ import Router from "next/router";
 import React from "react";
 import { InputField } from "../components/fields/InputField";
 import { useRegisterMutation } from "../generated/graphql";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -107,10 +107,10 @@ export default function registerPage() {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="FirstName" placeholder="FirstName*" component={InputField} />
-                        <Field name="LastName" placeholder="LastName*" component={InputField} />
-                        <Field name="Email" placeholder="Email*" component={InputField} />
-                        <Field name="Password" placeholder="Password*" type="password" component={InputField} />
+                        <Field name="firstName" placeholder="FirstName*" component={InputField} />
+                        <Field name="lastName" placeholder="LastName*" component={InputField} />
+                        <Field name="email" placeholder="Email*" component={InputField} />
+                        <Field name="password" placeholder="Password*" type="password" component={InputField} />
                         <Button type="submit" variant="contained" color="secondary" className={classes.signup}>
                             SIGN UP
                         </Button>

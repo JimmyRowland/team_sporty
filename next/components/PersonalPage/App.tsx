@@ -4,8 +4,8 @@ import { EventList } from "../../components/eventList/EventList";
 import PersonalInfoTab from "../../components/PersonalInfoTab/PersonalInfoTab";
 import TeamList from "../../components/teamList/TeamList";
 import CardPersonalPage from "../../components/cardPersonalPage/CardPersonalPage";
-import PersonalCalendar from "../../components/PersonalPage/PersonalCalendar"
-import PersonalTeamList from "../../components/PersonalPage/PersonalTeam"
+import PersonalCalendar from "../../components/PersonalPage/PersonalCalendar";
+import PersonalTeamList from "../../components/PersonalPage/PersonalTeam";
 
 const useStyles = makeStyles({
     container: {

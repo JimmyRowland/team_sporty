@@ -46,7 +46,7 @@ export default function ControlledExpansionPanels() {
         return <div>no data</div>;
     }
 
-    let events: any = [];
+    let events = data.getTeamsAsMemberOrCoach[0].team.events.slice(0, 0);
     if (selectedTeam.name === "All") {
         for (const team of data.getTeamsAsMemberOrCoach) {
             events = team.team.events ? events.concat(team.team.events) : events;
@@ -57,6 +57,8 @@ export default function ControlledExpansionPanels() {
         });
         events = team && team.team.events ? team.team.events : [];
     }
+    events.sort((event1, event2) => new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime());
+
     return (
         <div className={classes.root}>
             {events.map((event: any, index: number) => {

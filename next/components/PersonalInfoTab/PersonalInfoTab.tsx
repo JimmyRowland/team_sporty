@@ -37,30 +37,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function PersonalInfoTab() {
     const info = useSelector(selectPersonal);
-    const { data, loading, refetch } = useGetProfilePageQuery();
+    const { data, loading, refetch } = useMeQuery();
     const classes = useStyles();
-        return loading && data && data.me ? null : (
-            <Card className={classes.body}>
-                <CardMedia
-                    component="img"
-                    alt="CoverPhoto"
-                    height="200"
-                    image={data?.me?.bannerUrls}
-                    title="CoverPhoto"
-                />
-                <Avatar src={data?.me?.avatarUrl} className={classes.avatar}/>
-                <div>
-                    <p>
-                        <Typography variant={"h4"} className={classes.text}> {data?.me?.name} </Typography>
-                    </p>
-                    <p>
-                        <Typography variant={"h6"}  className={classes.text}> {data?.me?.introduction} </Typography>
-                    </p>
-                </div>
-                <div>
-                    <EditPopUp info={data?.me?.introduction}/>
-                </div>
-            </Card>
-        )
-
+    return loading && data && data.me ? null : (
+        <Card className={classes.body}>
+            <CardMedia component="img" alt="CoverPhoto" height="200" image={data?.me?.bannerUrls} title="CoverPhoto" />
+            <Avatar src={data?.me?.avatarUrl} className={classes.avatar} />
+            <div>
+                <p>
+                    <Typography variant={"h4"} className={classes.text}>
+                        {" "}
+                        {data?.me?.name}{" "}
+                    </Typography>
+                </p>
+                <p>
+                    <Typography variant={"h6"} className={classes.text}>
+                        {" "}
+                        {data?.me?.introduction}{" "}
+                    </Typography>
+                </p>
+            </div>
+            <div>
+                <EditPopUp info={data?.me?.introduction} />
+            </div>
+        </Card>
+    );
 }
