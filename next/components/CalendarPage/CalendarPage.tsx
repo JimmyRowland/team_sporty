@@ -37,9 +37,9 @@ function CalendarPage() {
                     <h2>{team.name}</h2>
                 </div>
                 <div className={classes.columnContainer}>
-                    <Typography align="right">
+                    <div align="right">
                         <TeamDropDown />
-                    </Typography>
+                    </div>
                 </div>
             </div>
             <div className={classes.container}>

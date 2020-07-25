@@ -12,12 +12,6 @@ import moment from "moment";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useRouter } from "next/router";
 
-const theme = createMuiTheme({
-    palette: {
-        type: "dark",
-    },
-});
-
 type formData = {
     eventType: string;
     startDate: moment.Moment;

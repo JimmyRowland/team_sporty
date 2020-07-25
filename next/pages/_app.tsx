@@ -7,8 +7,10 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../assets/theme";
 import { setAccessToken } from "../lib/accessToken";
+import { LOCALSERVER, HEROKU } from "../lib/serveruri";
 
 export default function App({ Component, pageProps }: { Component: ComponentType; pageProps: any }) {
+    const URI = process.env.VERCEL === "VERCEL" ? HEROKU : LOCALSERVER;
     const store = useStore(pageProps.initialReduxState);
     const apolloClient = useApollo(pageProps.initialApolloState);
     useEffect(() => {
@@ -22,7 +24,7 @@ export default function App({ Component, pageProps }: { Component: ComponentType
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("https://lit-atoll-38483.herokuapp.com/refresh_token", {
+        fetch(`${URI}/refresh_token`, {
             method: "POST",
             credentials: "include",
         }).then(async (x) => {

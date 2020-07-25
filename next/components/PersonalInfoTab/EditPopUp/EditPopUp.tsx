@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import CloseIcon from "@material-ui/icons/Close";
@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
 import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
-import { useMeQuery } from "../../../generated/graphql";
+import { useMeQuery, useUploadIntroMutation } from "../../../generated/graphql";
 import BannerUpload from "../../ImageUpload/BannerUpload/BannerUpload";
 import Card from "@material-ui/core/Card";
 import Paper from "@material-ui/core/Paper";
@@ -80,13 +80,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function EditPopUp() {
-    const info = useSelector(selectPersonal);
-    const dispatch = useDispatch();
-    let intro = info.intro;
+export default function EditPopUp(info:string) {
+    console.log(info);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-
+    const [editIntro] = useUploadIntroMutation();
+    const [intro, setIntro] = useState("");
+    const { refetch } = useMeQuery();
     const handleOpen = () => {
         setOpen(true);
     };
@@ -96,12 +96,14 @@ export default function EditPopUp() {
     };
 
     const onintroChange = (e: any) => {
-        intro = e.target.value;
+        setIntro(e.target.value);
     };
 
     const handleSubmit = () => {
         handleClose();
-        dispatch(changeintro(intro));
+        editIntro({ variables: { intro: intro } }).then(() => {
+            refetch();
+        });
     };
     const body = (
         <Card className={classes.paper}>
@@ -130,7 +132,7 @@ export default function EditPopUp() {
                 <div className={classes.title}>Personal Info</div>
                 <textarea
                     className={classes.field}
-                    placeholder={info.intro}
+                    placeholder={info.info}
                     onChange={(e) => {
                         onintroChange(e);
                     }}
