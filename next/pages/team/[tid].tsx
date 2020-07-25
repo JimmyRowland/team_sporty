@@ -9,15 +9,21 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
+import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import { useSelector } from "react-redux";
+import { selectTeamState } from "../../components/CalendarPage/CalendarPageSlicer";
+
 
 const useStyles = makeStyles({
     container: {
-        paddingTop: 90,
-        width: "100%",
+        paddingTop: 50,
+        width: "90%",
         height: "100%",
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-evenly",
+        margin: "40px auto 0 auto",
+        maxWidth: 1000,
     },
     rosterAvatar: {
         padding: 7,
@@ -25,7 +31,7 @@ const useStyles = makeStyles({
     leftColumn: {
         height: "80vh",
         position: "sticky",
-        top: "10%",
+        top: "8%",
         flexBasis: "25%",
         maxWidth: "25vw",
     },
@@ -73,6 +79,26 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
+
+    const { data:eventsData, loading:eventsLoading, error:eventsError, refetch:eventsRefetch } = useGetEventsAsCoachOrMemberQuery();
+    const selectedTeam = useSelector(selectTeamState);
+    const mequery = useMeQuery();
+    if (eventsLoading || mequery.loading) {
+        return <div>loading...</div>;
+    }
+    if (eventsError) {
+        console.log(error);
+        return <div>err</div>;
+    }
+    let events: any = [];
+    const team = eventsData.getTeamsAsMemberOrCoach.find((value) => {
+        return value.team._id === data?.getTeam.team._id;
+    });
+    events = team && team.team.events ? team.team.events : [];
+    const condensedList = events.slice(0, 3);
+
+
+
     if (loading || error || !data || !data.getTeam) {
         return <LoadingMembers />;
     }
@@ -84,6 +110,7 @@ function TeamPage({ id, errors }: Props) {
                         isCoach={data.getTeam.isCoach}
                         imgUrl={data.getTeam.team.imgUrl}
                         name={data.getTeam.team.name}
+                        events={condensedList}
                     />
                 </div>
                 <div className={classes.rightColumn}>
