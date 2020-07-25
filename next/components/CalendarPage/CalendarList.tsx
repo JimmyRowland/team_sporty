@@ -63,7 +63,7 @@ export default function ControlledExpansionPanels() {
         });
         events = team && team.team.events ? team.team.events : [];
     }
-    events.sort((event1, event2) => new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime());
+    events.sort((event1, event2) => new Date(event1.startDate).getTime() - new Date(event2.startDate).getTime());
 
     return (
         <div className={classes.root}>

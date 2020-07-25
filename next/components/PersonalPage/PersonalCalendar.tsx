@@ -65,7 +65,7 @@ function PersonalCalendar() {
                         }
                         events.sort(
                             (event1, event2) =>
-                                new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime(),
+                                new Date(event1.startDate).getTime() - new Date(event2.startDate).getTime(),
                         );
                         const condensedList = events.slice(0, 3);
                         return (
