@@ -1,36 +1,22 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import { DateAvatar } from "../PersonalPage/DateAvatarNew";
 
-
-export default function CalendarItem(props: {
-    key: React.ReactNode;
-    name: React.ReactNode;
-    type: React.ReactNode;
-    date: Date;
-    address: React.ReactNode;
-    event: React.ReactNode;
-    refetch: React.ReactNode;
-}) {
-
+export default function CalendarItem(props: { name: string; date: string; address: string }) {
     const eventDate = new Date(props.date);
     function formatAMPM(date: Date) {
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'pm' : 'am';
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "pm" : "am";
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        if (minutes < 10){
-            return hours + ':0' + minutes + ' ' + ampm;
-        } else {
-            return hours + ':' + minutes + ' ' + ampm;
-        }
+        const minutesString = minutes < 10 ? "0" + minutes : minutes;
+        const strTime = hours + ":" + minutesString + " " + ampm;
+        return strTime;
     }
     const timeString = formatAMPM(eventDate);
-
-
 
     return (
         <div>
@@ -40,13 +26,8 @@ export default function CalendarItem(props: {
                     primary={props.name}
                     secondary={
                         <React.Fragment>
-                            <Typography>
-                                {timeString}
-                            </Typography>
-                            <Typography>
-                                {props.address}
-                            </Typography>
-
+                            <Typography>{timeString}</Typography>
+                            <Typography>{props.address}</Typography>
                         </React.Fragment>
                     }
                 />

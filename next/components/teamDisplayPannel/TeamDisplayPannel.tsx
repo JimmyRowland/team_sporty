@@ -4,8 +4,8 @@ import { Avatar, Card, Typography } from "@material-ui/core";
 import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React from "react";
-import List from '@material-ui/core/List';
-import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
+import List from "@material-ui/core/List";
+import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -22,6 +22,7 @@ const useStyles = makeStyles((Theme: Theme) =>
             display: "block",
             padding: "1em",
             height: "60%",
+            justifyContent: "center",
         },
         teamContainer: {
             margin: "1em",
@@ -55,7 +56,7 @@ export default function TeamDisplayPannel({
     isCoach,
     imgUrl,
     name,
-    events
+    events,
 }: {
     isCoach: boolean;
     imgUrl: string;
@@ -80,23 +81,20 @@ export default function TeamDisplayPannel({
                     <Typography variant={"subtitle1"}>The best team</Typography>
                 </div>
                 <br></br>
-                <div className={classes.calendarContainer} align="center">
+                <div className={classes.calendarContainer}>
                     <Typography variant={"h6"}>Upcoming Events</Typography>
                     <div>
                         {console.log(events)}
-                        <List className={classes.root}>
-                    {events.map((c: any) => (
-                        <PersonalCalendarItem
-                            key={c._id}
-                            name={c.name}
-                            type={c.eventType}
-                            date={c.startDate}
-                            address={c.address}
-                            event={c.event}
-                            refetch={c.eventsRefetch}
-                        />
-                    ))}
-                </List>
+                        <List>
+                            {events.map((c: any) => (
+                                <PersonalCalendarItem
+                                    key={c._id}
+                                    name={c.name}
+                                    date={c.startDate}
+                                    address={c.address}
+                                />
+                            ))}
+                        </List>
                         {/* <EventList /> */}
                     </div>
                 </div>

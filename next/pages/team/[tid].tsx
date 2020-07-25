@@ -13,7 +13,6 @@ import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "
 import { useSelector } from "react-redux";
 import { selectTeamState } from "../../components/CalendarPage/CalendarPageSlicer";
 
-
 const useStyles = makeStyles({
     container: {
         paddingTop: 50,
@@ -80,7 +79,12 @@ function TeamPage({ id, errors }: Props) {
         pollInterval: 500,
     });
 
-    const { data:eventsData, loading:eventsLoading, error:eventsError, refetch:eventsRefetch } = useGetEventsAsCoachOrMemberQuery();
+    const {
+        data: eventsData,
+        loading: eventsLoading,
+        error: eventsError,
+        refetch: eventsRefetch,
+    } = useGetEventsAsCoachOrMemberQuery();
     const selectedTeam = useSelector(selectTeamState);
     const mequery = useMeQuery();
     if (eventsLoading || mequery.loading) {
@@ -96,8 +100,6 @@ function TeamPage({ id, errors }: Props) {
     });
     events = team && team.team.events ? team.team.events : [];
     const condensedList = events.slice(0, 3);
-
-
 
     if (loading || error || !data || !data.getTeam) {
         return <LoadingMembers />;

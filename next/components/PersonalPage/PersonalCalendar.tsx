@@ -4,11 +4,11 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import IconButton from "@material-ui/core/IconButton";
-import List from '@material-ui/core/List';
+import List from "@material-ui/core/List";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
-import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
+import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexBasis: "33.33%",
             flexShrink: 0,
         },
-    })
+    }),
 );
 
 function PersonalCalendar() {
@@ -43,41 +43,47 @@ function PersonalCalendar() {
     if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
         return <div>no data</div>;
     }
-
-    let events: any = [];
-    for (const team of data.getTeamsAsMemberOrCoach) {
-        events = team.team.events ? events.concat(team.team.events) : events;
-    }
-    const condensedList = events.slice(0, 3);
     return (
         <Card className={classes.root}>
-            <CardHeader className={classes.heading}
-                avatar={
-                    <CalendarTodayIcon />
-
-                }
+            <CardHeader
+                className={classes.heading}
+                avatar={<CalendarTodayIcon />}
                 action={
                     <IconButton aria-label="settings">
                         <MoreVertIcon />
                     </IconButton>
                 }
-                titleTypographyProps={{variant:'h5' }}
+                titleTypographyProps={{ variant: "h5" }}
                 title="Your Upcoming Events"
             />
             <CardContent>
-                <List className={classes.root}>
-                    {condensedList.map((c: any) => (
-                        <PersonalCalendarItem
-                            key={c._id}
-                            name={c.name}
-                            type={c.eventType}
-                            date={c.startDate}
-                            address={c.address}
-                            event={c.event}
-                            refetch={refetch}
-                        />
-                    ))}
-                </List>
+                {[1].map((value) => {
+                    if (data.getTeamsAsMemberOrCoach.length > 0) {
+                        let events = data.getTeamsAsMemberOrCoach[0].team.events;
+                        for (const team of data.getTeamsAsMemberOrCoach) {
+                            events = team.team.events === events ? events : events.concat(team.team.events);
+                        }
+                        events.sort(
+                            (event1, event2) =>
+                                new Date(event2.startDate).getTime() - new Date(event1.startDate).getTime(),
+                        );
+                        const condensedList = events.slice(0, 3);
+                        return (
+                            <List className={classes.root}>
+                                {condensedList.map((c) => (
+                                    <PersonalCalendarItem
+                                        key={c._id}
+                                        name={c.name}
+                                        date={c.startDate}
+                                        address={c.address}
+                                    />
+                                ))}
+                            </List>
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
             </CardContent>
         </Card>
     );
