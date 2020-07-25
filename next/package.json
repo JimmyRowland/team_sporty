@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build && gulp licenses",
+    "build": "next build",
     "start": "next start",
     "type-check": "tsc",
     "generate": "gql-gen --config ../next/codegen.yml",
