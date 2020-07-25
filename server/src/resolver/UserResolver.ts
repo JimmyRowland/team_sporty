@@ -65,7 +65,6 @@ export class UserResolver {
         @Ctx() { res, req }: ResReq,
     ): Promise<LoginResponse> {
         const user = await UserModel.findOne({ email });
-        console.log(email, user);
         const nullResponse: LoginResponse = { accessToken: "", user: null };
         if (!user) {
             return nullResponse;
