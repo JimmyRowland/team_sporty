@@ -19,7 +19,7 @@ import { TestResolver } from "./resolver/TestResolver";
     connectDatabase();
     app.use(
         cors({
-            origin: [/^https:\/\/teamsporty.*\.vercel\.app$/,/^https:\/\/teamsporty-\w{9}\.vercel\.app$/],
+            origin: [/^https:\/\/teamsporty.*\.vercel\.app$/,/^https:\/\/teamsporty-\w{9}\.vercel\.app$/, /^https:\/\/teamsp0rty.*\.vercel\.app$/],
             credentials: true,
 
         }),
