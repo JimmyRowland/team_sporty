@@ -9,7 +9,11 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import Radio, { RadioProps } from "@material-ui/core/Radio";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Event, EventUserResEnum, useMeQuery, useSetGoingMutation } from "../../generated/graphql";
 import { Avatar } from "@material-ui/core";
 import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
@@ -24,25 +28,28 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: "80.00%",
+            flexBasis: "84.00%",
             flexShrink: 0,
+            align: "left"
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "20.00%",
+            flexBasis: "16.00%",
             flexShrink: 0,
+            align: "right"
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
             flexBasis: "27%",
             flexShrink: 0,
+            align: "left",
         },
         spacing: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "5%",
+            flexBasis: "3%",
             flexShrink: 0,
         },
         greenIcon: {
@@ -50,6 +57,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         redIcon: {
             color: "red",
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
         },
     }),
 );
@@ -133,6 +144,13 @@ export default function CalendarItem({
             refetch();
         });
     };
+    const [availability, setAvailability] = React.useState(isGoing);
+    const handleChangeAvailability = (e: any) => {
+        setSelectedValue(+e.target.value);
+        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
+            refetch();
+        });
+    };
     return (
         <div className={classes.root}>
             <ExpansionPanel>
@@ -141,13 +159,28 @@ export default function CalendarItem({
                     aria-label="Expand"
                     aria-controls="additional-actions1-content"
                 >
-                    <Typography className={classes.heading} align="left">
+                    <div className={classes.heading}>
                         <h3>{name}</h3>
                         <p>{date}</p>
                         <p>{address}</p>
-                    </Typography>
-                    <Typography className={classes.secondaryHeading} align="right">
-                        <Typography align="right">
+                    </div>
+                    <div className={classes.secondaryHeading}>
+                        <FormControl variant="filled" className={classes.formControl}>
+                            <InputLabel>Availability</InputLabel>
+                            <Select
+                                value={selectedValue}
+                                onChange={handleChangeAvailability}
+                                label="Availability"
+                                defaultValue="notResponded"
+                                onClick={(event) => event.stopPropagation()}
+                                onFocus={(event) => event.stopPropagation()}
+                            >
+                                <MenuItem value={1} >Going</MenuItem>
+                                <MenuItem value={0} >Not Going</MenuItem>
+                                {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
+                            </Select>
+                        </FormControl>
+                        {/* <div align="right">
                             Going
                             <GreenRadio
                                 checked={selectedValue === 1}
@@ -158,8 +191,8 @@ export default function CalendarItem({
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             />
-                        </Typography>
-                        <Typography align="right">
+                        </div>
+                        <div align="right">
                             Not going
                             <RedRadio
                                 checked={selectedValue === 0}
@@ -170,8 +203,8 @@ export default function CalendarItem({
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             />
-                        </Typography>
-                        <Typography align="right">
+                        </div>
+                        <div align="right">
                             Not Responded
                             <GreyRadio
                                 checked={selectedValue === 2}
@@ -182,24 +215,24 @@ export default function CalendarItem({
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             />
-                        </Typography>
-                    </Typography>
+                        </div> */}
+                    </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Going: {usersGoing.length}</p>
                         <div className={classes.roaster}>{usersGoing}</div>
-                    </Typography>
+                    </div>
                     <Typography className={classes.spacing}></Typography>
-                    <Typography className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Not Going: {usersNotGoing.length}</p>
                         <div className={classes.roaster}>{usersNotGoing}</div>
-                    </Typography>
+                    </div>
                     <Typography className={classes.spacing}></Typography>
-                    <Typography className={classes.tertiaryHeading} align="left">
+                    <div className={classes.tertiaryHeading}>
                         <p>Not Responded: {usersNoResponse.length}</p>
                         <div className={classes.roaster}>{usersNoResponse}</div>
-                    </Typography>
+                    </div>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>

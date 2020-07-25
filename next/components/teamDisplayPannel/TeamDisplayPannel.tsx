@@ -1,11 +1,11 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Avatar, Card, Typography } from "@material-ui/core";
-import { EventList } from "../eventList/EventList";
+//import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React from "react";
-import List from "@material-ui/core/List";
-import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
+import List from '@material-ui/core/List';
+import PersonalCalendarItem from '../PersonalPage/PersonalCalendarItem'
 
 const useStyles = makeStyles((Theme: Theme) =>
     createStyles({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((Theme: Theme) =>
             display: "block",
             padding: "1em",
             height: "60%",
-            justifyContent: "center",
+            align: "center"
         },
         teamContainer: {
             margin: "1em",
@@ -56,7 +56,7 @@ export default function TeamDisplayPannel({
     isCoach,
     imgUrl,
     name,
-    events,
+    events
 }: {
     isCoach: boolean;
     imgUrl: string;
