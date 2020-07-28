@@ -119,7 +119,7 @@ export default function registerPage() {
             </Formik>
             <div className={classes.footerContainer}>
                 <Link href={"/login"}>
-                    <Button color="primary">{"Already have an account? Sign in"}</Button>
+                    <Button color="secondary">{"Already have an account? Sign in"}</Button>
                 </Link>
             </div>
         </Card>

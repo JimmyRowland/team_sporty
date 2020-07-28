@@ -130,11 +130,11 @@ const LoginPage = () => {
                 )}
             </Formik>
             <div className={classes.footerContainer}>
-                <Button color="primary" className={classes.footerButtonL}>
+                <Button color="secondary" className={classes.footerButtonL}>
                     {"Forgot password?"}
                 </Button>
                 <Link href={"/register"}>
-                    <Button color="primary" className={classes.footerButtonR}>
+                    <Button color="secondary" className={classes.footerButtonR}>
                         {"Don't have an account? Sign Up"}
                     </Button>
                 </Link>
