@@ -4,6 +4,7 @@ import { isAuth } from "../middleware/isAuth";
 import { isCoach } from "../middleware/isCoach";
 import { Team, TeamModel } from "../entities/Team";
 import { Post } from "../entities/Post";
+import { Comment } from "../entities/Comment";
 import { ObjectID } from "mongodb";
 import { isMember } from "../middleware/isMember";
 import { LikesMapModel } from "../entities/LikesMap";
@@ -97,6 +98,36 @@ export class PostResolver {
                 post.imgUrls = imgUrls;
             }
             team.posts.push(post);
+            post.comments = [];
+            await team.save();
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isMember)
+    async addPostComment(
+        @Arg("teamID") teamID: string,
+        @Arg("content") content: string,
+        @Ctx() { payload }: ResReq,
+        @Arg("postID") postID: string,
+    ) {
+        const team = await TeamModel.findById(teamID);
+        if (!team) return false;
+        try {
+            const comment = new Comment();
+            comment.content = content;
+            comment.user = new ObjectID(payload._id);
+            const posts = team.posts;
+            posts.find((post) => {
+                if (post._id.toString() === postID) {
+                    post.comments.push(comment);
+                }
+            });
+            team.posts = posts;
             await team.save();
         } catch (e) {
             console.log(e);

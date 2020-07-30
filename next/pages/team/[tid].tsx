@@ -134,6 +134,7 @@ function TeamPage({ id, errors }: Props) {
                                     teamID={id}
                                     isCoach={data?.getTeam.isCoach}
                                     imgUrls={post.imgUrls}
+                                    comments={post.comments}
                                 />
                             );
                         })}

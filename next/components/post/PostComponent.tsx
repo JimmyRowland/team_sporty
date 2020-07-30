@@ -11,7 +11,14 @@ import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { usePinPostMutation } from "../../generated/graphql";
+import {useAddPostCommentMutation, usePinPostMutation} from "../../generated/graphql";
+import RoomIcon from "@material-ui/icons/Room";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Collapse } from "@material-ui/core";
+import clsx from "clsx";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,6 +73,25 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: "wrap",
             justifyContent: "start",
         },
+        pin: {
+            paddingLeft: theme.spacing(2),
+            paddingTop: theme.spacing(2),
+            display: "flex",
+        },
+        pinElement: {
+            paddingTop: 5,
+            paddingLeft: 2,
+        },
+        expand: {
+            transform: "rotate(0deg)",
+            marginLeft: "auto",
+            transition: theme.transitions.create("transform", {
+                duration: theme.transitions.duration.shortest,
+            }),
+        },
+        expandOpen: {
+            transform: "rotate(180deg)",
+        },
     }),
 );
 
@@ -79,6 +105,7 @@ export default function PostComponent({
     isCoach,
     avatarUrl,
     imgUrls,
+    comments,
 }: {
     content: string;
     firstName: string;
@@ -89,11 +116,20 @@ export default function PostComponent({
     isCoach: boolean;
     avatarUrl: string;
     imgUrls: string[];
+    comments: any;
 }) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation({ variables: { teamID: teamID, isPined: !isPinned, postID: postID } });
     const divref = React.useRef<any>();
+    const [expanded, setExpanded] = React.useState(false);
+    const [addComment] = useAddPostCommentMutation()
+    const [commentInput, setCommentInput] = React.useState('');
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(divref.current);
     };
@@ -107,6 +143,13 @@ export default function PostComponent({
         pinPost();
     };
 
+    const handleComment = () =>{
+        addComment({ variables: { teamID: teamID, content: commentInput, postID: postID } });
+    }
+
+    const onCommentChange = (e) =>{
+        setCommentInput(e.target.value);
+    }
     const PinMenu = () => {
         return (
             <div>
@@ -143,8 +186,21 @@ export default function PostComponent({
         ) : null;
     };
 
+    const PinDisplay = () => {
+        return isPinned ? (
+            <div className={classes.pin}>
+                <RoomIcon />
+                <Typography variant="h7" className={classes.pinElement}>
+                    {" "}
+                    This post is pinned{" "}
+                </Typography>
+            </div>
+        ) : null;
+    };
+    console.log(comments);
     return (
         <Card className={classes.root}>
+            <PinDisplay />
             <CardHeader
                 avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
                 title={<Typography> {firstName} </Typography>}
@@ -161,7 +217,31 @@ export default function PostComponent({
                     {content}
                 </Typography>
                 <ImageDisplay />
+                <IconButton aria-label="like">
+                    <FavoriteIcon />
+                </IconButton>
+                <IconButton
+                    className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded,
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                >
+                    <ExpandMoreIcon />
+                </IconButton>
             </CardContent>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                    <TextField onChange={e=>onCommentChange(e)}/>
+                    <Button onClick={handleComment}>Send</Button>
+                    <div>
+                        {comments?.map((comment) => {
+                            return(<div>{comment.content}</div>);
+                        })}
+                    </div>
+                </CardContent>
+            </Collapse>
         </Card>
     );
 }
