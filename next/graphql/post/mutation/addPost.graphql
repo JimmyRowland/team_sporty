@@ -2,5 +2,16 @@ mutation AddPost($imgUrls: [String!],
 $isPrivate: Boolean,
 $content: String!,
 $teamID: String!) {
-    addPost(content: $content, imgUrls:$imgUrls, isPrivate:$isPrivate, teamID:$teamID)
+    addPost(content: $content, imgUrls:$imgUrls, isPrivate:$isPrivate, teamID:$teamID){
+        content
+        _id
+        isPined
+        imgUrls
+        numberOfLikes
+        lastModifyDate
+        user{
+            name
+            avatarUrl
+        }
+    }
 }

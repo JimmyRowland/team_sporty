@@ -40,6 +40,7 @@
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
     "react-spring": "^8.0.27",
+    "react-waypoint": "^9.0.3",
     "redux-devtools-extension": "^2.13.8"
   },
   "devDependencies": {

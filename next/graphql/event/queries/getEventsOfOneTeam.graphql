@@ -1,0 +1,9 @@
+query GetEventsOfOneTeam($skip: Int!, $limit: Int!, $teamID: String!) {
+    getEventsOfOneTeam(limit:$limit, skip:$skip, teamID:$teamID) {
+        _id
+        name
+        startDate
+        address
+    }
+}
+

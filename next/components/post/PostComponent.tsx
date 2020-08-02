@@ -11,7 +11,13 @@ import { red } from "@material-ui/core/colors";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { usePinPostMutation } from "../../generated/graphql";
+import {
+    GetPostsDocument,
+    GetPostsQueryHookResult,
+    GetPostsQueryResult,
+    usePinPostMutation,
+} from "../../generated/graphql";
+import query from "apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -79,7 +85,9 @@ export default function PostComponent({
     isCoach,
     avatarUrl,
     imgUrls,
+    index,
 }: {
+    index: number;
     content: string;
     firstName: string;
     lastModifyDate: string;
@@ -92,7 +100,7 @@ export default function PostComponent({
 }) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [pinPost] = usePinPostMutation({ variables: { teamID: teamID, isPined: !isPinned, postID: postID } });
+    const [pinPost] = usePinPostMutation();
     const divref = React.useRef<any>();
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(divref.current);
@@ -104,7 +112,22 @@ export default function PostComponent({
 
     const handlePin = () => {
         setAnchorEl(null);
-        pinPost();
+        pinPost({
+            variables: { teamID: teamID, isPined: !isPinned, postID: postID },
+            optimisticResponse: { pinPost: true },
+            update: (proxy, { data: { pinPost } }) => {
+                const data: any = proxy.readQuery({
+                    query: GetPostsDocument,
+                    variables: { teamID: teamID, limit: 10, skip: 0 },
+                });
+                data.getPosts[index].isPined = !isPinned;
+                proxy.writeQuery({
+                    query: GetPostsDocument,
+                    variables: { teamID: teamID, limit: 10, skip: 0 },
+                    data: { ...data },
+                });
+            },
+        });
     };
 
     const PinMenu = () => {

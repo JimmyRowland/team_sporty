@@ -5,7 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { useAddPostMutation } from "../../generated/graphql";
+import { GetPostsDocument, useAddPostMutation } from "../../generated/graphql";
 import CardMedia from "@material-ui/core/CardMedia";
 import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import IconButton from "@material-ui/core/IconButton";
@@ -73,7 +73,15 @@ const useStyles = makeStyles({
     },
 });
 
-export default function PostCreator({ teamID }: { teamID: string }) {
+export default function PostCreator({
+    teamID,
+    setHasNext,
+    refetch,
+}: {
+    teamID: string;
+    setHasNext: any;
+    refetch: any;
+}) {
     const classes = useStyles();
     const [content, setContent] = useState("");
     const [images, setImages] = useState<{ id: number; url: string }[]>([]);
@@ -116,7 +124,23 @@ export default function PostCreator({ teamID }: { teamID: string }) {
                 res.map((img) => {
                     imgUrls.push(img.secure_url.toString());
                 });
-                submitPost({ variables: { teamID: teamID, content: content, imgUrls: imgUrls } });
+                submitPost({
+                    variables: { teamID: teamID, content: content, imgUrls: imgUrls },
+                    update: (proxy, { data: { addPost } }) => {
+                        const data: any = proxy.readQuery({
+                            query: GetPostsDocument,
+                            variables: { teamID: teamID, limit: 10, skip: 0 },
+                        });
+                        proxy.writeQuery({
+                            query: GetPostsDocument,
+                            variables: { teamID: teamID, limit: 10, skip: 0 },
+                            data: { getPosts: [addPost, ...data.getPosts] },
+                        });
+                        setHasNext((state) => {
+                            return { skip: state.skip + 1, hasNext: state.hasNext };
+                        });
+                    },
+                });
             })
             .catch((err) => {
                 console.log(err);

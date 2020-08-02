@@ -1,4 +1,4 @@
-query getEventsOfAllTeams($skip: Int!, $limit: Int!) {
+query GetEventsOfAllTeams($skip: Int!, $limit: Int!) {
     getEventsOfAllTeams(limit:$limit, skip:$skip) {
         _id
         name

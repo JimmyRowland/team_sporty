@@ -1,0 +1,12 @@
+query GetTeamPageFirstFetch($teamID: String!, $limit: Int!) {
+    getTeam(teamID:$teamID) {
+        isCoach
+    }
+    getEventsOfOneTeam(limit:$limit, skip:0, teamID:$teamID) {
+        _id
+        name
+        startDate
+        address
+    }
+}
+

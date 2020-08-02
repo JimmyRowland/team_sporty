@@ -75,7 +75,6 @@ export default function TeamDisplayPannel({
     description: string;
 }) {
     const classes = useStyles();
-
     return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>

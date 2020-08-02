@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { LinearProgress, CircularProgress } from "@material-ui/core";
 import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Layout from "../../components/layouts/index/Layout";
-import { GetTeamPageDocument, useGetTeamPageQuery } from "../../generated/graphql";
+import { Waypoint } from "react-waypoint";
+import {
+    GetPostsDocument,
+    GetTeamPageStaticDocument,
+    useGetPostsQuery,
+    useGetTeamPageFirstFetchQuery,
+    useGetTeamPageStaticQuery,
+} from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
@@ -69,32 +77,48 @@ function TeamPage({ id, errors }: Props) {
         return "Error component";
     }
     const classes = useStyles();
-    const { data, loading, error } = useGetTeamPageQuery({
+    const { data } = useGetTeamPageStaticQuery({
         variables: {
             teamID: id,
         },
-        pollInterval: 500,
     });
-    const events = data.getEventsOfOneTeam;
+    const { data: events } = useGetTeamPageFirstFetchQuery({
+        variables: {
+            teamID: id,
+            limit: 3,
+        },
+    });
+    const { data: postsQuery, fetchMore, loading, networkStatus, refetch } = useGetPostsQuery({
+        variables: {
+            teamID: id,
+            limit: 10,
+            skip: 0,
+        },
+        partialRefetch: true,
+        notifyOnNetworkStatusChange: true,
+    });
+    const [{ hasNext, skip }, setHasNext] = useState({ hasNext: true, skip: 10 });
+    const posts = !loading && postsQuery && postsQuery.getPosts ? postsQuery.getPosts : data.getPosts;
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
                     <TeamDisplayPannel
-                        isCoach={data.getTeam.isCoach}
+                        isCoach={events ? events.getTeam.isCoach : false}
                         imgUrl={data.getTeam.team.imgUrl}
                         name={data.getTeam.team.name}
-                        events={events}
+                        events={events ? events.getEventsOfOneTeam : []}
                         id={data.getTeam.team._id}
                         description={data.getTeam.team.description}
                     />
                 </div>
                 <div className={classes.rightColumn}>
                     <div className={classes.columnItem}>
-                        {data?.getTeam.team.posts?.map((post, index) => {
+                        {posts.map((post, index) => {
                             return !post.isPined ? null : (
                                 <PostComponent
                                     key={index}
+                                    index={index}
                                     content={post.content}
                                     firstName={post.user.name}
                                     avatarUrl={post.user.avatarUrl}
@@ -102,31 +126,68 @@ function TeamPage({ id, errors }: Props) {
                                     isPinned={post.isPined}
                                     postID={post._id}
                                     teamID={id}
-                                    isCoach={data?.getTeam.isCoach}
+                                    isCoach={events?.getTeam.isCoach}
                                     imgUrls={post.imgUrls}
                                 />
                             );
                         })}
                     </div>
                     <div className={classes.columnItem}>
-                        <PostCreator teamID={id} />
+                        <PostCreator teamID={id} setHasNext={setHasNext} refetch={refetch} />
                     </div>
-                    {data?.getTeam.team.posts?.map((post, index) => {
-                        return post.isPined ? null : (
-                            <PostComponent
-                                key={index}
-                                content={post.content}
-                                firstName={post.user.name}
-                                lastModifyDate={post.lastModifyDate}
-                                isPinned={post.isPined}
-                                postID={post._id}
-                                teamID={id}
-                                isCoach={data?.getTeam.isCoach}
-                                avatarUrl={post.user.avatarUrl}
-                                imgUrls={post.imgUrls}
-                            />
+                    {data?.getPosts?.map((post, index) => {
+                        return (
+                            <Fragment key={index}>
+                                {post.isPined ? null : (
+                                    <PostComponent
+                                        key={index}
+                                        index={index}
+                                        content={post.content}
+                                        firstName={post.user.name}
+                                        lastModifyDate={post.lastModifyDate}
+                                        isPinned={post.isPined}
+                                        postID={post._id}
+                                        teamID={id}
+                                        isCoach={events?.getTeam.isCoach}
+                                        avatarUrl={post.user.avatarUrl}
+                                        imgUrls={post.imgUrls}
+                                    />
+                                )}
+                                {hasNext && index === postsQuery?.getPosts.length - 10 && (
+                                    <Waypoint
+                                        onEnter={({ previousPosition, currentPosition, event }) => {
+                                            return fetchMore({
+                                                variables: {
+                                                    skip: skip,
+                                                    limit: 10,
+                                                },
+                                                updateQuery: (pv, { fetchMoreResult }) => {
+                                                    if (!fetchMoreResult) {
+                                                        return pv;
+                                                    }
+                                                    if (fetchMoreResult.getPosts.length < 10) {
+                                                        setHasNext({
+                                                            hasNext: false,
+                                                            skip: skip + fetchMoreResult.getPosts.length,
+                                                        });
+                                                    } else {
+                                                        setHasNext({
+                                                            hasNext: true,
+                                                            skip: skip + fetchMoreResult.getPosts.length,
+                                                        });
+                                                    }
+                                                    return {
+                                                        getPosts: [...pv.getPosts, ...fetchMoreResult.getPosts],
+                                                    };
+                                                },
+                                            });
+                                        }}
+                                    />
+                                )}
+                            </Fragment>
                         );
                     })}
+                    {networkStatus === 3 && <LinearProgress className={classes.columnItem} />}
                 </div>
             </div>
         </Layout>
@@ -142,7 +203,7 @@ export const getStaticProps: GetStaticProps = async (url) => {
         const tid = url.params?.tid;
         const apolloClient = initializeApollo();
         await apolloClient.query({
-            query: GetTeamPageDocument,
+            query: GetTeamPageStaticDocument,
             variables: { teamID: tid },
         });
         return { props: { id: tid, initialApolloState: apolloClient.cache.extract() } };

@@ -111,7 +111,7 @@ export class PostResolver {
         return true;
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => Post)
     @UseMiddleware(isAuth, isMember)
     async addPost(
         @Arg("teamID") teamID: string,
@@ -119,9 +119,9 @@ export class PostResolver {
         @Ctx() { payload }: ResReq,
         @Arg("isPrivate", { nullable: true }) isPrivate?: boolean,
         @Arg("imgUrls", () => [String], { nullable: true }) imgUrls?: string[],
-    ) {
+    ): Promise<Post> {
         const team = await TeamModel.findById(teamID);
-        if (!team) return false;
+        if (!team) throw new Error("Team not found");
         try {
             const post = new Post();
             post.content = content;
@@ -134,11 +134,18 @@ export class PostResolver {
             }
             team.posts.push(post);
             await team.save();
+            const postID = team.posts[team.posts.length - 1]._id;
+            const posts = await TeamModel.aggregate([
+                { $match: { _id: new ObjectID(teamID) } },
+                { $project: { posts: 1 } },
+                { $unwind: "$posts" },
+                { $match: { "posts._id": new ObjectID(postID) } },
+            ]);
+            return posts[0].posts;
         } catch (e) {
             console.log(e);
-            return false;
+            throw new Error("Server Error");
         }
-        return true;
     }
 
     @Mutation(() => Boolean)
