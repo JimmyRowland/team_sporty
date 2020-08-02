@@ -6,6 +6,13 @@ query GetPosts($teamID: String!,$limit:Int!,$skip:Int!) {
         imgUrls
         numberOfLikes
         lastModifyDate
+        comments{
+            content
+            user{
+                name
+                avatarUrl
+            }
+        }
         user{
             name
             avatarUrl

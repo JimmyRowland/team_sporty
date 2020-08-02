@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     },
     field: {
         display: "block",
-        width: "80%",
+        width: "95%",
         height: "150px",
         borderRadius: 15,
         resize: "none",
@@ -188,6 +188,7 @@ export default function PostCreator({
                     variant={"outlined"}
                     multiline
                     fullWidth
+                    placeholder="Post Something"
                     rows={6}
                 />
                 <div>

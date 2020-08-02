@@ -13,11 +13,17 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {
     GetPostsDocument,
-    GetPostsQueryHookResult,
-    GetPostsQueryResult,
     usePinPostMutation,
+    useAddPostCommentMutation,
+    useUserLikedPostQuery,
 } from "../../generated/graphql";
-import query from "apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery";
+import RoomIcon from "@material-ui/icons/Room";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Collapse } from "@material-ui/core";
+import clsx from "clsx";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Likes from "./Likes/likes";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,12 +54,14 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "row",
         },
         comment: {
-            paddingLeft: 10,
+            width: "100%",
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
         },
         body: {
             paddingLeft: "2em",
             paddingRight: "2em",
-            marginBottom: "2em",
+            marginBottom: "1em",
             display: "inlined-block",
             overflowWrap: "break-word",
         },
@@ -72,8 +80,98 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: "wrap",
             justifyContent: "start",
         },
+        pin: {
+            paddingLeft: theme.spacing(2),
+            paddingTop: theme.spacing(2),
+            display: "flex",
+        },
+        pinElement: {
+            paddingTop: 5,
+            paddingLeft: 2,
+        },
+        commentField: {
+            width: "80%",
+        },
+        commentButton: {
+            width: "10%",
+            marginTop: theme.spacing(1),
+            marginLeft: theme.spacing(1),
+        },
+        commentDisplay: {
+            marginTop: theme.spacing(2),
+        },
+        commentInput: {
+            display: "flex",
+            justifyContent: "center",
+        },
+        buttonleft: {
+            float: "left",
+            marginLeft: theme.spacing(1),
+        },
+        buttonRight: {
+            textAlign: "right",
+            marginRight: theme.spacing(1),
+            marginTop: theme.spacing(1),
+        },
     }),
 );
+
+const PinMenu = ({ anchorEl, handlePin, isPinned }: { anchorEl: any; handlePin: any; isPinned: boolean }) => {
+    return (
+        <div>
+            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+                <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
+            </Menu>
+        </div>
+    );
+};
+
+const PinButton = ({ isCoach, handleClick }: { isCoach: boolean; handleClick: any }) => {
+    return isCoach ? (
+        <IconButton aria-label="settings" onClick={handleClick}>
+            <MoreVertIcon />
+        </IconButton>
+    ) : null;
+};
+
+const CommentComponent = ({ comment, classes }: { comment: any; classes: any }) => {
+    return (
+        <Card className={classes.commentDisplay} variant="outlined">
+            <CardHeader
+                avatar={<Avatar src={comment.user.avatarUrl} />}
+                title={<Typography>{comment.user.name}</Typography>}
+            />
+            <Typography className={classes.body}>{comment.content}</Typography>
+        </Card>
+    );
+};
+
+const ImageDisplay = ({ imgUrls, classes }: { imgUrls: string[]; classes: any }) => {
+    return imgUrls ? (
+        <div className={classes.imageDisplayContainer}>
+            {imgUrls.map((image, index) => (
+                <Card className={classes.imageCard} key={index}>
+                    <CardMedia
+                        component="img"
+                        alt="UploadedPhoto"
+                        image={image}
+                        title="UploadedPhoto"
+                        className={classes.image}
+                    />
+                </Card>
+            ))}
+        </div>
+    ) : null;
+};
+
+const PinDisplay = ({ isPinned, classes }: { isPinned: boolean; classes: any }) => {
+    return isPinned ? (
+        <div className={classes.pin}>
+            <RoomIcon />
+            <Typography className={classes.pinElement}> This post is pinned </Typography>
+        </div>
+    ) : null;
+};
 
 export default function PostComponent({
     content,
@@ -85,6 +183,7 @@ export default function PostComponent({
     isCoach,
     avatarUrl,
     imgUrls,
+    comments,
     index,
 }: {
     index: number;
@@ -97,11 +196,22 @@ export default function PostComponent({
     isCoach: boolean;
     avatarUrl: string;
     imgUrls: string[];
+    comments: any;
 }) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation();
     const divref = React.useRef<any>();
+    const [expanded, setExpanded] = React.useState(false);
+    const [addComment] = useAddPostCommentMutation();
+    const { data, refetch } = useUserLikedPostQuery({ variables: { postID: postID } });
+
+    const [commentInput, setCommentInput] = React.useState("");
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(divref.current);
     };
@@ -130,44 +240,19 @@ export default function PostComponent({
         });
     };
 
-    const PinMenu = () => {
-        return (
-            <div>
-                <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
-                </Menu>
-            </div>
-        );
+    const handleComment = () => {
+        addComment({ variables: { teamID: teamID, content: commentInput, postID: postID } }).then(() => {
+            setCommentInput("");
+        });
     };
 
-    const PinButton = () => {
-        return isCoach ? (
-            <IconButton aria-label="settings" onClick={handleClick}>
-                <MoreVertIcon />
-            </IconButton>
-        ) : null;
-    };
-
-    const ImageDisplay = () => {
-        return imgUrls ? (
-            <div className={classes.imageDisplayContainer}>
-                {imgUrls.map((image, index) => (
-                    <Card className={classes.imageCard} key={index}>
-                        <CardMedia
-                            component="img"
-                            alt="UploadedPhoto"
-                            image={image}
-                            title="UploadedPhoto"
-                            className={classes.image}
-                        />
-                    </Card>
-                ))}
-            </div>
-        ) : null;
+    const onCommentChange = (e) => {
+        setCommentInput(e.target.value);
     };
 
     return (
         <Card className={classes.root}>
+            <PinDisplay />
             <CardHeader
                 avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
                 title={<Typography> {firstName} </Typography>}
@@ -184,7 +269,54 @@ export default function PostComponent({
                     {content}
                 </Typography>
                 <ImageDisplay />
+                <div className={classes.buttonRight}>
+                    <Likes postID={postID} />
+                    <IconButton
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: expanded,
+                        })}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    >
+                        <ExpandMoreIcon />
+                    </IconButton>
+                </div>
             </CardContent>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent className={classes.comment}>
+                    <div className={classes.commentInput}>
+                        <TextField
+                            onChange={(e) => onCommentChange(e)}
+                            variant="outlined"
+                            placeholder="Comment something"
+                            fullWidth
+                            className={classes.commentField}
+                            value={commentInput}
+                        />
+                        <Button onClick={handleComment} className={classes.commentButton}>
+                            Send
+                        </Button>
+                    </div>
+                    <div>
+                        {comments?.map((comment) => {
+                            return <CommentComponent comment={comment} />;
+                        })}
+                    </div>
+                    <div className={classes.buttonRight}>
+                        <IconButton
+                            className={clsx(classes.expand, {
+                                [classes.expandOpen]: expanded,
+                            })}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreIcon />
+                        </IconButton>
+                    </div>
+                </CardContent>
+            </Collapse>
         </Card>
     );
 }

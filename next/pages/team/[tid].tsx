@@ -38,6 +38,7 @@ const useStyles = makeStyles({
         flexBasis: "25%",
         maxWidth: "30%",
         minWidth: "250px",
+        minHeight: "650px",
     },
     rightColumn: {
         marginLeft: "1em",
@@ -128,6 +129,7 @@ function TeamPage({ id, errors }: Props) {
                                     teamID={id}
                                     isCoach={events?.getTeam.isCoach}
                                     imgUrls={post.imgUrls}
+                                    comments={post.comments}
                                 />
                             );
                         })}

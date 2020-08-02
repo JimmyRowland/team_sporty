@@ -22,6 +22,14 @@ export class PostUserResponse {
 }
 
 @ObjectType()
+export class LikedPostResponse{
+    @Field(() => Boolean)
+    isLiked: boolean;
+    @Field(() => Number)
+    likedNum: number;
+}
+
+@ObjectType()
 export class EventUserResponse {
     @Field(() => Event)
     post: Event;

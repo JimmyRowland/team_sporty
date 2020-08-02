@@ -14,6 +14,13 @@ query GetTeamPageStatic($teamID: String!) {
         imgUrls
         numberOfLikes
         lastModifyDate
+        comments{
+            content
+            user{
+                name
+                avatarUrl
+            }
+        }
         user{
             name
             avatarUrl
