@@ -242,7 +242,7 @@ export default function PostComponent({
         return isPinned ? (
             <div className={classes.pin}>
                 <RoomIcon />
-                <Typography variant="h7" className={classes.pinElement}>
+                <Typography className={classes.pinElement}>
                     {" "}
                     This post is pinned{" "}
                 </Typography>
