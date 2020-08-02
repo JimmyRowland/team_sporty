@@ -11,7 +11,7 @@ import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { CloudinaryImageUpload } from "../../lib/cloudinary";
-import {TextField} from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 const useStyles = makeStyles({
     root: {
@@ -157,13 +157,14 @@ export default function PostCreator({ teamID }: { teamID: string }) {
                 <Typography color="textPrimary" className={classes.title}>
                     New Post
                 </Typography>
-                <TextField className={classes.field}
-                           onChange={(e) => setContent(e.target.value)}
-                           value={content}
-                           variant={"outlined"}
-                           multiline
-                           fullWidth
-                           rows={6}
+                <TextField
+                    className={classes.field}
+                    onChange={(e) => setContent(e.target.value)}
+                    value={content}
+                    variant={"outlined"}
+                    multiline
+                    fullWidth
+                    rows={6}
                 />
                 <div>
                     <ImageDisplay />

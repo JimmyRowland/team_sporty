@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import { EventUserResEnum, useGetAllTeamsAndEventsQuery, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 import { Avatar } from "@material-ui/core";
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ControlledExpansionPanels() {
     const classes = useStyles();
     // graphql
-    const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
+    const { data, loading, error, refetch } = useGetAllTeamsAndEventsQuery();
     const selectedTeam = useSelector(selectTeamState);
     const mequery = useMeQuery();
 

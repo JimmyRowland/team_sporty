@@ -19,7 +19,12 @@ query GetTeamPage($teamID: String!) {
             }
         }
         isCoach
-
+    }
+    getEventsOfOneTeam(limit:3, skip:0, teamID:$teamID) {
+        _id
+        name
+        startDate
+        address
     }
 }
 

@@ -26,13 +26,9 @@ function PersonalPage() {
             <div className={classes.container}>
                 <div className={classes.columnContainer}>
                     <PersonalCalendar />
-                    {/* <CardPersonalPage title="UPCOMING...">
-                        <EventList />
-                    </CardPersonalPage> */}
                 </div>
                 <div className={classes.columnContainer}>
                     <PersonalTeamList />
-                    {/* <TeamList /> */}
                 </div>
             </div>
         </div>

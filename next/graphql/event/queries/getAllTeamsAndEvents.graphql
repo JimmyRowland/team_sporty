@@ -1,4 +1,4 @@
-query GetEventsAsCoachOrMember {
+query getAllTeamsAndEvents {
     getTeamsAsMemberOrCoach {
         team{
             name

@@ -8,8 +8,6 @@ import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
-import { LoadingMembers } from "../../components/components/loadingComponents/LoadingMembers";
-import { useGetEventsAsCoachOrMemberQuery, useMeQuery } from "../../generated/graphql";
 
 const useStyles = makeStyles({
     container: {
@@ -77,35 +75,7 @@ function TeamPage({ id, errors }: Props) {
         },
         pollInterval: 500,
     });
-
-    const {
-        data: eventsData,
-        loading: eventsLoading,
-        error: eventsError,
-        refetch: eventsRefetch,
-    } = useGetEventsAsCoachOrMemberQuery();
-    const mequery = useMeQuery();
-    if (eventsLoading || mequery.loading) {
-        return <div>loading...</div>;
-    }
-    if (eventsError) {
-        console.log(error);
-        return <div>err</div>;
-    }
-    if (!eventsData || !eventsData.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
-        return <div>no data</div>;
-    }
-    let events: any = [];
-    const team = eventsData.getTeamsAsMemberOrCoach.find((value) => {
-        return value.team._id === data?.getTeam.team._id;
-    });
-    events = team && team.team.events ? team.team.events : [];
-    const condensedList = events.slice(0, 3);
-
-    if (loading || error || !data || !data.getTeam) {
-        return <LoadingMembers />;
-    }
-    console.log(data);
+    const events = data.getEventsOfOneTeam;
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
@@ -114,7 +84,7 @@ function TeamPage({ id, errors }: Props) {
                         isCoach={data.getTeam.isCoach}
                         imgUrl={data.getTeam.team.imgUrl}
                         name={data.getTeam.team.name}
-                        events={condensedList}
+                        events={events}
                         id={data.getTeam.team._id}
                         description={data.getTeam.team.description}
                     />
@@ -141,24 +111,6 @@ function TeamPage({ id, errors }: Props) {
                     <div className={classes.columnItem}>
                         <PostCreator teamID={id} />
                     </div>
-                    {/*<div className={classes.columnItem}>*/}
-                    {/*    <Card className={classes.rosterCard}>*/}
-                    {/*        <div className={classes.rosterText}>*/}
-                    {/*            <Typography variant={"h5"}>Roster</Typography>*/}
-                    {/*        </div>*/}
-                    {/*        <div className={classes.rosterContainer}>*/}
-                    {/*            {posts.map((name, index) => {*/}
-                    {/*                return (*/}
-                    {/*                    <div key={index} className={classes.rosterAvatar}>*/}
-                    {/*                        /!*<Link href={"/"}>*!/*/}
-                    {/*                        <Avatar key={index}>{name}</Avatar>*/}
-                    {/*                        /!*</Link>*!/*/}
-                    {/*                    </div>*/}
-                    {/*                );*/}
-                    {/*            })}*/}
-                    {/*        </div>*/}
-                    {/*    </Card>*/}
-                    {/*</div>*/}
                     {data?.getTeam.team.posts?.map((post, index) => {
                         return post.isPined ? null : (
                             <PostComponent

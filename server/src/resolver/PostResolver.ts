@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx, UseMiddleware, FieldResolver, Root } from "type-graphql";
+import { Resolver, Mutation, Arg, Ctx, UseMiddleware, FieldResolver, Root, Query, Int } from "type-graphql";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { isCoach } from "../middleware/isCoach";
@@ -10,9 +10,45 @@ import { LikesMapModel } from "../entities/LikesMap";
 import { isCoachPayload } from "../middleware/isCoachPayload";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 import { User, UserModel } from "../entities/User";
+import { GetTeamResponse } from "../interfaces/responseType";
+import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
+import { isMemberPayload } from "../middleware/isMemberPayload";
 
 @Resolver(() => Post)
 export class PostResolver {
+    @Query(() => [Post])
+    @UseMiddleware(getIDfromToken, isMemberPayload)
+    async getPosts(
+        @Arg("teamID") teamID: string,
+        @Arg("skip", () => Int) skip: number,
+        @Arg("limit", () => Int) limit: number,
+        @Ctx() { res, payload }: ResReq,
+    ): Promise<Post[]> {
+        let team: any;
+        if (!payload.isMember) {
+            team = await TeamModel.aggregate([
+                { $match: { _id: new ObjectID(teamID) } },
+                { $project: { posts: 1 } },
+                { $unwind: "$posts" },
+                { $match: { "posts.isPrivate": false } },
+                { $sort: { "posts.isPined": -1, "posts.creationDate": -1 } },
+                { $skip: skip },
+                { $limit: limit },
+            ]);
+        } else {
+            team = await TeamModel.aggregate([
+                { $match: { _id: new ObjectID(teamID) } },
+                { $project: { posts: 1 } },
+                { $unwind: "$posts" },
+                { $sort: { "posts.isPined": -1, "posts.creationDate": -1 } },
+                { $skip: skip },
+                { $limit: limit },
+            ]);
+        }
+        team = team.map(({ posts }: { posts: Post; _id: string }) => posts);
+        return team;
+    }
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
     async pinPost(

@@ -5,7 +5,8 @@ import { User } from "./User";
 import { Comment } from "./Comment";
 import { LikesMapModel } from "./LikesMap";
 @ObjectType()
-@index({ _id: 1 })
+@index({ isPined: -1, creationDate: 1 })
+@index({ isPined: -1, _id: 1 })
 export class Post extends CreationAndModificationDate {
     @Field()
     @prop({ required: false })
