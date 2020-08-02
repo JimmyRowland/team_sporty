@@ -81,6 +81,12 @@ export type GetTeamsResponse = {
   team: Team;
 };
 
+export type LikedPostResponse = {
+  __typename?: 'LikedPostResponse';
+  isLiked: Scalars['Boolean'];
+  likedNum: Scalars['Float'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -114,7 +120,6 @@ export type Mutation = {
   newTeam: Scalars['Boolean'];
   pinPost: Scalars['Boolean'];
   setPostPrivate: Scalars['Boolean'];
-  likePost: Scalars['Boolean'];
   addPost: Scalars['Boolean'];
   addPostComment: Scalars['Boolean'];
   deletePost: Scalars['Boolean'];
@@ -124,6 +129,7 @@ export type Mutation = {
   editEvent: Scalars['Boolean'];
   allUserApplyTeam: Scalars['Boolean'];
   removeAllEvent: Scalars['Boolean'];
+  likePost: Scalars['Boolean'];
 };
 
 
@@ -265,11 +271,6 @@ export type MutationSetPostPrivateArgs = {
 };
 
 
-export type MutationLikePostArgs = {
-  postID: Scalars['String'];
-};
-
-
 export type MutationAddPostArgs = {
   imgUrls?: Maybe<Array<Scalars['String']>>;
   isPrivate?: Maybe<Scalars['Boolean']>;
@@ -332,6 +333,11 @@ export type MutationAllUserApplyTeamArgs = {
   teamID: Scalars['String'];
 };
 
+
+export type MutationLikePostArgs = {
+  postID: Scalars['String'];
+};
+
 export type Post = {
   __typename?: 'Post';
   _id: Scalars['ID'];
@@ -358,6 +364,7 @@ export type Query = {
   getTeamsAsMember: Array<Team>;
   getTeamsAsMemberOrCoach: Array<GetTeamResponse>;
   getTeam: GetTeamResponse;
+  userLikedPost: LikedPostResponse;
 };
 
 
@@ -378,6 +385,11 @@ export type QueryGetMembersArgs = {
 
 export type QueryGetTeamArgs = {
   teamID: Scalars['String'];
+};
+
+
+export type QueryUserLikedPostArgs = {
+  postID: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -606,6 +618,19 @@ export type SetPostPrivateMutationVariables = Exact<{
 export type SetPostPrivateMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'setPostPrivate'>
+);
+
+export type UserLikedPostQueryVariables = Exact<{
+  postID: Scalars['String'];
+}>;
+
+
+export type UserLikedPostQuery = (
+  { __typename?: 'Query' }
+  & { userLikedPost: (
+    { __typename?: 'LikedPostResponse' }
+    & Pick<LikedPostResponse, 'isLiked' | 'likedNum'>
+  ) }
 );
 
 export type AddCoachMutationVariables = Exact<{
@@ -1465,6 +1490,40 @@ export function useSetPostPrivateMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type SetPostPrivateMutationHookResult = ReturnType<typeof useSetPostPrivateMutation>;
 export type SetPostPrivateMutationResult = ApolloReactCommon.MutationResult<SetPostPrivateMutation>;
 export type SetPostPrivateMutationOptions = ApolloReactCommon.BaseMutationOptions<SetPostPrivateMutation, SetPostPrivateMutationVariables>;
+export const UserLikedPostDocument = gql`
+    query userLikedPost($postID: String!) {
+  userLikedPost(postID: $postID) {
+    isLiked
+    likedNum
+  }
+}
+    `;
+
+/**
+ * __useUserLikedPostQuery__
+ *
+ * To run a query within a React component, call `useUserLikedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserLikedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserLikedPostQuery({
+ *   variables: {
+ *      postID: // value for 'postID'
+ *   },
+ * });
+ */
+export function useUserLikedPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserLikedPostQuery, UserLikedPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserLikedPostQuery, UserLikedPostQueryVariables>(UserLikedPostDocument, baseOptions);
+      }
+export function useUserLikedPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserLikedPostQuery, UserLikedPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserLikedPostQuery, UserLikedPostQueryVariables>(UserLikedPostDocument, baseOptions);
+        }
+export type UserLikedPostQueryHookResult = ReturnType<typeof useUserLikedPostQuery>;
+export type UserLikedPostLazyQueryHookResult = ReturnType<typeof useUserLikedPostLazyQuery>;
+export type UserLikedPostQueryResult = ApolloReactCommon.QueryResult<UserLikedPostQuery, UserLikedPostQueryVariables>;
 export const AddCoachDocument = gql`
     mutation AddCoach($teamID: String!, $userID: String!) {
   addCoach(teamID: $teamID, userID: $userID)

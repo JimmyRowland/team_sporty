@@ -57,26 +57,6 @@ export class PostResolver {
     }
 
     @Mutation(() => Boolean)
-    @UseMiddleware(isAuth)
-    async likePost(@Arg("postID") postID: string, @Ctx() { payload }: ResReq) {
-        const removed = await LikesMapModel.findOneAndRemove({ "_id.post": postID });
-        if (removed) return true;
-        try {
-            const likesPair = new LikesMapModel({
-                _id: {
-                    post: postID,
-                    user: payload._id,
-                },
-            });
-            await likesPair.save();
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
-        return true;
-    }
-
-    @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isMember)
     async addPost(
         @Arg("teamID") teamID: string,
