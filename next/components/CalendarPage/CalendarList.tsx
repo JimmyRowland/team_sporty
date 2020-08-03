@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function ControlledExpansionPanels(): ReactNode {
+export default function ControlledExpansionPanels() {
     const classes = useStyles();
     // graphql
     const { data, error, refetch } = useGetAllTeamsAndEventsQuery();
