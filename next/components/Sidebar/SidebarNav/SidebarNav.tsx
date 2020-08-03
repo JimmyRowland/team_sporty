@@ -72,7 +72,7 @@ const SidebarNav = () => {
         },
         {
             title: "Account change avatar, address sport and more",
-            href: "/account",
+            href: "/settings/account",
             icon: <AccountBoxIcon />,
         },
         {
@@ -107,7 +107,14 @@ const SidebarNav = () => {
                 <List component="div" disablePadding className={classes.nested}>
                     {!loading && data && data.getTeamsAsMemberOrCoach
                         ? data.getTeamsAsMemberOrCoach.map((team, index) => {
-                              return <NestedTeamItem team={team} key={index} />;
+                              return (
+                                  <NestedTeamItem
+                                      _id={team.team._id}
+                                      name={team.team.name}
+                                      isCoach={team.isCoach}
+                                      key={index}
+                                  />
+                              );
                           })
                         : null}
                 </List>

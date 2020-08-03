@@ -1,0 +1,23 @@
+query GetTeamPageStatic($teamID: String!) {
+    getTeam(teamID:$teamID) {
+        team{
+            name
+            _id
+            imgUrl
+            description
+        }
+    }
+    getPosts(teamID:$teamID, limit:10, skip:0){
+        content
+        _id
+        isPined
+        imgUrls
+        numberOfLikes
+        lastModifyDate
+        user{
+            name
+            avatarUrl
+        }
+    }
+}
+

@@ -53,12 +53,12 @@ export default function PersonalInfoTab() {
                 <p>
                     <Typography variant={"h6"} className={classes.text}>
                         {" "}
-                        {info.intro}{" "}
+                        {data?.me?.introduction}{" "}
                     </Typography>
                 </p>
             </div>
             <div>
-                <EditPopUp />
+                <EditPopUp info={data?.me?.introduction} />
             </div>
         </Card>
     );

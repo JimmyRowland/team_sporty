@@ -29,4 +29,11 @@ export enum EventTypeEnum {
     training = "training",
 }
 
+export enum SportEnum {
+    football = "football",
+    cricket = "cricket",
+    basketball = "basketball",
+    unspecified = "",
+}
+
 export const eventTypeList: string[] = ["match", "training"];

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../../../lib/redux";
+import { RootState } from "../../../lib/redux";
 
 interface EditPersonalInfoState {
     name: string;

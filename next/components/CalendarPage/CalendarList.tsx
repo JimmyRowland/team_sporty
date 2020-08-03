@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
-import { useGetEventsAsCoachOrMemberQuery, EventUserResEnum, useMeQuery } from "../../generated/graphql";
+import { EventUserResEnum, useGetAllTeamsAndEventsQuery, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 import { Avatar } from "@material-ui/core";
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ControlledExpansionPanels() {
     const classes = useStyles();
     // graphql
-    const { data, loading, error, refetch } = useGetEventsAsCoachOrMemberQuery();
+    const { data, loading, error, refetch } = useGetAllTeamsAndEventsQuery();
     const selectedTeam = useSelector(selectTeamState);
     const mequery = useMeQuery();
 
@@ -42,11 +42,17 @@ export default function ControlledExpansionPanels() {
         return <div>err</div>;
     }
 
-    if (!data || !data.getTeamsAsMemberOrCoach || !mequery.data || !mequery.data.me) {
+    if (
+        !data ||
+        !data.getTeamsAsMemberOrCoach ||
+        !data.getTeamsAsMemberOrCoach[0] ||
+        !mequery.data ||
+        !mequery.data.me
+    ) {
         return <div>no data</div>;
     }
 
-    let events: any = [];
+    let events = data.getTeamsAsMemberOrCoach[0].team.events.slice(0, 0);
     if (selectedTeam.name === "All") {
         for (const team of data.getTeamsAsMemberOrCoach) {
             events = team.team.events ? events.concat(team.team.events) : events;
@@ -57,6 +63,8 @@ export default function ControlledExpansionPanels() {
         });
         events = team && team.team.events ? team.team.events : [];
     }
+    events.sort((event1, event2) => new Date(event1.startDate).getTime() - new Date(event2.startDate).getTime());
+
     return (
         <div className={classes.root}>
             {events.map((event: any, index: number) => {

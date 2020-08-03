@@ -1,0 +1,6 @@
+query userLikedPost($postID: String!){
+    userLikedPost(postID: $postID){
+        isLiked
+        likedNum
+    }
+}

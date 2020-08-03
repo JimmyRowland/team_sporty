@@ -22,6 +22,16 @@ export type Comment = {
     user: User;
 };
 
+export type EditProfileInput = {
+    firstName: Scalars["String"];
+    lastName: Scalars["String"];
+    email: Scalars["String"];
+    address: Scalars["String"];
+    phone: Scalars["String"];
+    introduction: Scalars["String"];
+    sport: Scalars["String"];
+};
+
 export type Event = {
     __typename?: "Event";
     _id: Scalars["ID"];
@@ -66,7 +76,14 @@ export type GetTeamsResponse = {
     __typename?: "GetTeamsResponse";
     isMember: Scalars["Boolean"];
     isCoach: Scalars["Boolean"];
+    isPending: Scalars["Boolean"];
     team: Team;
+};
+
+export type LikedPostResponse = {
+    __typename?: "LikedPostResponse";
+    isLiked: Scalars["Boolean"];
+    likedNum: Scalars["Float"];
 };
 
 export type LoginResponse = {
@@ -83,6 +100,8 @@ export type Mutation = {
     register: Scalars["Boolean"];
     uploadAvatar: Scalars["Boolean"];
     uploadBanner: Scalars["Boolean"];
+    uploadIntro: Scalars["Boolean"];
+    editProfile: Scalars["Boolean"];
     updateTeam: Scalars["Boolean"];
     addMember: Scalars["Boolean"];
     addMembers: Scalars["Boolean"];
@@ -101,7 +120,8 @@ export type Mutation = {
     pinPost: Scalars["Boolean"];
     setPostPrivate: Scalars["Boolean"];
     likePost: Scalars["Boolean"];
-    addPost: Scalars["Boolean"];
+    addPost: Post;
+    addPostComment: Scalars["Boolean"];
     deletePost: Scalars["Boolean"];
     editPost: Scalars["Boolean"];
     addEvent: Scalars["Boolean"];
@@ -130,6 +150,14 @@ export type MutationUploadAvatarArgs = {
 
 export type MutationUploadBannerArgs = {
     bannerUrl: Scalars["String"];
+};
+
+export type MutationUploadIntroArgs = {
+    intro: Scalars["String"];
+};
+
+export type MutationEditProfileArgs = {
+    input: EditProfileInput;
 };
 
 export type MutationUpdateTeamArgs = {
@@ -201,8 +229,7 @@ export type MutationAddCoachesArgs = {
 };
 
 export type MutationNewTeamArgs = {
-    sport?: Maybe<Scalars["String"]>;
-    imgUrl?: Maybe<Scalars["String"]>;
+    sport: Scalars["String"];
     name: Scalars["String"];
 };
 
@@ -225,6 +252,12 @@ export type MutationLikePostArgs = {
 export type MutationAddPostArgs = {
     imgUrls?: Maybe<Array<Scalars["String"]>>;
     isPrivate?: Maybe<Scalars["Boolean"]>;
+    content: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationAddPostCommentArgs = {
+    postID: Scalars["String"];
     content: Scalars["String"];
     teamID: Scalars["String"];
 };
@@ -297,6 +330,11 @@ export type Query = {
     getTeamsAsMember: Array<Team>;
     getTeamsAsMemberOrCoach: Array<GetTeamResponse>;
     getTeam: GetTeamResponse;
+    getPosts: Array<Post>;
+    getEventsOfAllTeams: Array<Event>;
+    getEventsOfOneTeam: Array<Event>;
+    getComments: Array<Comment>;
+    userLikedPost: LikedPostResponse;
 };
 
 export type QueryGetPendingsArgs = {
@@ -313,6 +351,32 @@ export type QueryGetMembersArgs = {
 
 export type QueryGetTeamArgs = {
     teamID: Scalars["String"];
+};
+
+export type QueryGetPostsArgs = {
+    limit: Scalars["Int"];
+    skip: Scalars["Int"];
+    teamID: Scalars["String"];
+};
+
+export type QueryGetEventsOfAllTeamsArgs = {
+    limit: Scalars["Int"];
+    skip: Scalars["Int"];
+};
+
+export type QueryGetEventsOfOneTeamArgs = {
+    limit: Scalars["Int"];
+    skip: Scalars["Int"];
+    teamID: Scalars["String"];
+};
+
+export type QueryGetCommentsArgs = {
+    postID: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type QueryUserLikedPostArgs = {
+    postID: Scalars["String"];
 };
 
 export type RegisterInput = {
@@ -339,7 +403,7 @@ export type Team = {
     posts?: Maybe<Array<Post>>;
     events?: Maybe<Array<Event>>;
     sport: Sport;
-    imgUrl?: Maybe<Scalars["String"]>;
+    imgUrl: Scalars["String"];
     numberMembers: Scalars["Int"];
 };
 
@@ -355,6 +419,7 @@ export type User = {
     tokenVersion: Scalars["Int"];
     address: Scalars["String"];
     phone: Scalars["String"];
+    introduction: Scalars["String"];
     ip: Array<Scalars["String"]>;
     sport: Array<Sport>;
     bannerUrls: Scalars["String"];
@@ -400,9 +465,9 @@ export type SetGoingMutationVariables = Exact<{
 
 export type SetGoingMutation = { __typename?: "Mutation" } & Pick<Mutation, "setGoing">;
 
-export type GetEventsAsCoachOrMemberQueryVariables = Exact<{ [key: string]: never }>;
+export type GetAllTeamsAndEventsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetEventsAsCoachOrMemberQuery = { __typename?: "Query" } & {
+export type GetAllTeamsAndEventsQuery = { __typename?: "Query" } & {
     getTeamsAsMemberOrCoach: Array<
         { __typename?: "GetTeamResponse" } & Pick<GetTeamResponse, "isCoach"> & {
                 team: { __typename?: "Team" } & Pick<Team, "name" | "_id"> & {
@@ -431,11 +496,30 @@ export type GetEventsAsCoachOrMemberQuery = { __typename?: "Query" } & {
     >;
 };
 
-export type GetEventsForOneTeamQueryVariables = Exact<{
+export type GetEventsOfAllTeamsQueryVariables = Exact<{
+    skip: Scalars["Int"];
+    limit: Scalars["Int"];
+}>;
+
+export type GetEventsOfAllTeamsQuery = { __typename?: "Query" } & {
+    getEventsOfAllTeams: Array<{ __typename?: "Event" } & Pick<Event, "_id" | "name" | "startDate" | "address">>;
+};
+
+export type GetEventsOfOneTeamQueryVariables = Exact<{
+    skip: Scalars["Int"];
+    limit: Scalars["Int"];
     teamID: Scalars["String"];
 }>;
 
-export type GetEventsForOneTeamQuery = { __typename?: "Query" } & {
+export type GetEventsOfOneTeamQuery = { __typename?: "Query" } & {
+    getEventsOfOneTeam: Array<{ __typename?: "Event" } & Pick<Event, "_id" | "name" | "startDate" | "address">>;
+};
+
+export type GetTeamAndEventsQueryVariables = Exact<{
+    teamID: Scalars["String"];
+}>;
+
+export type GetTeamAndEventsQuery = { __typename?: "Query" } & {
     getTeam: { __typename?: "GetTeamResponse" } & Pick<GetTeamResponse, "isCoach"> & {
             team: { __typename?: "Team" } & Pick<Team, "name" | "_id"> & {
                     events?: Maybe<
@@ -457,7 +541,20 @@ export type AddPostMutationVariables = Exact<{
     teamID: Scalars["String"];
 }>;
 
-export type AddPostMutation = { __typename?: "Mutation" } & Pick<Mutation, "addPost">;
+export type AddPostMutation = { __typename?: "Mutation" } & {
+    addPost: { __typename?: "Post" } & Pick<
+        Post,
+        "content" | "_id" | "isPined" | "imgUrls" | "numberOfLikes" | "lastModifyDate"
+    > & { user: { __typename?: "User" } & Pick<User, "name" | "avatarUrl"> };
+};
+
+export type AddPostCommentMutationVariables = Exact<{
+    teamID: Scalars["String"];
+    content: Scalars["String"];
+    postID: Scalars["String"];
+}>;
+
+export type AddPostCommentMutation = { __typename?: "Mutation" } & Pick<Mutation, "addPostComment">;
 
 export type DeletePostMutationVariables = Exact<{
     postID: Scalars["String"];
@@ -496,6 +593,42 @@ export type SetPostPrivateMutationVariables = Exact<{
 
 export type SetPostPrivateMutation = { __typename?: "Mutation" } & Pick<Mutation, "setPostPrivate">;
 
+export type GetCommentsQueryVariables = Exact<{
+    teamID: Scalars["String"];
+    postID: Scalars["String"];
+}>;
+
+export type GetCommentsQuery = { __typename?: "Query" } & {
+    getComments: Array<
+        { __typename?: "Comment" } & Pick<Comment, "content"> & {
+                user: { __typename?: "User" } & Pick<User, "name" | "avatarUrl">;
+            }
+    >;
+};
+
+export type GetPostsQueryVariables = Exact<{
+    teamID: Scalars["String"];
+    limit: Scalars["Int"];
+    skip: Scalars["Int"];
+}>;
+
+export type GetPostsQuery = { __typename?: "Query" } & {
+    getPosts: Array<
+        { __typename?: "Post" } & Pick<
+            Post,
+            "content" | "_id" | "isPined" | "imgUrls" | "numberOfLikes" | "lastModifyDate"
+        > & { user: { __typename?: "User" } & Pick<User, "name" | "avatarUrl"> }
+    >;
+};
+
+export type UserLikedPostQueryVariables = Exact<{
+    postID: Scalars["String"];
+}>;
+
+export type UserLikedPostQuery = { __typename?: "Query" } & {
+    userLikedPost: { __typename?: "LikedPostResponse" } & Pick<LikedPostResponse, "isLiked" | "likedNum">;
+};
+
 export type AddCoachMutationVariables = Exact<{
     teamID: Scalars["String"];
     userID: Scalars["String"];
@@ -531,8 +664,7 @@ export type ApplyTeamMutationVariables = Exact<{
 export type ApplyTeamMutation = { __typename?: "Mutation" } & Pick<Mutation, "applyTeam">;
 
 export type NewTeamMutationVariables = Exact<{
-    sport?: Maybe<Scalars["String"]>;
-    imgUrl?: Maybe<Scalars["String"]>;
+    sport: Scalars["String"];
     name: Scalars["String"];
 }>;
 
@@ -582,6 +714,7 @@ export type UpdateTeamMutationVariables = Exact<{
     sport: Scalars["String"];
     teamID: Scalars["String"];
     name: Scalars["String"];
+    description: Scalars["String"];
 }>;
 
 export type UpdateTeamMutation = { __typename?: "Mutation" } & Pick<Mutation, "updateTeam">;
@@ -644,6 +777,19 @@ export type GetPendingsQuery = { __typename?: "Query" } & {
     >;
 };
 
+export type GetSearchTeamsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSearchTeamsQuery = { __typename?: "Query" } & {
+    getTeams: Array<
+        { __typename?: "GetTeamsResponse" } & Pick<GetTeamsResponse, "isMember" | "isCoach" | "isPending"> & {
+                team: { __typename?: "Team" } & Pick<
+                    Team,
+                    "name" | "_id" | "sport" | "imgUrl" | "numberMembers" | "description"
+                >;
+            }
+    >;
+};
+
 export type GetTeamIDsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetTeamIDsQuery = { __typename?: "Query" } & {
@@ -666,23 +812,30 @@ export type GetTeamListAsMemberOrCoachQuery = { __typename?: "Query" } & {
     >;
 };
 
-export type GetTeamPageQueryVariables = Exact<{
+export type GetTeamPageFirstFetchQueryVariables = Exact<{
+    teamID: Scalars["String"];
+    limit: Scalars["Int"];
+}>;
+
+export type GetTeamPageFirstFetchQuery = { __typename?: "Query" } & {
+    getTeam: { __typename?: "GetTeamResponse" } & Pick<GetTeamResponse, "isCoach">;
+    getEventsOfOneTeam: Array<{ __typename?: "Event" } & Pick<Event, "_id" | "name" | "startDate" | "address">>;
+};
+
+export type GetTeamPageStaticQueryVariables = Exact<{
     teamID: Scalars["String"];
 }>;
 
-export type GetTeamPageQuery = { __typename?: "Query" } & {
-    getTeam: { __typename?: "GetTeamResponse" } & Pick<GetTeamResponse, "isCoach"> & {
-            team: { __typename?: "Team" } & Pick<Team, "name" | "_id" | "imgUrl"> & {
-                    posts?: Maybe<
-                        Array<
-                            { __typename?: "Post" } & Pick<
-                                Post,
-                                "content" | "_id" | "isPined" | "imgUrls" | "numberOfLikes" | "lastModifyDate"
-                            > & { user: { __typename?: "User" } & Pick<User, "name" | "avatarUrl"> }
-                        >
-                    >;
-                };
-        };
+export type GetTeamPageStaticQuery = { __typename?: "Query" } & {
+    getTeam: { __typename?: "GetTeamResponse" } & {
+        team: { __typename?: "Team" } & Pick<Team, "name" | "_id" | "imgUrl" | "description">;
+    };
+    getPosts: Array<
+        { __typename?: "Post" } & Pick<
+            Post,
+            "content" | "_id" | "isPined" | "imgUrls" | "numberOfLikes" | "lastModifyDate"
+        > & { user: { __typename?: "User" } & Pick<User, "name" | "avatarUrl"> }
+    >;
 };
 
 export type GetTeamsQueryVariables = Exact<{ [key: string]: never }>;
@@ -698,6 +851,18 @@ export type GetTeamsQuery = { __typename?: "Query" } & {
     >;
 };
 
+export type EditProfileMutationVariables = Exact<{
+    firstName: Scalars["String"];
+    lastName: Scalars["String"];
+    email: Scalars["String"];
+    address: Scalars["String"];
+    phone: Scalars["String"];
+    introduction: Scalars["String"];
+    sport: Scalars["String"];
+}>;
+
+export type EditProfileMutation = { __typename?: "Mutation" } & Pick<Mutation, "editProfile">;
+
 export type LoginMutationVariables = Exact<{
     email: Scalars["String"];
     password: Scalars["String"];
@@ -705,7 +870,7 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: "Mutation" } & {
     login: { __typename?: "LoginResponse" } & Pick<LoginResponse, "accessToken"> & {
-            user: { __typename?: "User" } & Pick<User, "_id" | "avatarUrl" | "name">;
+            user: { __typename?: "User" } & Pick<User, "_id" | "name" | "avatarUrl" | "bannerUrls" | "introduction">;
         };
 };
 
@@ -734,10 +899,27 @@ export type UploadBannerMutationVariables = Exact<{
 
 export type UploadBannerMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadBanner">;
 
+export type UploadIntroMutationVariables = Exact<{
+    intro: Scalars["String"];
+}>;
+
+export type UploadIntroMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadIntro">;
+
+export type GetProfileDetailQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetProfileDetailQuery = { __typename?: "Query" } & {
+    me?: Maybe<
+        { __typename?: "User" } & Pick<
+            User,
+            "_id" | "firstName" | "lastName" | "email" | "address" | "phone" | "introduction" | "sport"
+        >
+    >;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = { __typename?: "Query" } & {
-    me?: Maybe<{ __typename?: "User" } & Pick<User, "_id" | "name" | "avatarUrl" | "bannerUrls">>;
+    me?: Maybe<{ __typename?: "User" } & Pick<User, "_id" | "name" | "avatarUrl" | "bannerUrls" | "introduction">>;
 };
 
 export const AddEventDocument = gql`
@@ -896,8 +1078,8 @@ export type SetGoingMutationOptions = ApolloReactCommon.BaseMutationOptions<
     SetGoingMutation,
     SetGoingMutationVariables
 >;
-export const GetEventsAsCoachOrMemberDocument = gql`
-    query GetEventsAsCoachOrMember {
+export const GetAllTeamsAndEventsDocument = gql`
+    query getAllTeamsAndEvents {
         getTeamsAsMemberOrCoach {
             team {
                 name
@@ -926,50 +1108,145 @@ export const GetEventsAsCoachOrMemberDocument = gql`
 `;
 
 /**
- * __useGetEventsAsCoachOrMemberQuery__
+ * __useGetAllTeamsAndEventsQuery__
  *
- * To run a query within a React component, call `useGetEventsAsCoachOrMemberQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventsAsCoachOrMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllTeamsAndEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllTeamsAndEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetEventsAsCoachOrMemberQuery({
+ * const { data, loading, error } = useGetAllTeamsAndEventsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetEventsAsCoachOrMemberQuery(
-    baseOptions?: ApolloReactHooks.QueryHookOptions<
-        GetEventsAsCoachOrMemberQuery,
-        GetEventsAsCoachOrMemberQueryVariables
-    >,
+export function useGetAllTeamsAndEventsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetAllTeamsAndEventsQuery, GetAllTeamsAndEventsQueryVariables>,
 ) {
-    return ApolloReactHooks.useQuery<GetEventsAsCoachOrMemberQuery, GetEventsAsCoachOrMemberQueryVariables>(
-        GetEventsAsCoachOrMemberDocument,
+    return ApolloReactHooks.useQuery<GetAllTeamsAndEventsQuery, GetAllTeamsAndEventsQueryVariables>(
+        GetAllTeamsAndEventsDocument,
         baseOptions,
     );
 }
-export function useGetEventsAsCoachOrMemberLazyQuery(
-    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-        GetEventsAsCoachOrMemberQuery,
-        GetEventsAsCoachOrMemberQueryVariables
-    >,
+export function useGetAllTeamsAndEventsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetAllTeamsAndEventsQuery, GetAllTeamsAndEventsQueryVariables>,
 ) {
-    return ApolloReactHooks.useLazyQuery<GetEventsAsCoachOrMemberQuery, GetEventsAsCoachOrMemberQueryVariables>(
-        GetEventsAsCoachOrMemberDocument,
+    return ApolloReactHooks.useLazyQuery<GetAllTeamsAndEventsQuery, GetAllTeamsAndEventsQueryVariables>(
+        GetAllTeamsAndEventsDocument,
         baseOptions,
     );
 }
-export type GetEventsAsCoachOrMemberQueryHookResult = ReturnType<typeof useGetEventsAsCoachOrMemberQuery>;
-export type GetEventsAsCoachOrMemberLazyQueryHookResult = ReturnType<typeof useGetEventsAsCoachOrMemberLazyQuery>;
-export type GetEventsAsCoachOrMemberQueryResult = ApolloReactCommon.QueryResult<
-    GetEventsAsCoachOrMemberQuery,
-    GetEventsAsCoachOrMemberQueryVariables
+export type GetAllTeamsAndEventsQueryHookResult = ReturnType<typeof useGetAllTeamsAndEventsQuery>;
+export type GetAllTeamsAndEventsLazyQueryHookResult = ReturnType<typeof useGetAllTeamsAndEventsLazyQuery>;
+export type GetAllTeamsAndEventsQueryResult = ApolloReactCommon.QueryResult<
+    GetAllTeamsAndEventsQuery,
+    GetAllTeamsAndEventsQueryVariables
 >;
-export const GetEventsForOneTeamDocument = gql`
-    query GetEventsForOneTeam($teamID: String!) {
+export const GetEventsOfAllTeamsDocument = gql`
+    query GetEventsOfAllTeams($skip: Int!, $limit: Int!) {
+        getEventsOfAllTeams(limit: $limit, skip: $skip) {
+            _id
+            name
+            startDate
+            address
+        }
+    }
+`;
+
+/**
+ * __useGetEventsOfAllTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetEventsOfAllTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventsOfAllTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventsOfAllTeamsQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetEventsOfAllTeamsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetEventsOfAllTeamsQuery, GetEventsOfAllTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetEventsOfAllTeamsQuery, GetEventsOfAllTeamsQueryVariables>(
+        GetEventsOfAllTeamsDocument,
+        baseOptions,
+    );
+}
+export function useGetEventsOfAllTeamsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventsOfAllTeamsQuery, GetEventsOfAllTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetEventsOfAllTeamsQuery, GetEventsOfAllTeamsQueryVariables>(
+        GetEventsOfAllTeamsDocument,
+        baseOptions,
+    );
+}
+export type GetEventsOfAllTeamsQueryHookResult = ReturnType<typeof useGetEventsOfAllTeamsQuery>;
+export type GetEventsOfAllTeamsLazyQueryHookResult = ReturnType<typeof useGetEventsOfAllTeamsLazyQuery>;
+export type GetEventsOfAllTeamsQueryResult = ApolloReactCommon.QueryResult<
+    GetEventsOfAllTeamsQuery,
+    GetEventsOfAllTeamsQueryVariables
+>;
+export const GetEventsOfOneTeamDocument = gql`
+    query GetEventsOfOneTeam($skip: Int!, $limit: Int!, $teamID: String!) {
+        getEventsOfOneTeam(limit: $limit, skip: $skip, teamID: $teamID) {
+            _id
+            name
+            startDate
+            address
+        }
+    }
+`;
+
+/**
+ * __useGetEventsOfOneTeamQuery__
+ *
+ * To run a query within a React component, call `useGetEventsOfOneTeamQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventsOfOneTeamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventsOfOneTeamQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      limit: // value for 'limit'
+ *      teamID: // value for 'teamID'
+ *   },
+ * });
+ */
+export function useGetEventsOfOneTeamQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetEventsOfOneTeamQuery, GetEventsOfOneTeamQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetEventsOfOneTeamQuery, GetEventsOfOneTeamQueryVariables>(
+        GetEventsOfOneTeamDocument,
+        baseOptions,
+    );
+}
+export function useGetEventsOfOneTeamLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventsOfOneTeamQuery, GetEventsOfOneTeamQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetEventsOfOneTeamQuery, GetEventsOfOneTeamQueryVariables>(
+        GetEventsOfOneTeamDocument,
+        baseOptions,
+    );
+}
+export type GetEventsOfOneTeamQueryHookResult = ReturnType<typeof useGetEventsOfOneTeamQuery>;
+export type GetEventsOfOneTeamLazyQueryHookResult = ReturnType<typeof useGetEventsOfOneTeamLazyQuery>;
+export type GetEventsOfOneTeamQueryResult = ApolloReactCommon.QueryResult<
+    GetEventsOfOneTeamQuery,
+    GetEventsOfOneTeamQueryVariables
+>;
+export const GetTeamAndEventsDocument = gql`
+    query getTeamAndEvents($teamID: String!) {
         getTeam(teamID: $teamID) {
             team {
                 name
@@ -989,46 +1266,57 @@ export const GetEventsForOneTeamDocument = gql`
 `;
 
 /**
- * __useGetEventsForOneTeamQuery__
+ * __useGetTeamAndEventsQuery__
  *
- * To run a query within a React component, call `useGetEventsForOneTeamQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventsForOneTeamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTeamAndEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamAndEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetEventsForOneTeamQuery({
+ * const { data, loading, error } = useGetTeamAndEventsQuery({
  *   variables: {
  *      teamID: // value for 'teamID'
  *   },
  * });
  */
-export function useGetEventsForOneTeamQuery(
-    baseOptions?: ApolloReactHooks.QueryHookOptions<GetEventsForOneTeamQuery, GetEventsForOneTeamQueryVariables>,
+export function useGetTeamAndEventsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamAndEventsQuery, GetTeamAndEventsQueryVariables>,
 ) {
-    return ApolloReactHooks.useQuery<GetEventsForOneTeamQuery, GetEventsForOneTeamQueryVariables>(
-        GetEventsForOneTeamDocument,
+    return ApolloReactHooks.useQuery<GetTeamAndEventsQuery, GetTeamAndEventsQueryVariables>(
+        GetTeamAndEventsDocument,
         baseOptions,
     );
 }
-export function useGetEventsForOneTeamLazyQuery(
-    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventsForOneTeamQuery, GetEventsForOneTeamQueryVariables>,
+export function useGetTeamAndEventsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamAndEventsQuery, GetTeamAndEventsQueryVariables>,
 ) {
-    return ApolloReactHooks.useLazyQuery<GetEventsForOneTeamQuery, GetEventsForOneTeamQueryVariables>(
-        GetEventsForOneTeamDocument,
+    return ApolloReactHooks.useLazyQuery<GetTeamAndEventsQuery, GetTeamAndEventsQueryVariables>(
+        GetTeamAndEventsDocument,
         baseOptions,
     );
 }
-export type GetEventsForOneTeamQueryHookResult = ReturnType<typeof useGetEventsForOneTeamQuery>;
-export type GetEventsForOneTeamLazyQueryHookResult = ReturnType<typeof useGetEventsForOneTeamLazyQuery>;
-export type GetEventsForOneTeamQueryResult = ApolloReactCommon.QueryResult<
-    GetEventsForOneTeamQuery,
-    GetEventsForOneTeamQueryVariables
+export type GetTeamAndEventsQueryHookResult = ReturnType<typeof useGetTeamAndEventsQuery>;
+export type GetTeamAndEventsLazyQueryHookResult = ReturnType<typeof useGetTeamAndEventsLazyQuery>;
+export type GetTeamAndEventsQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamAndEventsQuery,
+    GetTeamAndEventsQueryVariables
 >;
 export const AddPostDocument = gql`
     mutation AddPost($imgUrls: [String!], $isPrivate: Boolean, $content: String!, $teamID: String!) {
-        addPost(content: $content, imgUrls: $imgUrls, isPrivate: $isPrivate, teamID: $teamID)
+        addPost(content: $content, imgUrls: $imgUrls, isPrivate: $isPrivate, teamID: $teamID) {
+            content
+            _id
+            isPined
+            imgUrls
+            numberOfLikes
+            lastModifyDate
+            user {
+                name
+                avatarUrl
+            }
+        }
     }
 `;
 export type AddPostMutationFn = ApolloReactCommon.MutationFunction<AddPostMutation, AddPostMutationVariables>;
@@ -1061,6 +1349,49 @@ export function useAddPostMutation(
 export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
 export type AddPostMutationResult = ApolloReactCommon.MutationResult<AddPostMutation>;
 export type AddPostMutationOptions = ApolloReactCommon.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;
+export const AddPostCommentDocument = gql`
+    mutation addPostComment($teamID: String!, $content: String!, $postID: String!) {
+        addPostComment(content: $content, teamID: $teamID, postID: $postID)
+    }
+`;
+export type AddPostCommentMutationFn = ApolloReactCommon.MutationFunction<
+    AddPostCommentMutation,
+    AddPostCommentMutationVariables
+>;
+
+/**
+ * __useAddPostCommentMutation__
+ *
+ * To run a mutation, you first call `useAddPostCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPostCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPostCommentMutation, { data, loading, error }] = useAddPostCommentMutation({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      content: // value for 'content'
+ *      postID: // value for 'postID'
+ *   },
+ * });
+ */
+export function useAddPostCommentMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<AddPostCommentMutation, AddPostCommentMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<AddPostCommentMutation, AddPostCommentMutationVariables>(
+        AddPostCommentDocument,
+        baseOptions,
+    );
+}
+export type AddPostCommentMutationHookResult = ReturnType<typeof useAddPostCommentMutation>;
+export type AddPostCommentMutationResult = ApolloReactCommon.MutationResult<AddPostCommentMutation>;
+export type AddPostCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    AddPostCommentMutation,
+    AddPostCommentMutationVariables
+>;
 export const DeletePostDocument = gql`
     mutation DeletePost($postID: String!, $teamID: String!) {
         deletePost(postID: $postID, teamID: $teamID)
@@ -1249,6 +1580,140 @@ export type SetPostPrivateMutationOptions = ApolloReactCommon.BaseMutationOption
     SetPostPrivateMutation,
     SetPostPrivateMutationVariables
 >;
+export const GetCommentsDocument = gql`
+    query GetComments($teamID: String!, $postID: String!) {
+        getComments(teamID: $teamID, postID: $postID) {
+            content
+            user {
+                name
+                avatarUrl
+            }
+        }
+    }
+`;
+
+/**
+ * __useGetCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommentsQuery({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      postID: // value for 'postID'
+ *   },
+ * });
+ */
+export function useGetCommentsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, baseOptions);
+}
+export function useGetCommentsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCommentsQuery, GetCommentsQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetCommentsQuery, GetCommentsQueryVariables>(GetCommentsDocument, baseOptions);
+}
+export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
+export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
+export type GetCommentsQueryResult = ApolloReactCommon.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export const GetPostsDocument = gql`
+    query GetPosts($teamID: String!, $limit: Int!, $skip: Int!) {
+        getPosts(teamID: $teamID, limit: $limit, skip: $skip) {
+            content
+            _id
+            isPined
+            imgUrls
+            numberOfLikes
+            lastModifyDate
+            user {
+                name
+                avatarUrl
+            }
+        }
+    }
+`;
+
+/**
+ * __useGetPostsQuery__
+ *
+ * To run a query within a React component, call `useGetPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostsQuery({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      limit: // value for 'limit'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useGetPostsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+}
+export function useGetPostsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPostsQuery, GetPostsQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+}
+export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
+export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
+export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const UserLikedPostDocument = gql`
+    query userLikedPost($postID: String!) {
+        userLikedPost(postID: $postID) {
+            isLiked
+            likedNum
+        }
+    }
+`;
+
+/**
+ * __useUserLikedPostQuery__
+ *
+ * To run a query within a React component, call `useUserLikedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserLikedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserLikedPostQuery({
+ *   variables: {
+ *      postID: // value for 'postID'
+ *   },
+ * });
+ */
+export function useUserLikedPostQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<UserLikedPostQuery, UserLikedPostQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<UserLikedPostQuery, UserLikedPostQueryVariables>(
+        UserLikedPostDocument,
+        baseOptions,
+    );
+}
+export function useUserLikedPostLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserLikedPostQuery, UserLikedPostQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<UserLikedPostQuery, UserLikedPostQueryVariables>(
+        UserLikedPostDocument,
+        baseOptions,
+    );
+}
+export type UserLikedPostQueryHookResult = ReturnType<typeof useUserLikedPostQuery>;
+export type UserLikedPostLazyQueryHookResult = ReturnType<typeof useUserLikedPostLazyQuery>;
+export type UserLikedPostQueryResult = ApolloReactCommon.QueryResult<UserLikedPostQuery, UserLikedPostQueryVariables>;
 export const AddCoachDocument = gql`
     mutation AddCoach($teamID: String!, $userID: String!) {
         addCoach(teamID: $teamID, userID: $userID)
@@ -1435,8 +1900,8 @@ export type ApplyTeamMutationOptions = ApolloReactCommon.BaseMutationOptions<
     ApplyTeamMutationVariables
 >;
 export const NewTeamDocument = gql`
-    mutation NewTeam($sport: String, $imgUrl: String, $name: String!) {
-        newTeam(sport: $sport, imgUrl: $imgUrl, name: $name)
+    mutation NewTeam($sport: String!, $name: String!) {
+        newTeam(sport: $sport, name: $name)
     }
 `;
 export type NewTeamMutationFn = ApolloReactCommon.MutationFunction<NewTeamMutation, NewTeamMutationVariables>;
@@ -1455,7 +1920,6 @@ export type NewTeamMutationFn = ApolloReactCommon.MutationFunction<NewTeamMutati
  * const [newTeamMutation, { data, loading, error }] = useNewTeamMutation({
  *   variables: {
  *      sport: // value for 'sport'
- *      imgUrl: // value for 'imgUrl'
  *      name: // value for 'name'
  *   },
  * });
@@ -2025,6 +2489,61 @@ export function useGetPendingsLazyQuery(
 export type GetPendingsQueryHookResult = ReturnType<typeof useGetPendingsQuery>;
 export type GetPendingsLazyQueryHookResult = ReturnType<typeof useGetPendingsLazyQuery>;
 export type GetPendingsQueryResult = ApolloReactCommon.QueryResult<GetPendingsQuery, GetPendingsQueryVariables>;
+export const GetSearchTeamsDocument = gql`
+    query GetSearchTeams {
+        getTeams {
+            team {
+                name
+                _id
+                sport
+                imgUrl
+                numberMembers
+                description
+            }
+            isMember
+            isCoach
+            isPending
+        }
+    }
+`;
+
+/**
+ * __useGetSearchTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetSearchTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSearchTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSearchTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSearchTeamsQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>(
+        GetSearchTeamsDocument,
+        baseOptions,
+    );
+}
+export function useGetSearchTeamsLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetSearchTeamsQuery, GetSearchTeamsQueryVariables>(
+        GetSearchTeamsDocument,
+        baseOptions,
+    );
+}
+export type GetSearchTeamsQueryHookResult = ReturnType<typeof useGetSearchTeamsQuery>;
+export type GetSearchTeamsLazyQueryHookResult = ReturnType<typeof useGetSearchTeamsLazyQuery>;
+export type GetSearchTeamsQueryResult = ApolloReactCommon.QueryResult<
+    GetSearchTeamsQuery,
+    GetSearchTeamsQueryVariables
+>;
 export const GetTeamIDsDocument = gql`
     query GetTeamIDs {
         getTeams {
@@ -2162,60 +2681,125 @@ export type GetTeamListAsMemberOrCoachQueryResult = ApolloReactCommon.QueryResul
     GetTeamListAsMemberOrCoachQuery,
     GetTeamListAsMemberOrCoachQueryVariables
 >;
-export const GetTeamPageDocument = gql`
-    query GetTeamPage($teamID: String!) {
+export const GetTeamPageFirstFetchDocument = gql`
+    query GetTeamPageFirstFetch($teamID: String!, $limit: Int!) {
         getTeam(teamID: $teamID) {
-            team {
-                name
-                _id
-                imgUrl
-                posts {
-                    content
-                    _id
-                    isPined
-                    imgUrls
-                    numberOfLikes
-                    lastModifyDate
-                    user {
-                        name
-                        avatarUrl
-                    }
-                }
-            }
             isCoach
+        }
+        getEventsOfOneTeam(limit: $limit, skip: 0, teamID: $teamID) {
+            _id
+            name
+            startDate
+            address
         }
     }
 `;
 
 /**
- * __useGetTeamPageQuery__
+ * __useGetTeamPageFirstFetchQuery__
  *
- * To run a query within a React component, call `useGetTeamPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTeamPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTeamPageFirstFetchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamPageFirstFetchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTeamPageQuery({
+ * const { data, loading, error } = useGetTeamPageFirstFetchQuery({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetTeamPageFirstFetchQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamPageFirstFetchQuery, GetTeamPageFirstFetchQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetTeamPageFirstFetchQuery, GetTeamPageFirstFetchQueryVariables>(
+        GetTeamPageFirstFetchDocument,
+        baseOptions,
+    );
+}
+export function useGetTeamPageFirstFetchLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+        GetTeamPageFirstFetchQuery,
+        GetTeamPageFirstFetchQueryVariables
+    >,
+) {
+    return ApolloReactHooks.useLazyQuery<GetTeamPageFirstFetchQuery, GetTeamPageFirstFetchQueryVariables>(
+        GetTeamPageFirstFetchDocument,
+        baseOptions,
+    );
+}
+export type GetTeamPageFirstFetchQueryHookResult = ReturnType<typeof useGetTeamPageFirstFetchQuery>;
+export type GetTeamPageFirstFetchLazyQueryHookResult = ReturnType<typeof useGetTeamPageFirstFetchLazyQuery>;
+export type GetTeamPageFirstFetchQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamPageFirstFetchQuery,
+    GetTeamPageFirstFetchQueryVariables
+>;
+export const GetTeamPageStaticDocument = gql`
+    query GetTeamPageStatic($teamID: String!) {
+        getTeam(teamID: $teamID) {
+            team {
+                name
+                _id
+                imgUrl
+                description
+            }
+        }
+        getPosts(teamID: $teamID, limit: 10, skip: 0) {
+            content
+            _id
+            isPined
+            imgUrls
+            numberOfLikes
+            lastModifyDate
+            user {
+                name
+                avatarUrl
+            }
+        }
+    }
+`;
+
+/**
+ * __useGetTeamPageStaticQuery__
+ *
+ * To run a query within a React component, call `useGetTeamPageStaticQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamPageStaticQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamPageStaticQuery({
  *   variables: {
  *      teamID: // value for 'teamID'
  *   },
  * });
  */
-export function useGetTeamPageQuery(
-    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamPageQuery, GetTeamPageQueryVariables>,
+export function useGetTeamPageStaticQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamPageStaticQuery, GetTeamPageStaticQueryVariables>,
 ) {
-    return ApolloReactHooks.useQuery<GetTeamPageQuery, GetTeamPageQueryVariables>(GetTeamPageDocument, baseOptions);
+    return ApolloReactHooks.useQuery<GetTeamPageStaticQuery, GetTeamPageStaticQueryVariables>(
+        GetTeamPageStaticDocument,
+        baseOptions,
+    );
 }
-export function useGetTeamPageLazyQuery(
-    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamPageQuery, GetTeamPageQueryVariables>,
+export function useGetTeamPageStaticLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamPageStaticQuery, GetTeamPageStaticQueryVariables>,
 ) {
-    return ApolloReactHooks.useLazyQuery<GetTeamPageQuery, GetTeamPageQueryVariables>(GetTeamPageDocument, baseOptions);
+    return ApolloReactHooks.useLazyQuery<GetTeamPageStaticQuery, GetTeamPageStaticQueryVariables>(
+        GetTeamPageStaticDocument,
+        baseOptions,
+    );
 }
-export type GetTeamPageQueryHookResult = ReturnType<typeof useGetTeamPageQuery>;
-export type GetTeamPageLazyQueryHookResult = ReturnType<typeof useGetTeamPageLazyQuery>;
-export type GetTeamPageQueryResult = ApolloReactCommon.QueryResult<GetTeamPageQuery, GetTeamPageQueryVariables>;
+export type GetTeamPageStaticQueryHookResult = ReturnType<typeof useGetTeamPageStaticQuery>;
+export type GetTeamPageStaticLazyQueryHookResult = ReturnType<typeof useGetTeamPageStaticLazyQuery>;
+export type GetTeamPageStaticQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamPageStaticQuery,
+    GetTeamPageStaticQueryVariables
+>;
 export const GetTeamsDocument = gql`
     query GetTeams {
         getTeams {
@@ -2260,13 +2844,80 @@ export function useGetTeamsLazyQuery(
 export type GetTeamsQueryHookResult = ReturnType<typeof useGetTeamsQuery>;
 export type GetTeamsLazyQueryHookResult = ReturnType<typeof useGetTeamsLazyQuery>;
 export type GetTeamsQueryResult = ApolloReactCommon.QueryResult<GetTeamsQuery, GetTeamsQueryVariables>;
+export const EditProfileDocument = gql`
+    mutation EditProfile(
+        $firstName: String!
+        $lastName: String!
+        $email: String!
+        $address: String!
+        $phone: String!
+        $introduction: String!
+        $sport: String!
+    ) {
+        editProfile(
+            input: {
+                firstName: $firstName
+                lastName: $lastName
+                email: $email
+                address: $address
+                phone: $phone
+                introduction: $introduction
+                sport: $sport
+            }
+        )
+    }
+`;
+export type EditProfileMutationFn = ApolloReactCommon.MutationFunction<
+    EditProfileMutation,
+    EditProfileMutationVariables
+>;
+
+/**
+ * __useEditProfileMutation__
+ *
+ * To run a mutation, you first call `useEditProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editProfileMutation, { data, loading, error }] = useEditProfileMutation({
+ *   variables: {
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *      email: // value for 'email'
+ *      address: // value for 'address'
+ *      phone: // value for 'phone'
+ *      introduction: // value for 'introduction'
+ *      sport: // value for 'sport'
+ *   },
+ * });
+ */
+export function useEditProfileMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<EditProfileMutation, EditProfileMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<EditProfileMutation, EditProfileMutationVariables>(
+        EditProfileDocument,
+        baseOptions,
+    );
+}
+export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
+export type EditProfileMutationResult = ApolloReactCommon.MutationResult<EditProfileMutation>;
+export type EditProfileMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    EditProfileMutation,
+    EditProfileMutationVariables
+>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
             user {
                 _id
-                avatarUrl
                 name
+                avatarUrl
+                bannerUrls
+                introduction
             }
             accessToken
         }
@@ -2451,6 +3102,99 @@ export type UploadBannerMutationOptions = ApolloReactCommon.BaseMutationOptions<
     UploadBannerMutation,
     UploadBannerMutationVariables
 >;
+export const UploadIntroDocument = gql`
+    mutation UploadIntro($intro: String!) {
+        uploadIntro(intro: $intro)
+    }
+`;
+export type UploadIntroMutationFn = ApolloReactCommon.MutationFunction<
+    UploadIntroMutation,
+    UploadIntroMutationVariables
+>;
+
+/**
+ * __useUploadIntroMutation__
+ *
+ * To run a mutation, you first call `useUploadIntroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadIntroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadIntroMutation, { data, loading, error }] = useUploadIntroMutation({
+ *   variables: {
+ *      intro: // value for 'intro'
+ *   },
+ * });
+ */
+export function useUploadIntroMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<UploadIntroMutation, UploadIntroMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<UploadIntroMutation, UploadIntroMutationVariables>(
+        UploadIntroDocument,
+        baseOptions,
+    );
+}
+export type UploadIntroMutationHookResult = ReturnType<typeof useUploadIntroMutation>;
+export type UploadIntroMutationResult = ApolloReactCommon.MutationResult<UploadIntroMutation>;
+export type UploadIntroMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    UploadIntroMutation,
+    UploadIntroMutationVariables
+>;
+export const GetProfileDetailDocument = gql`
+    query getProfileDetail {
+        me {
+            _id
+            firstName
+            lastName
+            email
+            address
+            phone
+            introduction
+            sport
+        }
+    }
+`;
+
+/**
+ * __useGetProfileDetailQuery__
+ *
+ * To run a query within a React component, call `useGetProfileDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileDetailQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProfileDetailQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetProfileDetailQuery, GetProfileDetailQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetProfileDetailQuery, GetProfileDetailQueryVariables>(
+        GetProfileDetailDocument,
+        baseOptions,
+    );
+}
+export function useGetProfileDetailLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProfileDetailQuery, GetProfileDetailQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetProfileDetailQuery, GetProfileDetailQueryVariables>(
+        GetProfileDetailDocument,
+        baseOptions,
+    );
+}
+export type GetProfileDetailQueryHookResult = ReturnType<typeof useGetProfileDetailQuery>;
+export type GetProfileDetailLazyQueryHookResult = ReturnType<typeof useGetProfileDetailLazyQuery>;
+export type GetProfileDetailQueryResult = ApolloReactCommon.QueryResult<
+    GetProfileDetailQuery,
+    GetProfileDetailQueryVariables
+>;
 export const MeDocument = gql`
     query Me {
         me {
@@ -2458,6 +3202,7 @@ export const MeDocument = gql`
             name
             avatarUrl
             bannerUrls
+            introduction
         }
     }
 `;

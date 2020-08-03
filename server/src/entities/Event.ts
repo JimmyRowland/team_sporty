@@ -22,6 +22,7 @@ registerEnumType(EventTypeEnum, {
 
 @ObjectType()
 @index({ _id: 1 })
+@index({ startDate: 1 })
 export class Event extends CreationAndModificationDate {
     @Field()
     @prop({ required: true })

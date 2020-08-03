@@ -29,6 +29,7 @@ import { TeamApplicationPendingList, TeamApplicationPendingListModel } from "../
 import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendingList";
 import { isMember } from "../middleware/isMember";
 import { isCoachPayload } from "../middleware/isCoachPayload";
+import { start } from "repl";
 
 @Resolver((of) => Team)
 export class TeamResolver {
@@ -177,6 +178,7 @@ export class TeamResolver {
         });
     }
 
+    //TODO filter nested documents using mongoose.
     @Query(() => [GetTeamResponse])
     @UseMiddleware(isAuth)
     async getTeamsAsMemberOrCoach(@Ctx() { res, payload }: ResReq): Promise<GetTeamResponse[]> {
@@ -185,6 +187,8 @@ export class TeamResolver {
         const coachTeamIDs = coachTeamPair.map((pair) => pair._id.team);
         const memberTeamIDs = memberTeamPair.map((pair) => pair._id.team);
         const teamIDs = coachTeamIDs.concat(memberTeamIDs);
+        const startOfTheDay = new Date();
+        startOfTheDay.setHours(0, 0, 0, 0);
         const teams: Team[] = await TeamModel.find({
             _id: {
                 $in: teamIDs,
@@ -193,6 +197,9 @@ export class TeamResolver {
         const response: GetTeamResponse[] = [];
         for (const team of teams) {
             const getTeamResponse = new GetTeamResponse();
+            team.events = team.events.filter((event) => {
+                return event.startDate.getTime() > startOfTheDay.getTime();
+            });
             getTeamResponse.team = team;
             getTeamResponse.isCoach = coachTeamIDs.includes(team._id.toHexString());
             response.push(getTeamResponse);

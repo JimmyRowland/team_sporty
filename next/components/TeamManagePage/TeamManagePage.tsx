@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TeamInfoManageTab from "../../components/TeamManagePage/TeamInfoManageTab/TeamInfoManageTab";
 import MemberManagementTab from "../../components/TeamManagePage/MemberManagementTab/MemberManagementTab";

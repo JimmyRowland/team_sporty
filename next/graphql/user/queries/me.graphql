@@ -4,6 +4,6 @@ query Me {
         name
         avatarUrl
         bannerUrls
+        introduction
     }
 }
-

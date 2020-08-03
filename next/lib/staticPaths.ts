@@ -10,5 +10,5 @@ export const getAllTeamStaticPaths: GetStaticPaths = async () => {
     const paths = teams.data.getTeams.map(({ team }: { team: Team }) => {
         return { params: { tid: team._id } };
     });
-    return { paths, fallback: false };
+    return { paths, fallback: true };
 };

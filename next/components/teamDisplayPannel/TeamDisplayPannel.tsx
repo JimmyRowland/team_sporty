@@ -1,11 +1,13 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Avatar, Card, Typography } from "@material-ui/core";
-import { EventList } from "../eventList/EventList";
+//import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React from "react";
+import List from "@material-ui/core/List";
+import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 
-const useStyles = makeStyles((Theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         leftCard: {
             height: "100%",
@@ -15,11 +17,14 @@ const useStyles = makeStyles((Theme: Theme) =>
             height: "100%",
             width: "100%",
             padding: "1em",
+            align: "center",
         },
         calendarContainer: {
+            marginTop: theme.spacing(1),
             display: "block",
             padding: "1em",
             height: "60%",
+            align: "center",
         },
         teamContainer: {
             margin: "1em",
@@ -30,59 +35,76 @@ const useStyles = makeStyles((Theme: Theme) =>
         avatar: {
             height: 120,
             width: 120,
+            marginBottom: theme.spacing(1),
         },
-        eventContainer: {
-            height: "90%",
-            overflowY: "scroll",
-        },
-        teammanageContainer: {
+        eventButtonContainer: {
             position: "absolute",
-            width: "100%",
-            bottom: "1em",
+            bottom: theme.spacing(1),
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
         },
-        teammanageButton: {
-            display: "block",
-            width: "60%",
-            maxWidth: "200px",
+        eventButton: {
             margin: "auto",
         },
     }),
 );
 
+const TeamMangementPortal = ({ tid, isCoach }: { tid: string; isCoach: boolean }) => {
+    const classes = useStyles();
+    return isCoach ? (
+        <Link href="/addEvent/[tid]" as={`/addEvent/${tid}`}>
+            <Button className={classes.eventButton}> Create Event </Button>
+        </Link>
+    ) : null;
+};
+
 export default function TeamDisplayPannel({
     isCoach,
     imgUrl,
     name,
+    events,
+    id,
+    description,
 }: {
     isCoach: boolean;
     imgUrl: string;
     name: string;
+    events: any;
+    id: string;
+    description: string;
 }) {
     const classes = useStyles();
-    const TeamMangementPortal = () => {
-        return isCoach ? (
-            <Link href="/teammanage">
-                <Button className={classes.teammanageButton}> Team Management </Button>
-            </Link>
-        ) : null;
-    };
-
     return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>
                 <div className={classes.teamContainer}>
                     <Avatar className={classes.avatar} src={imgUrl} />
                     <Typography variant={"h4"}> {name} </Typography>
-                    <Typography variant={"subtitle1"}>something</Typography>
+                    <Typography variant={"subtitle1"}>{description}</Typography>
                 </div>
+                <br></br>
                 <div className={classes.calendarContainer}>
-                    <Typography variant={"h5"}>UPCOMING...</Typography>
-                    <div className={classes.eventContainer}>
-                        <EventList />
+                    <Typography variant={"h6"} align="center">
+                        Upcoming Events
+                    </Typography>
+                    <div>
+                        {events ? (
+                            <List>
+                                {events.map((c: any) => (
+                                    <PersonalCalendarItem
+                                        key={c._id}
+                                        name={c.name}
+                                        date={c.startDate}
+                                        address={c.address}
+                                    />
+                                ))}
+                            </List>
+                        ) : null}
                     </div>
                 </div>
-                <div className={classes.teammanageContainer}>
-                    <TeamMangementPortal />
+                <div className={classes.eventButtonContainer}>
+                    <TeamMangementPortal tid={id} isCoach={isCoach} />
                 </div>
             </div>
         </Card>
