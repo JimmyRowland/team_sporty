@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useNewTeamMutation } from "../generated/graphql";
+import { GetMyTeamListDocument, useNewTeamMutation } from "../generated/graphql";
 import moment from "moment";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useRouter } from "next/router";
@@ -89,6 +89,7 @@ export default function App() {
                 name: name,
                 sport: sport ? sport : "",
             },
+            refetchQueries: [{ query: GetMyTeamListDocument, variables: {} }],
         })
             .then(() => {
                 router.back();

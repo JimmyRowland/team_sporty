@@ -127,7 +127,7 @@ export default function CalendarItem({
     type: string;
     date: string;
     address: string;
-    event: Event;
+    event: any;
     isGoing: number;
     usersNotGoing: ReactNode[];
     usersGoing: ReactNode[];

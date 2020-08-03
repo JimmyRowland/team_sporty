@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function PersonalCalendar() {
     const classes = useStyles();
 
-    const { data, loading } = useGetEventsOfAllTeamsQuery({ variables: { skip: 0, limit: 3 } });
+    const { data } = useGetEventsOfAllTeamsQuery({ variables: { skip: 0, limit: 3 } });
 
     return (
         <Card className={classes.root}>
@@ -45,15 +45,11 @@ function PersonalCalendar() {
                 title="Your Upcoming Events"
             />
             <CardContent>
-                {loading ? (
-                    <CircularProgress />
-                ) : (
-                    <List className={classes.root}>
-                        {data.getEventsOfAllTeams.map((c) => (
-                            <PersonalCalendarItem key={c._id} name={c.name} date={c.startDate} address={c.address} />
-                        ))}
-                    </List>
-                )}
+                <List className={classes.root}>
+                    {data?.getEventsOfAllTeams?.map((c) => (
+                        <PersonalCalendarItem key={c._id} name={c.name} date={c.startDate} address={c.address} />
+                    ))}
+                </List>
             </CardContent>
         </Card>
     );

@@ -9,6 +9,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import GroupIcon from "@material-ui/icons/Group";
 import { useGetMyTeamListQuery } from "../../generated/graphql";
 import TeamItem from "../../components/teamList/TeamItem";
+import { ErrorComponent } from "../Error/Error";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +32,7 @@ function PersonalCalendar() {
     const { data, loading, error } = useGetMyTeamListQuery({});
     if (error) {
         console.log(error);
-        return <div>err</div>;
+        return <ErrorComponent />;
     }
 
     return (
@@ -49,19 +50,17 @@ function PersonalCalendar() {
             />
             <CardContent>
                 <List className={classes.root}>
-                    {loading
-                        ? "loading"
-                        : data?.getMyTeams.map((team, index) => {
-                              return (
-                                  <TeamItem
-                                      key={index}
-                                      name={team.name}
-                                      _id={team._id}
-                                      record={"0-0-0"}
-                                      imgUrl={team.imgUrl}
-                                  />
-                              );
-                          })}
+                    {data?.getMyTeams.map((team, index) => {
+                        return (
+                            <TeamItem
+                                key={index}
+                                name={team.name}
+                                _id={team._id}
+                                record={"0-0-0"}
+                                imgUrl={team.imgUrl}
+                            />
+                        );
+                    })}
                 </List>
             </CardContent>
         </Card>
