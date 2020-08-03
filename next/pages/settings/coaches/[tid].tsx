@@ -1,7 +1,12 @@
 import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Layout from "../../../components/layouts/settings/Layout";
-import { useGetCoachesQuery, useQuitTeamAsCoachMutation } from "../../../generated/graphql";
+import {
+    GetMyTeamListDocument,
+    GetTeamListAsMemberOrCoachDocument,
+    useGetCoachesQuery,
+    useQuitTeamAsCoachMutation,
+} from "../../../generated/graphql";
 import { useRouter } from "next/router";
 import { TeamNotFound } from "../../../components/Error/TeamNotFound";
 import { LoadingMembers } from "../../../components/components/loadingComponents/LoadingMembers";
@@ -34,7 +39,7 @@ function ManageCoachesPage() {
         return <TeamNotFound />;
     }
     let error1;
-    const { data, loading, error, refetch } = useGetCoachesQuery({
+    const { data, loading, error } = useGetCoachesQuery({
         variables: {
             teamID: tid,
         },
@@ -45,9 +50,12 @@ function ManageCoachesPage() {
     const [quit] = useQuitTeamAsCoachMutation();
     const handleLeave = () => {
         dispatch(resetSelectedUsers());
-        quit({ variables: { teamID: tid } })
+        quit({
+            variables: { teamID: tid },
+            refetchQueries: [{ query: GetTeamListAsMemberOrCoachDocument, variables: {} }],
+        })
             .then(() => {
-                refetch();
+                router.push("/settings");
             })
             .catch((e: any) => {
                 error1 = e;
