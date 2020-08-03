@@ -10,6 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Add } from "@material-ui/icons";
 import Link from "next/link";
+import { ErrorComponent } from "../components/Error/Error";
 
 const useStyles = makeStyles({
     body: {
@@ -45,17 +46,15 @@ const useStyles = makeStyles({
 
 function TeamSearchPage() {
     const classes = useStyles();
-    const { data, loading, error } = useGetSearchTeamsQuery();
+    const { data, error } = useGetSearchTeamsQuery();
     const [search, setSearch] = useState("");
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    if (loading || !data || !data.getTeams) {
-        return "loading";
-    } else if (error) {
-        return "error";
+    if (error) {
+        return <ErrorComponent />;
     } else {
         return (
             <Layout title={"Teams"}>
@@ -76,7 +75,7 @@ function TeamSearchPage() {
                         </Link>
                     </Card>
                     <div className={classes.teamContainer}>
-                        {data.getTeams.map((team, index: number) => {
+                        {data?.getTeams?.map((team, index: number) => {
                             if (team.team.name.includes(search) || team.team.sport.includes(search))
                                 return (
                                     <div key={index} className={classes.teamtabContainer}>

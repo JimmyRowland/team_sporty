@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
 import { EventUserResEnum, useGetAllTeamsAndEventsQuery, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 import { Avatar } from "@material-ui/core";
+import { ErrorComponent } from "../Error/Error";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,20 +27,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function ControlledExpansionPanels() {
+export default function ControlledExpansionPanels(): ReactNode {
     const classes = useStyles();
     // graphql
-    const { data, loading, error, refetch } = useGetAllTeamsAndEventsQuery();
+    const { data, error, refetch } = useGetAllTeamsAndEventsQuery();
     const selectedTeam = useSelector(selectTeamState);
     const mequery = useMeQuery();
 
-    if (loading || mequery.loading) {
-        return <div>loading...</div>;
-    }
-
     if (error) {
         console.log(error);
-        return <div>err</div>;
+        return <ErrorComponent />;
     }
 
     if (
@@ -49,7 +46,7 @@ export default function ControlledExpansionPanels() {
         !mequery.data ||
         !mequery.data.me
     ) {
-        return <div>no data</div>;
+        return null;
     }
 
     let events = data.getTeamsAsMemberOrCoach[0].team.events.slice(0, 0);
@@ -67,7 +64,7 @@ export default function ControlledExpansionPanels() {
 
     return (
         <div className={classes.root}>
-            {events.map((event: any, index: number) => {
+            {events.map((event, index: number) => {
                 let isGoing = 2;
                 const usersNotGoing = [];
                 const usersGoing = [];
@@ -115,9 +112,9 @@ export default function ControlledExpansionPanels() {
                     />
                 );
             })}
-            <br></br>
-            <br></br>
-            <br></br>
+            <br />
+            <br />
+            <br />
         </div>
     );
 }

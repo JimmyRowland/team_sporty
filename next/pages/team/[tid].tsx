@@ -69,7 +69,7 @@ const useStyles = makeStyles({
 
 type Props = {
     id: string;
-    errors?: any;
+    errors?: string;
 };
 
 function TeamPage({ id, errors }: Props) {
@@ -209,7 +209,6 @@ export const getStaticProps: GetStaticProps = async (url) => {
         });
         return { props: { id: tid, initialApolloState: apolloClient.cache.extract() } };
     } catch (err) {
-        console.log(err);
-        return { props: { errors: err } };
+        return { props: { errors: err.message } };
     }
 };
