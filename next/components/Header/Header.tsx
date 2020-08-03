@@ -21,6 +21,7 @@ const useStyles = makeStyles({
         height: "70px",
         cursor: "pointer",
     },
+    icon: { fontSize: "30px" },
 });
 // TODO use appbar to handle small screen
 export default function Header() {
@@ -54,23 +55,23 @@ export default function Header() {
                     textColor="primary"
                     centered
                 >
-                    <Tab label={<People />} />
-                    <Tab label={<Event />} />
+                    <Tab label={<People className={classes.icon} />} />
+                    <Tab label={<Event className={classes.icon} />} />
                 </Tabs>
                 <div>
                     {!!accessToken ? (
                         <Fragment>
                             <Button onClick={handleLogout}>
-                                <ExitToApp />
+                                <ExitToApp className={classes.icon} />
                             </Button>
                             <Link href={"/settings"}>
                                 <Button>
-                                    <Settings />
+                                    <Settings className={classes.icon} />
                                 </Button>
                             </Link>
                             <Link href={"/"}>
                                 <Button>
-                                    <AccountCircle />
+                                    <AccountCircle className={classes.icon} />
                                 </Button>
                             </Link>
                         </Fragment>

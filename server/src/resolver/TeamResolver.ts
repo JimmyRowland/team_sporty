@@ -395,12 +395,10 @@ export class TeamResolver {
     @UseMiddleware(isAuth, isCoach)
     async quitTeamAsCoach(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
         try {
-            const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
-            if (pairs.length > 1) {
-                await TeamCoachMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": payload._id });
-            } else {
-                return false;
-            }
+            await TeamCoachMapModel.remove({
+                "_id.team": teamID,
+                "_id.user": payload._id,
+            });
         } catch (err) {
             console.log(err);
             return false;
