@@ -21,7 +21,13 @@ import { LikesMapResolver } from "./resolver/LikesMapResolver";
     connectDatabase();
     app.use(
         cors({
-            origin: "http://localhost:3000",
+            origin: process.env.PORT
+                ? [
+                      /^https:\/\/teamsporty.*\.vercel\.app$/,
+                      /^https:\/\/teamsporty-\w{9}\.vercel\.app$/,
+                      /^https:\/\/teamsp0rty.*\.vercel\.app$/,
+                  ]
+                : "http://localhost:3000",
             credentials: true,
         }),
     );
@@ -46,7 +52,8 @@ import { LikesMapResolver } from "./resolver/LikesMapResolver";
 
     apolloServer.applyMiddleware({ app, cors: false });
     app.use(routes);
-    app.listen(4000, () => {
-        console.log("express server started on http://localhost:4000/graphql");
+    const port = process.env.PORT || 4000;
+    app.listen(port, () => {
+        console.log(`express server started on http://localhost:${port}/graphql`);
     });
 })();
