@@ -22,7 +22,7 @@ export class PostUserResponse {
 }
 
 @ObjectType()
-export class LikedPostResponse{
+export class LikedPostResponse {
     @Field(() => Boolean)
     isLiked: boolean;
     @Field(() => Number)

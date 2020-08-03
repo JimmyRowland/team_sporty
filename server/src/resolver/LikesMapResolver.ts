@@ -24,7 +24,6 @@ export class LikesMapResolver {
         return likedPostResponse;
     }
 
-
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async likePost(@Arg("postID") postID: string, @Ctx() { payload }: ResReq) {

@@ -1,0 +1,10 @@
+query GetComments($teamID: String!,$postID: String!) {
+    getComments(teamID:$teamID,postID:$postID){
+            content
+            user{
+                name
+                avatarUrl
+            }
+    }
+}
+

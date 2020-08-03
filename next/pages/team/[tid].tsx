@@ -153,6 +153,7 @@ function TeamPage({ id, errors }: Props) {
                                         isCoach={events?.getTeam.isCoach}
                                         avatarUrl={post.user.avatarUrl}
                                         imgUrls={post.imgUrls}
+                                        comments={post.comments}
                                     />
                                 )}
                                 {hasNext && index === postsQuery?.getPosts.length - 10 && (

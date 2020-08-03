@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -16,6 +16,8 @@ import {
     usePinPostMutation,
     useAddPostCommentMutation,
     useUserLikedPostQuery,
+    useGetCommentsLazyQuery,
+    useGetCommentsQuery,
 } from "../../generated/graphql";
 import RoomIcon from "@material-ui/icons/Room";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -24,6 +26,7 @@ import clsx from "clsx";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Likes from "./Likes/likes";
+import { start } from "repl";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -116,7 +119,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const PinMenu = ({ anchorEl, handlePin, isPinned }: { anchorEl: any; handlePin: any; isPinned: boolean }) => {
+const PinMenu = ({
+    anchorEl,
+    handlePin,
+    isPinned,
+    handleClose,
+}: {
+    anchorEl: any;
+    handlePin: any;
+    isPinned: boolean;
+    handleClose: any;
+}) => {
     return (
         <div>
             <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
@@ -126,7 +139,7 @@ const PinMenu = ({ anchorEl, handlePin, isPinned }: { anchorEl: any; handlePin: 
     );
 };
 
-const PinButton = ({ isCoach, handleClick }: { isCoach: boolean; handleClick: any }) => {
+const PinButton = ({ isCoach, handleClick }: { isCoach: boolean; handleClick: (event: any) => void }) => {
     return isCoach ? (
         <IconButton aria-label="settings" onClick={handleClick}>
             <MoreVertIcon />
@@ -183,7 +196,6 @@ export default function PostComponent({
     isCoach,
     avatarUrl,
     imgUrls,
-    comments,
     index,
 }: {
     index: number;
@@ -196,20 +208,27 @@ export default function PostComponent({
     isCoach: boolean;
     avatarUrl: string;
     imgUrls: string[];
-    comments: any;
 }) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation();
     const divref = React.useRef<any>();
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
     const [addComment] = useAddPostCommentMutation();
-    const { data, refetch } = useUserLikedPostQuery({ variables: { postID: postID } });
-
     const [commentInput, setCommentInput] = React.useState("");
-
+    const { startPolling, stopPolling, data: commentQuery } = useGetCommentsQuery({
+        variables: { postID: postID, teamID: teamID },
+        skip: !expanded,
+    });
     const handleExpandClick = () => {
-        setExpanded(!expanded);
+        setExpanded((expended) => {
+            if (!expanded) {
+                startPolling(2000);
+            } else {
+                stopPolling();
+            }
+            return !expended;
+        });
     };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -252,14 +271,19 @@ export default function PostComponent({
 
     return (
         <Card className={classes.root}>
-            <PinDisplay />
+            <PinDisplay isPinned={isPinned} classes={classes} />
             <CardHeader
                 avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
                 title={<Typography> {firstName} </Typography>}
                 action={
                     <div ref={divref}>
-                        <PinButton />
-                        <PinMenu />
+                        <PinButton isCoach={isCoach} handleClick={handleClick} />
+                        <PinMenu
+                            isPinned={isPinned}
+                            anchorEl={anchorEl}
+                            handlePin={handlePin}
+                            handleClose={handleClose}
+                        />
                     </div>
                 }
                 subheader={lastModifyDate}
@@ -268,7 +292,7 @@ export default function PostComponent({
                 <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>
                     {content}
                 </Typography>
-                <ImageDisplay />
+                <ImageDisplay classes={classes} imgUrls={imgUrls} />
                 <div className={classes.buttonRight}>
                     <Likes postID={postID} />
                     <IconButton
@@ -299,8 +323,8 @@ export default function PostComponent({
                         </Button>
                     </div>
                     <div>
-                        {comments?.map((comment) => {
-                            return <CommentComponent comment={comment} />;
+                        {commentQuery?.getComments?.map((comment, index) => {
+                            return <CommentComponent comment={comment} classes={classes} key={index} />;
                         })}
                     </div>
                     <div className={classes.buttonRight}>

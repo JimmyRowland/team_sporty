@@ -14,8 +14,8 @@ import { PostResolver } from "./resolver/PostResolver";
 import { EventResolver } from "./resolver/EventResolver";
 import { json } from "express";
 import { TestResolver } from "./resolver/TestResolver";
-import {CommentResolver} from "./resolver/CommentResolver";
-import {LikesMapResolver} from "./resolver/LikesMapResolver";
+import { CommentResolver } from "./resolver/CommentResolver";
+import { LikesMapResolver } from "./resolver/LikesMapResolver";
 (async () => {
     const app = express();
     connectDatabase();
@@ -30,7 +30,15 @@ import {LikesMapResolver} from "./resolver/LikesMapResolver";
     app.use(json({ limit: "50mb" }));
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, TeamResolver, PostResolver, EventResolver, TestResolver, CommentResolver, LikesMapResolver],
+            resolvers: [
+                UserResolver,
+                TeamResolver,
+                PostResolver,
+                EventResolver,
+                TestResolver,
+                CommentResolver,
+                LikesMapResolver,
+            ],
             globalMiddlewares: [TypegooseMiddleware],
         }),
         context: ({ req, res }) => ({ req, res }),
