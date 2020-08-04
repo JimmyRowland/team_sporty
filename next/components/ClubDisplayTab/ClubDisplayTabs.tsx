@@ -137,7 +137,7 @@ export default function ClubDisplayTab({
     return (
         <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
-                <Avatar className={classes.clubIMG} src={teamimage} height="100px"></Avatar>
+                <Avatar className={classes.clubIMG} src={teamimage}></Avatar>
             </div>
             <div className={classes.infoContainer}>
                 <div>

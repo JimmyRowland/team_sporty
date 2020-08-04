@@ -29,7 +29,7 @@ function TeamList() {
                                   key={index}
                                   name={team.name}
                                   _id={team._id}
-                                  record={"0-0-0"}
+                                  description={team.description}
                                   imgUrl={team.imgUrl}
                               />
                           );

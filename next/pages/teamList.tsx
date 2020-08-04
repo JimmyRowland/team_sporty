@@ -6,7 +6,7 @@ import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
         body: {
             paddingTop: 90,
@@ -39,6 +39,7 @@ const TeamListPage = () => {
                 teamID={team.team._id}
                 isMember={true}
                 isDisplayOnly={false}
+                isPending={false}
             />
         );
     };
