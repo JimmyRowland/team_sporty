@@ -10,6 +10,9 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { CircularProgress } from "@material-ui/core";
 import { useGetEventsOfAllTeamsQuery } from "../../generated/graphql";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,10 +29,21 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
+
 function PersonalCalendar() {
     const classes = useStyles();
 
     const { data } = useGetEventsOfAllTeamsQuery({ variables: { skip: 0, limit: 3 } });
+
+    //drop down
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <Card className={classes.root}>
@@ -37,9 +51,28 @@ function PersonalCalendar() {
                 className={classes.heading}
                 avatar={<CalendarTodayIcon />}
                 action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
+                    <div>
+                        <IconButton aria-label="settings" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                        >
+                            <Link href={"/event"}><MenuItem>View All</MenuItem></Link>
+                        </Menu>
+                    </div>
                 }
                 titleTypographyProps={{ variant: "h5" }}
                 title="Your Upcoming Events"

@@ -10,6 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Link from "next/link";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import * as Yup from "yup";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,6 +60,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
+
+const LoginSchema = Yup.object().shape({
+    email: Yup.string()
+        .email('Please use a valid email')
+        .required('Required'),
+    password: Yup.string()
+        .required('Required'),
+
+});
+
 const LoginPage = () => {
     const classes = useStyles();
     const [login] = useLoginMutation();
@@ -82,6 +93,7 @@ const LoginPage = () => {
             <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
+                validationSchema={LoginSchema}
                 onSubmit={async (data, { setErrors }) => {
                     const res = await login({
                         variables: data,
