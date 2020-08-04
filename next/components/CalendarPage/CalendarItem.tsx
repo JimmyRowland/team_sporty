@@ -121,6 +121,8 @@ const ExpansionPanelDetailsUpdated = withStyles((theme: Theme) => ({
 }))(ExpansionPanelDetails);
 
 
+
+
 export default function CalendarItem({
     name,
     type,
@@ -160,6 +162,20 @@ export default function CalendarItem({
             refetch();
         });
     };
+
+    const eventDate = new Date(date);
+    function formatAMPM(date: Date) {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        const minutesString = minutes < 10 ? "0" + minutes : minutes;
+        const strTime = hours + ":" + minutesString + " " + ampm;
+        return strTime;
+    }
+    const timeString = formatAMPM(eventDate);
+
     return (
         <div className={classes.root}>
             <ExpansionPanel>
@@ -170,7 +186,7 @@ export default function CalendarItem({
                 >
                     <div className={classes.heading}>
                         <h3>{name}</h3>
-                        <p>{date}</p>
+                        <p>{timeString}</p>
                         <p>{address}</p>
                     </div>
                     <div className={classes.secondaryHeading}>

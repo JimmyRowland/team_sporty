@@ -86,6 +86,7 @@ function PersonalCalendar() {
                             }}
                         >
                             <Link href={"/teamList"}><MenuItem>View All</MenuItem></Link>
+                            <Link href={"/createTeam"}><MenuItem>Create Team</MenuItem></Link>
                         </Menu>
                     </div>
                 }

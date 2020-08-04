@@ -18,7 +18,7 @@ import { Autocomplete } from "@material-ui/lab";
 
 const useStyles = makeStyles({
     body: {
-        paddingTop: 90,
+        paddingTop: 110,
         width: "100%",
         height: "100%",
         margin: "auto",

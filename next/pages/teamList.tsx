@@ -37,7 +37,7 @@ function TeamListPage() {
                 sport={team.team.sport}
                 teamID={team.team._id}
                 isMember={true}
-                //isDisplayOnly={false}
+                isDisplayOnly={false}
                 isPending={false}
             />
         );

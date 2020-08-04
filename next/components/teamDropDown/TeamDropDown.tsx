@@ -8,9 +8,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import ComputerIcon from "@material-ui/icons/Computer";
-import SportsFootballIcon from "@material-ui/icons/SportsFootball";
+//import SportsFootballIcon from "@material-ui/icons/SportsFootball";
 import { useGetTeamListAsMemberOrCoachQuery, useGetTeamListAsMemberQuery } from "../../generated/graphql";
-import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
+//import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
 import { useDispatch } from "react-redux";
 import { setTeam } from "../CalendarPage/CalendarPageSlicer";
 const StyledMenu = withStyles({
@@ -107,6 +107,7 @@ export default function CustomizedMenus() {
             </div>
         );
     } else {
-        return <LoadingMembers />;
+        //return <LoadingMembers />;
+        return <div />;
     }
 }
