@@ -10,8 +10,8 @@ import Link from "next/link";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         body: {
-            width: "90%",
-            maxWidth: "800px",
+            width: "100%",
+            maxWidth: "1000px",
             height: "150px",
             borderRadius: "15px",
             display: "flex",
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
         clubIMGContainer: {
             position: "relative",
             height: "80%",
-            width: "25%",
+            width: "20%",
             margin: "auto",
         },
         clubIMG: {
@@ -34,36 +34,42 @@ const useStyles = makeStyles((theme: Theme) =>
             transform: "translate(-50%,-50%)",
         },
         infoContainer: {
-            height: "80%",
-            width: "50%",
+            height: "70%",
+            width: "70%",
             margin: "auto",
-            paddingLeft: theme.spacing(1),
+            paddingLeft: theme.spacing(0),
             display: "block",
         },
         infoLine1items: {
             display: "inline",
-            padding: "5px",
+            padding: "00px",
             fontSize: "24px",
             fontWeight: "bold",
         },
         infoLine2items: {
             display: "inline",
-            padding: "5px",
+            padding: "0px",
             fontWeight: 300,
             fontSize: "12px",
         },
-        infoLine3: {
+        infoLine3items: {
+            display: "inline",
+            padding: "20px",
+            fontWeight: 300,
+            fontSize: "12px",
+        },
+        infoLine4: {
             marginTop: "5px",
             textAlign: "center",
         },
-        infoLine3items: {
+        infoLine4items: {
             padding: "5px",
             fontSize: "16px",
         },
         addButtonContainer: {
             position: "relative",
             height: "80%",
-            width: "15%",
+            width: "20%",
             padding: theme.spacing(2),
             margin: "auto",
         },
@@ -145,10 +151,10 @@ export default function ClubDisplayTab({
                 </div>
                 <div>
                     <div className={classes.infoLine2items}> {sport} </div>
-                    <div className={classes.infoLine2items}> {numberMembers} members </div>
+                    <div className={classes.infoLine3items}> {numberMembers} members </div>
                 </div>
-                <div className={classes.infoLine3}>
-                    <div className={classes.infoLine3items}> {description} </div>
+                <div className={classes.infoLine4}>
+                    <div className={classes.infoLine4items}> {description} </div>
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
