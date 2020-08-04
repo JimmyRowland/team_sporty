@@ -32,7 +32,7 @@ const useStyles = makeStyles({
         padding: 7,
     },
     leftColumn: {
-        height: "80vh",
+        height: "87vh",
         position: "sticky",
         top: "8%",
         flexBasis: "25%",

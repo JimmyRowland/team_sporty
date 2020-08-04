@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     },
     tabs: {
         margin: "auto",
-        paddingLeft: "6%",
+        paddingLeft: "3.2%",
     },
     icon: { fontSize: "30px" },
 });
@@ -78,11 +78,11 @@ export default function Header() {
                                     <Settings className={classes.icon} />
                                 </Button>
                             </Link>
-                            <Link href={"/"}>
+                            {/* <Link href={"/"}>
                                 <Button>
                                     <AccountCircle className={classes.icon} />
                                 </Button>
-                            </Link>
+                            </Link> */}
                         </Fragment>
                     ) : null}
                 </div>
