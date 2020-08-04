@@ -8,7 +8,7 @@ import Link from "next/link";
 import { getAccessToken, setAccessToken } from "../../lib/accessToken";
 import { useLogoutMutation } from "../../generated/graphql";
 import Router, { useRouter } from "next/router";
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles({
     root: {
@@ -22,9 +22,9 @@ const useStyles = makeStyles({
         height: "70px",
         cursor: "pointer",
     },
-    tabs:{
-        margin:"auto",
-        paddingLeft:"8%",
+    tabs: {
+        margin: "auto",
+        paddingLeft: "8%",
     },
     icon: { fontSize: "30px" },
 });

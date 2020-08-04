@@ -56,7 +56,7 @@ const useStyles = makeStyles({
     searchContainer: {
         height: "200px",
         width: "80%",
-        maxWidth:"900px",
+        maxWidth: "900px",
         margin: "auto",
         padding: theme.spacing(5),
         borderRadius: "15px",
@@ -69,7 +69,7 @@ function TeamSearchPage() {
     const [search, setSearch] = useState("");
 
     const handleSearch = (e, v) => {
-        if(v) setSearch(v);
+        if (v) setSearch(v);
     };
 
     if (error) {
@@ -80,7 +80,7 @@ function TeamSearchPage() {
                 <div className={classes.body}>
                     <Card className={classes.searchContainer}>
                         <Autocomplete
-                            onChange={(e,v) => handleSearch(e,v)}
+                            onChange={(e, v) => handleSearch(e, v)}
                             options={data?.getTeams?.map((team) => team.team.name)}
                             renderInput={(params) => (
                                 <TextField

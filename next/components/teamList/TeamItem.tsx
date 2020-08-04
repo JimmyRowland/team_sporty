@@ -8,7 +8,17 @@ import { Button } from "@material-ui/core";
 import Link from "next/link";
 import { Team } from "../../generated/graphql";
 
-function TeamItem({ name, _id, description, imgUrl }: { name: string; _id: string; description: string; imgUrl: string }) {
+function TeamItem({
+    name,
+    _id,
+    description,
+    imgUrl,
+}: {
+    name: string;
+    _id: string;
+    description: string;
+    imgUrl: string;
+}) {
     return (
         <Link href={"/team/[tid]"} as={`/team/${_id}`}>
             <Button fullWidth>

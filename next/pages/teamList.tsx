@@ -4,7 +4,7 @@ import { useGetMyTeamListQuery } from "../generated/graphql";
 import TeamItem from "../components/teamList/TeamItem";
 import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -14,13 +14,12 @@ const useStyles = makeStyles(() =>
             height: "100%",
             margin: "auto",
         },
-        title:{
-            marginLeft:"10%",
+        title: {
+            marginLeft: "10%",
         },
         teamtabContainer: {
             margin: "2em",
         },
-
     }),
 );
 
@@ -28,7 +27,6 @@ const TeamListPage = () => {
     const { data, loading, error } = useGetMyTeamListQuery({});
     const classes = useStyles();
     const TeamDisplay = (team) => {
-        console.log(team);
         return (
             <ClubDisplayTab
                 teamimage={team.team.imgUrl}
@@ -47,10 +45,13 @@ const TeamListPage = () => {
     return (
         <Layout title="TeamList">
             <div className={classes.body}>
-                <Typography variant="h4" className={classes.title}> My Teams </Typography>
-                {data?.getMyTeams.map((team) => {
+                <Typography variant="h4" className={classes.title}>
+                    {" "}
+                    My Teams{" "}
+                </Typography>
+                {data?.getMyTeams.map((team, index) => {
                     return (
-                        <div className={classes.teamtabContainer}>
+                        <div key={index} className={classes.teamtabContainer}>
                             <TeamDisplay team={team} />
                         </div>
                     );
