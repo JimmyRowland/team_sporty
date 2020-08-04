@@ -36,12 +36,11 @@ function PersonalCalendar() {
 
     const { data } = useGetEventsOfAllTeamsQuery({ variables: { skip: 0, limit: 3 } });
 
+    //drop down
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -71,7 +70,7 @@ function PersonalCalendar() {
                                 horizontal: 'right',
                             }}
                         >
-                            <Link href={"/event"}><MenuItem href="/event">View All</MenuItem></Link>
+                            <Link href={"/event"}><MenuItem>View All</MenuItem></Link>
                         </Menu>
                     </div>
                 }

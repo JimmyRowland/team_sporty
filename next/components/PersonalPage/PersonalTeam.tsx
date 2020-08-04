@@ -10,6 +10,9 @@ import GroupIcon from "@material-ui/icons/Group";
 import { useGetMyTeamListQuery } from "../../generated/graphql";
 import TeamItem from "../../components/teamList/TeamItem";
 import { ErrorComponent } from "../Error/Error";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,6 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
+
 function PersonalCalendar() {
     const classes = useStyles();
 
@@ -35,15 +40,43 @@ function PersonalCalendar() {
         return <ErrorComponent />;
     }
 
+    //drop down
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Card className={classes.root}>
             <CardHeader
                 className={classes.heading}
                 avatar={<GroupIcon />}
                 action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
+                    <div>
+                        <IconButton aria-label="settings" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                        >
+                            <Link href={"/teamList"}><MenuItem>View All</MenuItem></Link>
+                        </Menu>
+                    </div>
                 }
                 titleTypographyProps={{ variant: "h5" }}
                 title="Your Teams"
