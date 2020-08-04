@@ -55,8 +55,8 @@ const useStyles = makeStyles({
     },
     searchContainer: {
         height: "200px",
-        width: "80%",
-        maxWidth: "900px",
+        width: "100%",
+        maxWidth: "1000px",
         margin: "auto",
         padding: theme.spacing(5),
         borderRadius: "15px",
