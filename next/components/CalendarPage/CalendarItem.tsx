@@ -110,7 +110,6 @@ const ExpansionPanelSummary = withStyles({
     },
     expanded: {},
 })((props) => <MuiExpansionPanelSummary {...props} />);
-let renders = 0;
 export default function CalendarItem({
     name,
     type,
@@ -134,7 +133,6 @@ export default function CalendarItem({
     usersNoResponse: ReactNode[];
     refetch: () => Promise<any>;
 }) {
-    console.log(renders++);
     const classes = useStyles();
     const [selectedValue, setSelectedValue] = React.useState(isGoing);
     const [setGoing] = useSetGoingMutation();

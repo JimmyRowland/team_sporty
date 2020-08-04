@@ -35,7 +35,6 @@ export default function ControlledExpansionPanels() {
     const mequery = useMeQuery();
 
     if (error) {
-        console.log(error);
         return <ErrorComponent />;
     }
 

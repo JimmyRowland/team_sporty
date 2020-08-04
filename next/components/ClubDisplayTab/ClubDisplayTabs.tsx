@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         body: {
             width: "90%",
-            maxWidth:"800px",
+            maxWidth: "800px",
             height: "150px",
             borderRadius: "15px",
             display: "flex",
@@ -21,17 +21,17 @@ const useStyles = makeStyles((theme: Theme) =>
         clubIMGContainer: {
             position: "relative",
             height: "80%",
-            width:"25%",
+            width: "25%",
             margin: "auto",
         },
         clubIMG: {
             margin: "auto",
             width: theme.spacing(13),
             height: theme.spacing(13),
-            position:"absolute",
-            top:"50%",
-            left:"50%",
-            transform:"translate(-50%,-50%)",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
         },
         infoContainer: {
             height: "80%",
@@ -64,13 +64,13 @@ const useStyles = makeStyles((theme: Theme) =>
             position: "relative",
             height: "80%",
             width: "15%",
-            padding:theme.spacing(2),
+            padding: theme.spacing(2),
             margin: "auto",
         },
         addButton: {
             position: "absolute",
-            top:"50%",
-            left:"50%",
+            top: "50%",
+            left: "50%",
             transform: "translate(-50%, -50%)",
             borderRadius: "20px",
         },
