@@ -21,10 +21,13 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: "100%",
-            border: "1px solid rgba(0, 0, 0, .125)",
+            border: "1px solid rgba(50, 50, 50, 1)",
+            borderRadius: "5px",
         },
-        roaster: {
+        roster: {
             display: "flex",
+            flexWrap: "wrap",
+            height: "100px"
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
-            color: theme.palette.text.secondary,
+            color: theme.palette.text.primary,
             flexBasis: "27%",
             flexShrink: 0,
             align: "left",
@@ -110,6 +113,14 @@ const ExpansionPanelSummary = withStyles({
     },
     expanded: {},
 })((props) => <MuiExpansionPanelSummary {...props} />);
+
+const ExpansionPanelDetailsUpdated = withStyles((theme: Theme) => ({
+    root: {
+        backgroundColor: "rgba(255,255,255,.1)",
+    }
+}))(ExpansionPanelDetails);
+
+
 export default function CalendarItem({
     name,
     type,
@@ -178,60 +189,24 @@ export default function CalendarItem({
                                 {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
                             </Select>
                         </FormControl>
-                        {/* <div align="right">
-                            Going
-                            <GreenRadio
-                                checked={selectedValue === 1}
-                                onChange={handleChange}
-                                value={1}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "A" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div>
-                        <div align="right">
-                            Not going
-                            <RedRadio
-                                checked={selectedValue === 0}
-                                onChange={handleChange}
-                                value={0}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "B" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div>
-                        <div align="right">
-                            Not Responded
-                            <GreyRadio
-                                checked={selectedValue === 2}
-                                onChange={handleChange}
-                                value={2}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "C" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div> */}
                     </div>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetailsUpdated>
                     <div className={classes.tertiaryHeading}>
                         <p>Going: {usersGoing.length}</p>
-                        <div className={classes.roaster}>{usersGoing}</div>
+                        <div className={classes.roster}>{usersGoing}</div>
                     </div>
                     <Typography className={classes.spacing}></Typography>
                     <div className={classes.tertiaryHeading}>
                         <p>Not Going: {usersNotGoing.length}</p>
-                        <div className={classes.roaster}>{usersNotGoing}</div>
+                        <div className={classes.roster}>{usersNotGoing}</div>
                     </div>
                     <Typography className={classes.spacing}></Typography>
                     <div className={classes.tertiaryHeading}>
                         <p>Not Responded: {usersNoResponse.length}</p>
-                        <div className={classes.roaster}>{usersNoResponse}</div>
+                        <div className={classes.roster}>{usersNoResponse}</div>
                     </div>
-                </ExpansionPanelDetails>
+                </ExpansionPanelDetailsUpdated>
             </ExpansionPanel>
         </div>
     );

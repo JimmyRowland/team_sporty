@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
         avatar: {
             marginRight: theme.spacing(1),
         },
+        eventContainer: {
+            marginBottom: "1em",
+            marginLeft: "2em",
+            marginRight: "2em",
+        }
     }),
 );
 
@@ -96,19 +101,20 @@ export default function ControlledExpansionPanels() {
                     }
                 }
                 return (
-                    <CalendarItem
-                        key={index}
-                        name={event.name}
-                        type={event.eventType}
-                        date={event.startDate}
-                        address={event.address}
-                        event={event}
-                        isGoing={isGoing}
-                        usersNotGoing={usersNotGoing}
-                        usersGoing={usersGoing}
-                        usersNoResponse={usersNoResponse}
-                        refetch={refetch}
-                    />
+                    <div className={classes.eventContainer}>
+                        <CalendarItem
+                            key={index}
+                            name={event.name}
+                            type={event.eventType}
+                            date={event.startDate}
+                            address={event.address}
+                            event={event}
+                            isGoing={isGoing}
+                            usersNotGoing={usersNotGoing}
+                            usersGoing={usersGoing}
+                            usersNoResponse={usersNoResponse}
+                            refetch={refetch}
+                        /></div>
                 );
             })}
             <br />

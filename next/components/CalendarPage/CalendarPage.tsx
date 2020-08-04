@@ -7,7 +7,21 @@ import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 
 const useStyles = makeStyles({
+    body: {
+        paddingTop: 50,
+        width: "100%",
+        height: "100%",
+        margin: "auto",
+    },
     container: {
+        width: "90%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        margin: "40px auto 0 auto",
+        maxWidth: 1000,
+    },
+    container2: {
         width: "90%",
         display: "flex",
         flexDirection: "row",
@@ -29,20 +43,19 @@ function CalendarPage() {
     const team = useSelector(selectTeamState);
 
     return (
-        <div className="App">
-            <br></br>
-            <br></br>
+        <div className={classes.body}>
             <div className={classes.container}>
                 <div className={classes.columnContainer}>
-                    <h2>{team.name}</h2>
+                    <h1>{team.name}</h1>
                 </div>
                 <div className={classes.columnContainer}>
+                    <br></br>
                     <Typography align="right">
                         <TeamDropDown />
                     </Typography>
                 </div>
             </div>
-            <div className={classes.container}>
+            <div className={classes.container2}>
                 <CalendarList />
             </div>
         </div>
