@@ -24,16 +24,16 @@ function TeamList() {
                 {loading
                     ? "loading"
                     : data?.getMyTeams.map((team, index) => {
-                          return (
-                              <TeamItem
-                                  key={index}
-                                  name={team.name}
-                                  _id={team._id}
-                                  description={team.description}
-                                  imgUrl={team.imgUrl}
-                              />
-                          );
-                      })}
+                        return (
+                            <TeamItem
+                                key={index}
+                                name={team.name}
+                                _id={team._id}
+                                description={team.description}
+                                imgUrl={team.imgUrl}
+                            />
+                        );
+                    })}
             </List>
         </CardPersonalPage>
     );

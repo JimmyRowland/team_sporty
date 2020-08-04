@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { People, Event, ExitToApp, Settings, AccountCircle } from "@material-ui/icons";
+import { Person, People, Event, ExitToApp, Settings, AccountCircle } from "@material-ui/icons";
 import { Button, Toolbar, AppBar } from "@material-ui/core";
 import Link from "next/link";
 import { getAccessToken, setAccessToken } from "../../lib/accessToken";
@@ -22,9 +22,9 @@ const useStyles = makeStyles({
         height: "70px",
         cursor: "pointer",
     },
-    tabs:{
-        margin:"auto",
-        paddingLeft:"8%",
+    tabs: {
+        margin: "auto",
+        paddingLeft: "6%",
     },
     icon: { fontSize: "30px" },
 });
@@ -33,7 +33,7 @@ export default function Header() {
     const classes = useStyles();
     const router = useRouter();
     const accessToken = getAccessToken();
-    const routes = ["/teamsearch", "/event", "/teamList"];
+    const routes = ["/profile", "/teamList", "/event", "/teamsearch"];
     const [tabValue, setTabValue] = useState(routes.indexOf(router.asPath));
     const handleTabClick = (event: React.ChangeEvent<unknown>, newValue: number) => {
         setTabValue(newValue);
@@ -56,14 +56,16 @@ export default function Header() {
                 <Tabs
                     value={tabValue === -1 ? false : tabValue}
                     onChange={handleTabClick}
-                    indicatorColor="primary"
-                    textColor="primary"
+                    indicatorColor="secondary"
+                    textColor="secondary"
                     centered
                     className={classes.tabs}
                 >
-                    <Tab label={<SearchIcon className={classes.icon} />} />
-                    <Tab label={<Event className={classes.icon} />} />
+                    <Tab label={<Person className={classes.icon} />} />
                     <Tab label={<People className={classes.icon} />} />
+                    <Tab label={<Event className={classes.icon} />} />
+                    <Tab label={<SearchIcon className={classes.icon} />} />
+
                 </Tabs>
                 <div>
                     {!!accessToken ? (

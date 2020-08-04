@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: "100%",
             borderRadius: "1rem",
-            minHeight: 300,
+            minHeight: 310,
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -29,7 +29,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const CardHeader2 = withStyles((theme: Theme) => ({
+    root: {
+        paddingBottom: 1,
+    }
+}))(CardHeader);
 
+const CardContent2 = withStyles((theme: Theme) => ({
+    root: {
+        paddingTop: 0,
+        paddingBottom: 0,
+    }
+}))(CardContent);
 
 function PersonalCalendar() {
     const classes = useStyles();
@@ -51,7 +62,7 @@ function PersonalCalendar() {
 
     return (
         <Card className={classes.root}>
-            <CardHeader
+            <CardHeader2
                 className={classes.heading}
                 avatar={<GroupIcon />}
                 action={
@@ -81,7 +92,7 @@ function PersonalCalendar() {
                 titleTypographyProps={{ variant: "h5" }}
                 title="Your Teams"
             />
-            <CardContent>
+            <CardContent2>
                 <List className={classes.root}>
                     {data?.getMyTeams.map((team, index) => {
                         return (
@@ -95,7 +106,7 @@ function PersonalCalendar() {
                         );
                     })}
                 </List>
-            </CardContent>
+            </CardContent2>
         </Card>
     );
 }

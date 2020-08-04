@@ -18,7 +18,9 @@ function TeamItem({ name, _id, description, imgUrl }: { name: string; _id: strin
                             <ImageIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={name} secondary={description} />
+                    <ListItemText primary={name}
+                    // secondary="{description}"
+                    />
                 </ListItem>
             </Button>
         </Link>
