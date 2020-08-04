@@ -286,7 +286,7 @@ export default function PostComponent({
                         />
                     </div>
                 }
-                subheader={lastModifyDate}
+                subheader={new Date(lastModifyDate).toString()}
             />
             <CardContent>
                 <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>

@@ -5,34 +5,41 @@ import { Button } from "@material-ui/core";
 import { GTranslate } from "@material-ui/icons";
 import { Team, useApplyTeamMutation } from "../../generated/graphql";
 import Card from "@material-ui/core/Card";
+import Link from "next/link";
 
-const useStyles = makeStyles((Theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         body: {
-            width: "800px",
+            width: "90%",
+            maxWidth:"800px",
             height: "150px",
             borderRadius: "15px",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
             display: "flex",
+            justifyContent: "auto",
             margin: "auto",
         },
         clubIMGContainer: {
+            position: "relative",
             height: "80%",
-            width: "15%",
+            width:"25%",
             margin: "auto",
         },
         clubIMG: {
-            margin: "10px auto",
-            height: "80%",
-            width: "80%",
+            margin: "auto",
+            width: theme.spacing(13),
+            height: theme.spacing(13),
+            position:"absolute",
+            top:"50%",
+            left:"50%",
+            transform:"translate(-50%,-50%)",
         },
         infoContainer: {
             height: "80%",
-            width: "60%",
+            width: "50%",
             margin: "auto",
+            paddingLeft: theme.spacing(1),
             display: "block",
         },
-        infocontainer: {},
         infoLine1items: {
             display: "inline",
             padding: "5px",
@@ -54,13 +61,16 @@ const useStyles = makeStyles((Theme: Theme) =>
             fontSize: "16px",
         },
         addButtonContainer: {
+            position: "relative",
             height: "80%",
             width: "15%",
+            padding:theme.spacing(2),
             margin: "auto",
         },
         addButton: {
-            position: "relative",
-            margin: "50%",
+            position: "absolute",
+            top:"50%",
+            left:"50%",
             transform: "translate(-50%, -50%)",
             borderRadius: "20px",
         },
@@ -76,6 +86,7 @@ export default function ClubDisplayTab({
     isMember,
     teamimage,
     isPending,
+    isDisplayOnly,
 }: {
     name: string;
     sport: string;
@@ -85,25 +96,54 @@ export default function ClubDisplayTab({
     isMember: boolean;
     teamimage: string;
     isPending: boolean;
+    isDisplayOnly: boolean;
 }) {
     const classes = useStyles();
     const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
+    const [applied, setApplied] = useState(isPending);
     const handleJoinTeam = () => {
         setApplied(true);
         joinTeam();
     };
-    const [applied, setApplied] = useState(isPending);
+
+    const JoinButton = () => {
+        if (isMember && isDisplayOnly)
+            return (
+                <Button disabled variant="contained" color="secondary" className={classes.addButton}>
+                    Joined
+                </Button>
+            );
+        else if (isMember)
+            return (
+                <Link href={"/team/[tid]"} as={`/team/${teamID}`}>
+                    <Button variant="contained" color="secondary" className={classes.addButton}>
+                        Open
+                    </Button>
+                </Link>
+            );
+        else if (applied)
+            return (
+                <Button disabled variant="contained" color="secondary" className={classes.addButton}>
+                    Pending
+                </Button>
+            );
+        return (
+            <Button onClick={handleJoinTeam} variant="contained" color="secondary" className={classes.addButton}>
+                Join
+            </Button>
+        );
+    };
+
     return (
         <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
-                <Avatar className={classes.clubIMG} src={teamimage}></Avatar>
+                <Avatar className={classes.clubIMG} src={teamimage} height="100px"></Avatar>
             </div>
             <div className={classes.infoContainer}>
-                <div className={classes.infocontainer}>
-                    {/*<div className={classes.infoLine1items}>Club Name</div>*/}
+                <div>
                     <div className={classes.infoLine1items}>{name}</div>
                 </div>
-                <div className={classes.infocontainer}>
+                <div>
                     <div className={classes.infoLine2items}> {sport} </div>
                     <div className={classes.infoLine2items}> {numberMembers} members </div>
                 </div>
@@ -112,20 +152,7 @@ export default function ClubDisplayTab({
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
-                {isMember || applied ? (
-                    <Button disabled variant="contained" color="primary" className={classes.addButton}>
-                        {isMember ? "Joined" : "Pending"}
-                    </Button>
-                ) : (
-                    <Button
-                        onClick={handleJoinTeam}
-                        variant="contained"
-                        color="secondary"
-                        className={classes.addButton}
-                    >
-                        Join
-                    </Button>
-                )}
+                <JoinButton />
             </div>
         </Card>
     );

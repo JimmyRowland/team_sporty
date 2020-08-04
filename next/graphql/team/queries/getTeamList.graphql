@@ -2,7 +2,10 @@ query GetMyTeamList {
     getMyTeams {
         name
         _id
+        sport
         imgUrl
+        numberMembers
+        description
     }
 }
 

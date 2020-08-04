@@ -8,6 +8,7 @@ import Link from "next/link";
 import { getAccessToken, setAccessToken } from "../../lib/accessToken";
 import { useLogoutMutation } from "../../generated/graphql";
 import Router, { useRouter } from "next/router";
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles({
     root: {
@@ -21,6 +22,10 @@ const useStyles = makeStyles({
         height: "70px",
         cursor: "pointer",
     },
+    tabs:{
+        margin:"auto",
+        paddingLeft:"8%",
+    },
     icon: { fontSize: "30px" },
 });
 // TODO use appbar to handle small screen
@@ -28,7 +33,7 @@ export default function Header() {
     const classes = useStyles();
     const router = useRouter();
     const accessToken = getAccessToken();
-    const routes = ["/teamsearch", "/event"];
+    const routes = ["/teamsearch", "/event", "/teamList"];
     const [tabValue, setTabValue] = useState(routes.indexOf(router.asPath));
     const handleTabClick = (event: React.ChangeEvent<unknown>, newValue: number) => {
         setTabValue(newValue);
@@ -54,9 +59,11 @@ export default function Header() {
                     indicatorColor="primary"
                     textColor="primary"
                     centered
+                    className={classes.tabs}
                 >
-                    <Tab label={<People className={classes.icon} />} />
+                    <Tab label={<SearchIcon className={classes.icon} />} />
                     <Tab label={<Event className={classes.icon} />} />
+                    <Tab label={<People className={classes.icon} />} />
                 </Tabs>
                 <div>
                     {!!accessToken ? (
