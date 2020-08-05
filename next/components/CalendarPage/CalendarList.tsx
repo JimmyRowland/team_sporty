@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: "1em",
             marginLeft: "2em",
             marginRight: "2em",
-        }
+        },
     }),
 );
 
@@ -114,7 +114,8 @@ export default function ControlledExpansionPanels() {
                             usersGoing={usersGoing}
                             usersNoResponse={usersNoResponse}
                             refetch={refetch}
-                        /></div>
+                        />
+                    </div>
                 );
             })}
             <br />

@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme: Theme) =>
         pinTest: {
             display: "flex",
             //flexWrap: "wrap",
-        }
+        },
     }),
 );
 
@@ -136,15 +136,21 @@ const PinMenu = ({
 }) => {
     return (
         <div>
-            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: "top",
+                    horizontal: "right",
                 }}
                 transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+            >
                 <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
             </Menu>
         </div>

@@ -77,7 +77,7 @@ function TeamPage({ id, errors }: Props) {
         return "Error component";
     }
     const classes = useStyles();
-    const { data} = useGetTeamPageStaticQuery({
+    const { data } = useGetTeamPageStaticQuery({
         variables: {
             teamID: id,
         },

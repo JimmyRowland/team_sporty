@@ -96,7 +96,7 @@ export class TeamResolver {
         @Arg("teamID") teamID: string,
         @Arg("description") description: string,
         @Ctx()
-            { res, payload }: ResReq,
+        { res, payload }: ResReq,
     ) {
         try {
             await TeamModel.findByIdAndUpdate(teamID, { description: description });

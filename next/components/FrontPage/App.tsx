@@ -14,7 +14,6 @@ import Router from "next/router";
 const theme = createMuiTheme({
     palette: {
         primary: green,
-
     },
 });
 
@@ -81,7 +80,7 @@ const useStyles = makeStyles((theme: Theme) =>
             left: "50%",
             transform: "translate(0%, +410%)",
             //animation: "$fill 0.5s ease forwards 3s",
-            contrasttext: '#fff'
+            contrasttext: "#fff",
         },
         logo_path_nth_child_1: {
             strokeDasharray: "493px",
@@ -114,7 +113,7 @@ const useStyles = makeStyles((theme: Theme) =>
             animation: "$line-anim 2s ease forwards 1.0s",
         },
         button2: {
-            contrastText: "#fff"
+            contrastText: "#fff",
         },
         "@keyframes line-anim": {
             to: {
@@ -133,9 +132,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const GreenButton = withStyles((theme: Theme) => ({
     root: {
         color: theme.palette.getContrastText(green[900]),
-    }
+    },
 }))(Button);
-
 
 function CalendarPage() {
     const classes = useStyles();

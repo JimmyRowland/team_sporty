@@ -24,13 +24,7 @@ export const InputField = ({ field, form: { errors, touched }, type, label }: Fi
     const classes = useStyles();
     return (
         <div className={classes.fieldContainer}>
-            <TextField
-                {...field}
-                type={type}
-                label={label}
-                variant="outlined"
-                className={classes.field}
-            />
+            <TextField {...field} type={type} label={label} variant="outlined" className={classes.field} />
             {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
         </div>
     );

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
         roster: {
             display: "flex",
             flexWrap: "wrap",
-            height: "100px"
+            height: "100px",
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -117,11 +117,8 @@ const ExpansionPanelSummary = withStyles({
 const ExpansionPanelDetailsUpdated = withStyles((theme: Theme) => ({
     root: {
         backgroundColor: "rgba(255,255,255,.1)",
-    }
+    },
 }))(ExpansionPanelDetails);
-
-
-
 
 export default function CalendarItem({
     name,

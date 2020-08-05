@@ -28,9 +28,7 @@ function TeamItem({
                             <ImageIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={name}
-                     secondary={description}
-                    />
+                    <ListItemText primary={name} secondary={description} />
                 </ListItem>
             </Button>
         </Link>

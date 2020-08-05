@@ -108,7 +108,7 @@ export default function TeamDisplayPannel({
 
     const OnDescription = (e) => {
         let description = e.target.value;
-        if(!description) description = "No Description";
+        if (!description) description = "No Description";
         if (e.keyCode == 13) {
             updateDescrpition({
                 variables: {

@@ -74,7 +74,6 @@ export default function registerPage() {
     const classes = useStyles();
     const [register] = useRegisterMutation();
     return (
-        // <Layout title="Register page">
         <Card className={classes.body}>
             <CardMedia
                 component="img"
@@ -135,6 +134,5 @@ export default function registerPage() {
                 </Link>
             </div>
         </Card>
-        // </Layout>
     );
 }

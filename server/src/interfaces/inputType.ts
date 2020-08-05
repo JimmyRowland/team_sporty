@@ -1,5 +1,5 @@
 import { Field, InputType } from "type-graphql";
-import { IsAlphanumeric, IsEmail, IsEnum, IsPhoneNumber, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsPhoneNumber, MaxLength, MinLength } from "class-validator";
 import { SportEnum } from "./enum";
 
 @InputType()
@@ -9,17 +9,15 @@ export class RegisterInput {
     email: string;
 
     @Field()
-    @MinLength(12)
+    @MinLength(12, { message: "Password must be at least 12 characters long" })
     password: string;
 
     @Field()
     @MaxLength(25)
-    @IsAlphanumeric()
     firstName: string;
 
     @Field()
     @MaxLength(25)
-    @IsAlphanumeric()
     lastName: string;
 }
 
@@ -27,12 +25,10 @@ export class RegisterInput {
 export class EditProfileInput {
     @Field()
     @MaxLength(25)
-    @IsAlphanumeric()
     firstName: string;
 
     @Field()
     @MaxLength(25)
-    @IsAlphanumeric()
     lastName: string;
 
     @Field()
@@ -41,16 +37,14 @@ export class EditProfileInput {
 
     @Field()
     @MaxLength(100)
-    @IsAlphanumeric()
     address: string;
 
     @Field()
-    @IsPhoneNumber("CA")
+    @IsPhoneNumber("CA", { message: "Phone number must be a Canadian phone number" })
     phone: string;
 
     @Field()
     @MaxLength(100)
-    @IsAlphanumeric()
     introduction: string;
 
     @Field()

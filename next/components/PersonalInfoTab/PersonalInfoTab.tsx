@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             textAlign: "center",
         },
-        textContainer:{
+        textContainer: {
             marginTop: theme.spacing(3),
             marginBottom: theme.spacing(3),
-        }
+        },
     }),
 );
 export default function PersonalInfoTab() {

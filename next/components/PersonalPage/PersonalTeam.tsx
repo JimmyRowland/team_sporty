@@ -10,8 +10,8 @@ import GroupIcon from "@material-ui/icons/Group";
 import { useGetMyTeamListQuery } from "../../generated/graphql";
 import TeamItem from "../../components/teamList/TeamItem";
 import { ErrorComponent } from "../Error/Error";
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,14 +32,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const CardHeader2 = withStyles((theme: Theme) => ({
     root: {
         paddingBottom: 1,
-    }
+    },
 }))(CardHeader);
 
 const CardContent2 = withStyles((theme: Theme) => ({
     root: {
         paddingTop: 0,
         paddingBottom: 0,
-    }
+    },
 }))(CardContent);
 
 function PersonalCalendar() {
@@ -67,7 +67,12 @@ function PersonalCalendar() {
                 avatar={<GroupIcon />}
                 action={
                     <div>
-                        <IconButton aria-label="settings" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                        <IconButton
+                            aria-label="settings"
+                            aria-controls="simple-menu"
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
                             <MoreVertIcon />
                         </IconButton>
                         <Menu
@@ -77,16 +82,20 @@ function PersonalCalendar() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                             anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
+                                vertical: "top",
+                                horizontal: "right",
                             }}
                             transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
+                                vertical: "top",
+                                horizontal: "right",
                             }}
                         >
-                            <Link href={"/teamList"}><MenuItem>View All</MenuItem></Link>
-                            <Link href={"/createTeam"}><MenuItem>Create Team</MenuItem></Link>
+                            <Link href={"/teamList"}>
+                                <MenuItem>View All</MenuItem>
+                            </Link>
+                            <Link href={"/createTeam"}>
+                                <MenuItem>Create Team</MenuItem>
+                            </Link>
                         </Menu>
                     </div>
                 }

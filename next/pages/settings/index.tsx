@@ -14,7 +14,7 @@ const useStyles = makeStyles({
         justifyContent: "space-between",
         margin: "40px auto 0 auto",
         maxWidth: 1000,
-        paddingRight: "13%"
+        paddingRight: "13%",
     },
 });
 
@@ -25,13 +25,16 @@ const SettingPage = () => {
     if (!accessToken) {
         router.push("/");
     }
-    return <Layout>
-        <div className={classes.container}>
-            <Typography align="center" variant="h6">
-                On the settings panel to your left, you can manage your account and teams here. If you would like to leave your team, click on the members list of your team.
-                    </Typography>
-        </div>
-    </Layout>;
+    return (
+        <Layout>
+            <div className={classes.container}>
+                <Typography align="center" variant="h6">
+                    On the settings panel to your left, you can manage your account and teams here. If you would like to
+                    leave your team, click on the members list of your team.
+                </Typography>
+            </div>
+        </Layout>
+    );
 };
 
 export default SettingPage;

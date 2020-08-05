@@ -31,7 +31,7 @@ export default function ClubImageUpload(team) {
     const imgUrl = team.imgUrl;
     const classes = useStyles();
     const [updateTeamImage] = useUploadTeamImageMutation();
-    const {data, refetch } = useGetTeamPageStaticQuery({
+    const { data, refetch } = useGetTeamPageStaticQuery({
         variables: {
             teamID: teamID,
         },
