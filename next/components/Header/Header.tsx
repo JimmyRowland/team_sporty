@@ -61,10 +61,10 @@ export default function Header() {
                     centered
                     className={classes.tabs}
                 >
-                    <Tab label={<Person className={classes.icon} />} />
-                    <Tab label={<People className={classes.icon} />} />
-                    <Tab label={<Event className={classes.icon} />} />
-                    <Tab label={<SearchIcon className={classes.icon} />} />
+                    <Tab label={"PROFILE"} icon={<Person className={classes.icon} />} />
+                    <Tab label={"TEAM"} icon={<People className={classes.icon} />} />
+                    <Tab label={"CALENDAR"} icon={<Event className={classes.icon} />} />
+                    <Tab label={"SEARCH"} icon={<SearchIcon className={classes.icon} />} />
 
                 </Tabs>
                 <div>
