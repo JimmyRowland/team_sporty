@@ -81,7 +81,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function EditPopUp({ info }: { info: string }) {
-    console.log(info);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [editIntro] = useUploadIntroMutation();

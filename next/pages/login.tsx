@@ -132,8 +132,8 @@ const LoginPage = () => {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="email" placeholder="Email" component={InputField} />
-                        <Field name="password" placeholder="Password" type="password" component={InputField} />
+                        <Field name="email" label="Email" component={InputField} />
+                        <Field name="password" label="Password" type="password" component={InputField} />
                         <FormHelperText>{helperText}</FormHelperText>
                         <Button type="submit" color="secondary" variant="contained" className={classes.login}>
                             Log in
@@ -142,9 +142,11 @@ const LoginPage = () => {
                 )}
             </Formik>
             <div className={classes.footerContainer}>
+                <Link href={"/register"}>
                 <Button color="secondary" className={classes.footerButtonL}>
                     {"Forgot password?"}
                 </Button>
+                </Link>
                 <Link href={"/register"}>
                     <Button color="secondary" className={classes.footerButtonR}>
                         {"Don't have an account? Sign Up"}

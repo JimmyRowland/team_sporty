@@ -61,21 +61,13 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    lastName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    email: Yup.string()
-        .email('Please enter a valid email')
-        .required('Required'),
+    firstName: Yup.string().min(1, "Too Short!").max(50, "Too Long!").required("Required"),
+    lastName: Yup.string().min(1, "Too Short!").max(50, "Too Long!").required("Required"),
+    email: Yup.string().email("Please enter a valid email").required("Required"),
     password: Yup.string()
-        .min(16, 'Password must be at least 16 characters')
-        .max(50, 'Password is too long')
-        .required('Required'),
+        .min(16, "Password must be at least 16 characters")
+        .max(50, "Password is too long")
+        .required("Required"),
 });
 
 export default function registerPage() {
@@ -127,10 +119,10 @@ export default function registerPage() {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="first name" placeholder="FirstName*" component={InputField} />
-                        <Field name="last name" placeholder="LastName*" component={InputField} />
-                        <Field name="email" placeholder="Email*" component={InputField} />
-                        <Field name="password" placeholder="Password*" type="password" component={InputField} />
+                        <Field name="firstName" label="First Name *" component={InputField} />
+                        <Field name="lastName" label="Last Name *" component={InputField} />
+                        <Field name="email" label="Email *" component={InputField} />
+                        <Field name="password" label="Password *" type="password" component={InputField} />
                         <Button type="submit" variant="contained" color="secondary" className={classes.signup}>
                             SIGN UP
                         </Button>

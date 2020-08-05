@@ -29,7 +29,7 @@ function TeamItem({
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={name}
-                    // secondary="{description}"
+                     secondary={description}
                     />
                 </ListItem>
             </Button>

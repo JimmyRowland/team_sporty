@@ -3,9 +3,17 @@ import Button from "@material-ui/core/Button";
 import { Avatar, Card, Typography } from "@material-ui/core";
 //import { EventList } from "../eventList/EventList";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import List from "@material-ui/core/List";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
+import ClubImageUpload from "../ImageUpload/ClubImageUpload/ClubImageUpload";
+import {
+    useGetTeamPageStaticQuery,
+    useUpdateDescriptionMutation,
+    useUpdateTeamMutation,
+} from "../../generated/graphql";
+import Input from "@material-ui/core/Input";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,6 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "100%",
             padding: "1em",
             align: "center",
+            textAlign: "center",
+        },
+        text: {
+            marginTop: theme.spacing(1),
         },
         calendarContainer: {
             marginTop: theme.spacing(1),
@@ -47,6 +59,9 @@ const useStyles = makeStyles((theme: Theme) =>
         eventButton: {
             margin: "auto",
         },
+        caption: {
+            float: "left",
+        },
     }),
 );
 
@@ -74,14 +89,89 @@ export default function TeamDisplayPannel({
     id: string;
     description: string;
 }) {
+    const [updateDescrpition] = useUpdateDescriptionMutation();
     const classes = useStyles();
+    const [desDisplay, setDesDisplay] = useState(true);
+    const { data, refetch } = useGetTeamPageStaticQuery({
+        variables: {
+            teamID: id,
+        },
+    });
+    if (description === "") description = "No Description";
+    const ImageUpload = () => {
+        return isCoach ? (
+            <ClubImageUpload teamID={id} imgUrl={imgUrl} />
+        ) : (
+            <Avatar className={classes.avatar} src={imgUrl} />
+        );
+    };
+
+    const OnDescription = (e) => {
+        let description = e.target.value;
+        if(!description) description = "No Description";
+        if (e.keyCode == 13) {
+            updateDescrpition({
+                variables: {
+                    teamID: id,
+                    description: description,
+                },
+            }).then(() => {
+                refetch();
+                EditDescription();
+            });
+        }
+        if (e.keyCode == 27) {
+            EditDescription();
+        }
+    };
+
+    const EditDescription = () => {
+        setDesDisplay(!desDisplay);
+    };
+
+    const ModifyDescription = () => {
+        return desDisplay ? (
+            <Typography variant={"subtitle1"} className={classes.text} onClick={EditDescription}>
+                {description}
+            </Typography>
+        ) : (
+            <div>
+                <TextField
+                    variant="outlined"
+                    placeholder={description}
+                    size="small"
+                    className={classes.text}
+                    onKeyDown={(e) => OnDescription(e)}
+                />
+                <Typography variant="caption" className={classes.caption}>
+                    Press enter to edit/ ESC cancel
+                </Typography>
+            </div>
+        );
+    };
+
+    const DescriptionDisplay = () => {
+        return isCoach ? (
+            <ModifyDescription />
+        ) : (
+            <Typography variant={"subtitle1"} className={classes.text}>
+                {description}
+            </Typography>
+        );
+    };
     return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>
                 <div className={classes.teamContainer}>
-                    <Avatar className={classes.avatar} src={imgUrl} />
-                    <Typography variant={"h4"}> {name} </Typography>
-                    <Typography variant={"subtitle1"}>{description}</Typography>
+                    <ImageUpload />
+                    <Typography variant={"h4"} className={classes.text}>
+                        {" "}
+                        {name}{" "}
+                    </Typography>
+                    <Typography variant="subtitle1" className={classes.text}>
+                        Team Description:
+                    </Typography>
+                    <DescriptionDisplay />
                 </div>
                 <br></br>
                 <div className={classes.calendarContainer}>

@@ -31,8 +31,13 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: "-3em",
         },
         text: {
+            marginTop: theme.spacing(1),
             textAlign: "center",
         },
+        textContainer:{
+            marginTop: theme.spacing(3),
+            marginBottom: theme.spacing(3),
+        }
     }),
 );
 export default function PersonalInfoTab() {
@@ -43,19 +48,15 @@ export default function PersonalInfoTab() {
         <Card className={classes.body}>
             <CardMedia component="img" alt="CoverPhoto" height="200" image={data?.me?.bannerUrls} title="CoverPhoto" />
             <Avatar src={data?.me?.avatarUrl} className={classes.avatar} />
-            <div>
-                <p>
-                    <Typography variant={"h4"} className={classes.text}>
-                        {" "}
-                        {data?.me?.name}{" "}
-                    </Typography>
-                </p>
-                <p>
-                    <Typography variant={"h6"} className={classes.text}>
-                        {" "}
-                        {data?.me?.introduction}{" "}
-                    </Typography>
-                </p>
+            <div className={classes.textContainer}>
+                <Typography variant={"h4"} className={classes.text}>
+                    {" "}
+                    {data?.me?.name}{" "}
+                </Typography>
+                <Typography variant={"h6"} className={classes.text}>
+                    {" "}
+                    {data?.me?.introduction}{" "}
+                </Typography>
             </div>
             <div>
                 <EditPopUp info={data?.me?.introduction} />

@@ -18,12 +18,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export const InputField = ({ field, form: { errors, touched }, type }: FieldProps & InputProps) => {
+export const InputField = ({ field, form: { errors, touched }, type, label }: FieldProps & InputProps) => {
     const errorMessage = touched[field.name] && errors[field.name];
     const classes = useStyles();
     return (
         <div className={classes.fieldContainer}>
-            <TextField {...field} type={type} label={field.name} variant="outlined" className={classes.field} />
+            <TextField
+                {...field}
+                type={type}
+                label={label}
+                variant="outlined"
+                className={classes.field}
+            />
             {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
         </div>
     );
