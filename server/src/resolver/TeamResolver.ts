@@ -90,6 +90,23 @@ export class TeamResolver {
         return true;
     }
 
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async updateDescription(
+        @Arg("teamID") teamID: string,
+        @Arg("description") description: string,
+        @Ctx()
+        { res, payload }: ResReq,
+    ) {
+        try {
+            await TeamModel.findByIdAndUpdate(teamID, { description: description });
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
+    }
+
     @Query(() => [User])
     @UseMiddleware(isAuth, isCoach)
     async getPendings(@Arg("teamID") teamID: string): Promise<User[]> {
@@ -468,6 +485,7 @@ export class TeamResolver {
         const newTeam = new TeamModel({
             name: name,
             sport: sport,
+            description: "No team description",
         });
         const newKeyPair = new TeamCoachMapModel({
             _id: {
@@ -513,5 +531,26 @@ export class TeamResolver {
             })
             .sort((event1, event2) => event2.lastModifyDate.getTime() - event1.lastModifyDate.getTime());
         return result;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async uploadTeamImage(
+        @Arg("imgUrl") imgUrl: string,
+        @Arg("teamID") teamID: string,
+        @Ctx() { res, payload }: ResReq,
+    ): Promise<boolean> {
+        console.log(teamID);
+        try {
+            const message = await TeamModel.updateOne({ _id: teamID }, { imgUrl: imgUrl });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
     }
 }

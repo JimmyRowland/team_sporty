@@ -90,16 +90,28 @@ const NestedTeamItem = ({ _id, name, isCoach }: { _id: string; name: string; isC
                         </Link>
                     </ListItem>
                     {isCoach ? (
-                        <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                            <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${_id}`}>
-                                <Button className={classes.button}>
-                                    <div className={classes.icon}>
-                                        <SportsSoccer />
-                                    </div>
-                                    Pending request
-                                </Button>
-                            </Link>
-                        </ListItem>
+                        <Fragment>
+                            <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
+                                <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${_id}`}>
+                                    <Button className={classes.button}>
+                                        <div className={classes.icon}>
+                                            <SportsSoccer />
+                                        </div>
+                                        Pending request
+                                    </Button>
+                                </Link>
+                            </ListItem>
+                            <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
+                                <Link href={"/settings/team/[tid]"} as={`/settings/team/${_id}`}>
+                                    <Button className={classes.button}>
+                                        <div className={classes.icon}>
+                                            <SportsSoccer />
+                                        </div>
+                                        Team Info
+                                    </Button>
+                                </Link>
+                            </ListItem>
+                        </Fragment>
                     ) : null}
                 </List>
             </Collapse>

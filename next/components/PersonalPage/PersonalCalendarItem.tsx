@@ -1,10 +1,12 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { DateAvatar } from "../PersonalPage/DateAvatarNew";
 
+//individual event items on the calendar card on profile page
 export default function CalendarItem(props: { name: string; date: string; address: string }) {
+
+    //date to readable string
     const eventDate = new Date(props.date);
     function formatAMPM(date: Date) {
         let hours = date.getHours();
@@ -26,8 +28,9 @@ export default function CalendarItem(props: { name: string; date: string; addres
                     primary={props.name}
                     secondary={
                         <React.Fragment>
-                            <Typography>{timeString}</Typography>
-                            <Typography>{props.address}</Typography>
+                            {timeString}
+                            <br></br>
+                            {props.address}
                         </React.Fragment>
                     }
                 />

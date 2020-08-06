@@ -1,0 +1,3 @@
+mutation UpdateDescription($teamID: String!,$description: String!) {
+    updateDescription(teamID: $teamID, description: $description)
+}

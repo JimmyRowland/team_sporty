@@ -103,6 +103,7 @@ export type Mutation = {
     uploadIntro: Scalars["Boolean"];
     editProfile: Scalars["Boolean"];
     updateTeam: Scalars["Boolean"];
+    updateDescription: Scalars["Boolean"];
     addMember: Scalars["Boolean"];
     addMembers: Scalars["Boolean"];
     rejectMembers: Scalars["Boolean"];
@@ -117,6 +118,7 @@ export type Mutation = {
     addCoach: Scalars["Boolean"];
     addCoaches: Scalars["Boolean"];
     newTeam: Scalars["Boolean"];
+    uploadTeamImage: Scalars["Boolean"];
     pinPost: Scalars["Boolean"];
     setPostPrivate: Scalars["Boolean"];
     likePost: Scalars["Boolean"];
@@ -164,6 +166,11 @@ export type MutationUpdateTeamArgs = {
     description: Scalars["String"];
     name: Scalars["String"];
     sport: Scalars["String"];
+    teamID: Scalars["String"];
+};
+
+export type MutationUpdateDescriptionArgs = {
+    description: Scalars["String"];
     teamID: Scalars["String"];
 };
 
@@ -231,6 +238,11 @@ export type MutationAddCoachesArgs = {
 export type MutationNewTeamArgs = {
     sport: Scalars["String"];
     name: Scalars["String"];
+};
+
+export type MutationUploadTeamImageArgs = {
+    teamID: Scalars["String"];
+    imgUrl: Scalars["String"];
 };
 
 export type MutationPinPostArgs = {
@@ -657,6 +669,12 @@ export type AddMembersMutationVariables = Exact<{
 
 export type AddMembersMutation = { __typename?: "Mutation" } & Pick<Mutation, "addMembers">;
 
+export type UploadAvatarMutationVariables = Exact<{
+    url: Scalars["String"];
+}>;
+
+export type UploadAvatarMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadAvatar">;
+
 export type ApplyTeamMutationVariables = Exact<{
     teamID: Scalars["String"];
 }>;
@@ -709,6 +727,13 @@ export type RemoveMembersMutationVariables = Exact<{
 }>;
 
 export type RemoveMembersMutation = { __typename?: "Mutation" } & Pick<Mutation, "removeMembers">;
+
+export type UpdateDescriptionMutationVariables = Exact<{
+    teamID: Scalars["String"];
+    description: Scalars["String"];
+}>;
+
+export type UpdateDescriptionMutation = { __typename?: "Mutation" } & Pick<Mutation, "updateDescription">;
 
 export type UpdateTeamMutationVariables = Exact<{
     sport: Scalars["String"];
@@ -790,6 +815,16 @@ export type GetSearchTeamsQuery = { __typename?: "Query" } & {
     >;
 };
 
+export type GetTeamEditPageQueryVariables = Exact<{
+    teamID: Scalars["String"];
+}>;
+
+export type GetTeamEditPageQuery = { __typename?: "Query" } & {
+    getTeam: { __typename?: "GetTeamResponse" } & {
+        team: { __typename?: "Team" } & Pick<Team, "name" | "imgUrl" | "description" | "sport">;
+    };
+};
+
 export type GetTeamIDsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetTeamIDsQuery = { __typename?: "Query" } & {
@@ -799,7 +834,9 @@ export type GetTeamIDsQuery = { __typename?: "Query" } & {
 export type GetMyTeamListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetMyTeamListQuery = { __typename?: "Query" } & {
-    getMyTeams: Array<{ __typename?: "Team" } & Pick<Team, "name" | "_id" | "imgUrl">>;
+    getMyTeams: Array<
+        { __typename?: "Team" } & Pick<Team, "name" | "_id" | "sport" | "imgUrl" | "numberMembers" | "description">
+    >;
 };
 
 export type GetTeamListAsMemberOrCoachQueryVariables = Exact<{ [key: string]: never }>;
@@ -887,11 +924,12 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: "Mutation" } & Pick<Mutation, "register">;
 
-export type UploadAvatarMutationVariables = Exact<{
+export type UploadTeamImageMutationVariables = Exact<{
     url: Scalars["String"];
+    teamID: Scalars["String"];
 }>;
 
-export type UploadAvatarMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadAvatar">;
+export type UploadTeamImageMutation = { __typename?: "Mutation" } & Pick<Mutation, "uploadTeamImage">;
 
 export type UploadBannerMutationVariables = Exact<{
     url: Scalars["String"];
@@ -1864,6 +1902,47 @@ export type AddMembersMutationOptions = ApolloReactCommon.BaseMutationOptions<
     AddMembersMutation,
     AddMembersMutationVariables
 >;
+export const UploadAvatarDocument = gql`
+    mutation UploadAvatar($url: String!) {
+        uploadAvatar(avatarUrl: $url)
+    }
+`;
+export type UploadAvatarMutationFn = ApolloReactCommon.MutationFunction<
+    UploadAvatarMutation,
+    UploadAvatarMutationVariables
+>;
+
+/**
+ * __useUploadAvatarMutation__
+ *
+ * To run a mutation, you first call `useUploadAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadAvatarMutation, { data, loading, error }] = useUploadAvatarMutation({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useUploadAvatarMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<UploadAvatarMutation, UploadAvatarMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<UploadAvatarMutation, UploadAvatarMutationVariables>(
+        UploadAvatarDocument,
+        baseOptions,
+    );
+}
+export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
+export type UploadAvatarMutationResult = ApolloReactCommon.MutationResult<UploadAvatarMutation>;
+export type UploadAvatarMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    UploadAvatarMutation,
+    UploadAvatarMutationVariables
+>;
 export const ApplyTeamDocument = gql`
     mutation ApplyTeam($teamID: String!) {
         applyTeam(teamID: $teamID)
@@ -2181,6 +2260,48 @@ export type RemoveMembersMutationResult = ApolloReactCommon.MutationResult<Remov
 export type RemoveMembersMutationOptions = ApolloReactCommon.BaseMutationOptions<
     RemoveMembersMutation,
     RemoveMembersMutationVariables
+>;
+export const UpdateDescriptionDocument = gql`
+    mutation UpdateDescription($teamID: String!, $description: String!) {
+        updateDescription(teamID: $teamID, description: $description)
+    }
+`;
+export type UpdateDescriptionMutationFn = ApolloReactCommon.MutationFunction<
+    UpdateDescriptionMutation,
+    UpdateDescriptionMutationVariables
+>;
+
+/**
+ * __useUpdateDescriptionMutation__
+ *
+ * To run a mutation, you first call `useUpdateDescriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDescriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDescriptionMutation, { data, loading, error }] = useUpdateDescriptionMutation({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useUpdateDescriptionMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateDescriptionMutation, UpdateDescriptionMutationVariables>,
+) {
+    return ApolloReactHooks.useMutation<UpdateDescriptionMutation, UpdateDescriptionMutationVariables>(
+        UpdateDescriptionDocument,
+        baseOptions,
+    );
+}
+export type UpdateDescriptionMutationHookResult = ReturnType<typeof useUpdateDescriptionMutation>;
+export type UpdateDescriptionMutationResult = ApolloReactCommon.MutationResult<UpdateDescriptionMutation>;
+export type UpdateDescriptionMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    UpdateDescriptionMutation,
+    UpdateDescriptionMutationVariables
 >;
 export const UpdateTeamDocument = gql`
     mutation UpdateTeam($sport: String!, $teamID: String!, $name: String!, $description: String!) {
@@ -2544,6 +2665,57 @@ export type GetSearchTeamsQueryResult = ApolloReactCommon.QueryResult<
     GetSearchTeamsQuery,
     GetSearchTeamsQueryVariables
 >;
+export const GetTeamEditPageDocument = gql`
+    query GetTeamEditPage($teamID: String!) {
+        getTeam(teamID: $teamID) {
+            team {
+                name
+                imgUrl
+                description
+                sport
+            }
+        }
+    }
+`;
+
+/**
+ * __useGetTeamEditPageQuery__
+ *
+ * To run a query within a React component, call `useGetTeamEditPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamEditPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamEditPageQuery({
+ *   variables: {
+ *      teamID: // value for 'teamID'
+ *   },
+ * });
+ */
+export function useGetTeamEditPageQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<GetTeamEditPageQuery, GetTeamEditPageQueryVariables>,
+) {
+    return ApolloReactHooks.useQuery<GetTeamEditPageQuery, GetTeamEditPageQueryVariables>(
+        GetTeamEditPageDocument,
+        baseOptions,
+    );
+}
+export function useGetTeamEditPageLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetTeamEditPageQuery, GetTeamEditPageQueryVariables>,
+) {
+    return ApolloReactHooks.useLazyQuery<GetTeamEditPageQuery, GetTeamEditPageQueryVariables>(
+        GetTeamEditPageDocument,
+        baseOptions,
+    );
+}
+export type GetTeamEditPageQueryHookResult = ReturnType<typeof useGetTeamEditPageQuery>;
+export type GetTeamEditPageLazyQueryHookResult = ReturnType<typeof useGetTeamEditPageLazyQuery>;
+export type GetTeamEditPageQueryResult = ApolloReactCommon.QueryResult<
+    GetTeamEditPageQuery,
+    GetTeamEditPageQueryVariables
+>;
 export const GetTeamIDsDocument = gql`
     query GetTeamIDs {
         getTeams {
@@ -2587,7 +2759,10 @@ export const GetMyTeamListDocument = gql`
         getMyTeams {
             name
             _id
+            sport
             imgUrl
+            numberMembers
+            description
         }
     }
 `;
@@ -3020,46 +3195,47 @@ export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<
     RegisterMutation,
     RegisterMutationVariables
 >;
-export const UploadAvatarDocument = gql`
-    mutation UploadAvatar($url: String!) {
-        uploadAvatar(avatarUrl: $url)
+export const UploadTeamImageDocument = gql`
+    mutation uploadTeamImage($url: String!, $teamID: String!) {
+        uploadTeamImage(imgUrl: $url, teamID: $teamID)
     }
 `;
-export type UploadAvatarMutationFn = ApolloReactCommon.MutationFunction<
-    UploadAvatarMutation,
-    UploadAvatarMutationVariables
+export type UploadTeamImageMutationFn = ApolloReactCommon.MutationFunction<
+    UploadTeamImageMutation,
+    UploadTeamImageMutationVariables
 >;
 
 /**
- * __useUploadAvatarMutation__
+ * __useUploadTeamImageMutation__
  *
- * To run a mutation, you first call `useUploadAvatarMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUploadAvatarMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUploadTeamImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadTeamImageMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [uploadAvatarMutation, { data, loading, error }] = useUploadAvatarMutation({
+ * const [uploadTeamImageMutation, { data, loading, error }] = useUploadTeamImageMutation({
  *   variables: {
  *      url: // value for 'url'
+ *      teamID: // value for 'teamID'
  *   },
  * });
  */
-export function useUploadAvatarMutation(
-    baseOptions?: ApolloReactHooks.MutationHookOptions<UploadAvatarMutation, UploadAvatarMutationVariables>,
+export function useUploadTeamImageMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<UploadTeamImageMutation, UploadTeamImageMutationVariables>,
 ) {
-    return ApolloReactHooks.useMutation<UploadAvatarMutation, UploadAvatarMutationVariables>(
-        UploadAvatarDocument,
+    return ApolloReactHooks.useMutation<UploadTeamImageMutation, UploadTeamImageMutationVariables>(
+        UploadTeamImageDocument,
         baseOptions,
     );
 }
-export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
-export type UploadAvatarMutationResult = ApolloReactCommon.MutationResult<UploadAvatarMutation>;
-export type UploadAvatarMutationOptions = ApolloReactCommon.BaseMutationOptions<
-    UploadAvatarMutation,
-    UploadAvatarMutationVariables
+export type UploadTeamImageMutationHookResult = ReturnType<typeof useUploadTeamImageMutation>;
+export type UploadTeamImageMutationResult = ApolloReactCommon.MutationResult<UploadTeamImageMutation>;
+export type UploadTeamImageMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    UploadTeamImageMutation,
+    UploadTeamImageMutationVariables
 >;
 export const UploadBannerDocument = gql`
     mutation UploadBanner($url: String!) {

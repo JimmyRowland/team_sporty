@@ -14,7 +14,7 @@ import {
 } from "../../generated/graphql";
 import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
-import TeamDisplayPannel from "../../components/teamDisplayPannel/TeamDisplayPannel";
+import TeamDisplayPanel from "../../components/teamDisplayPanel/TeamDisplayPanel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 
 const useStyles = makeStyles({
@@ -32,10 +32,10 @@ const useStyles = makeStyles({
         padding: 7,
     },
     leftColumn: {
-        height: "80vh",
+        height: "87vh",
         position: "sticky",
         top: "8%",
-        flexBasis: "25%",
+        flexBasis: "30%",
         maxWidth: "30%",
         minWidth: "250px",
         minHeight: "650px",
@@ -65,7 +65,6 @@ const useStyles = makeStyles({
         padding: 7,
     },
 });
-//TODO 100% height fixed column
 
 type Props = {
     id: string;
@@ -104,7 +103,7 @@ function TeamPage({ id, errors }: Props) {
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
                 <div className={classes.leftColumn}>
-                    <TeamDisplayPannel
+                    <TeamDisplayPanel
                         isCoach={events ? events.getTeam.isCoach : false}
                         imgUrl={data.getTeam.team.imgUrl}
                         name={data.getTeam.team.name}
@@ -114,6 +113,9 @@ function TeamPage({ id, errors }: Props) {
                     />
                 </div>
                 <div className={classes.rightColumn}>
+                    <div className={classes.columnItem}>
+                        <PostCreator teamID={id} setHasNext={setHasNext} refetch={refetch} />
+                    </div>
                     <div className={classes.columnItem}>
                         {posts.map((post, index) => {
                             return !post.isPined ? null : (
@@ -132,9 +134,6 @@ function TeamPage({ id, errors }: Props) {
                                 />
                             );
                         })}
-                    </div>
-                    <div className={classes.columnItem}>
-                        <PostCreator teamID={id} setHasNext={setHasNext} refetch={refetch} />
                     </div>
                     {data?.getPosts?.map((post, index) => {
                         return (

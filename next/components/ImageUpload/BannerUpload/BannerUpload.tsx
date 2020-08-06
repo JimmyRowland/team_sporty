@@ -78,7 +78,6 @@ export default function BannerUpload() {
                         url: uploadedFileUrl,
                     },
                 }).then((res) => {
-                    console.log(res);
                     refetch();
                 });
             })

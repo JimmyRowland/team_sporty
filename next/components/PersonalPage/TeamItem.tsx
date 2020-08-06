@@ -6,9 +6,19 @@ import Avatar from "@material-ui/core/Avatar";
 import ImageIcon from "@material-ui/icons/Image";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
-import { Team } from "../../generated/graphql";
 
-function TeamItem({ name, _id, record, imgUrl }: { name: string; _id: string; record: string; imgUrl: string }) {
+//team item for team card on profile page
+function TeamItem({
+    name,
+    _id,
+    description,
+    imgUrl,
+}: {
+    name: string;
+    _id: string;
+    description: string;
+    imgUrl: string;
+}) {
     return (
         <Link href={"/team/[tid]"} as={`/team/${_id}`}>
             <Button fullWidth>
@@ -18,7 +28,7 @@ function TeamItem({ name, _id, record, imgUrl }: { name: string; _id: string; re
                             <ImageIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={name} secondary={record} />
+                    <ListItemText primary={name} secondary={description} />
                 </ListItem>
             </Button>
         </Link>

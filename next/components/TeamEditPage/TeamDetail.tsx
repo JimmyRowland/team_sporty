@@ -3,8 +3,9 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
 import { Card, CardHeader, CardContent, CardActions, Divider, Grid, Button, TextField } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
-import { EditProfileInput, useEditProfileMutation } from "../../generated/graphql";
+import { MutationUpdateTeamArgs, useUpdateTeamMutation } from "../../generated/graphql";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { useRouter } from "next/router";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { Color } from "@material-ui/lab";
@@ -14,10 +15,24 @@ const useStyles = makeStyles(() => ({
 function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-const AccountDetails = ({ firstName, lastName, email, address, phone, introduction, sport }: EditProfileInput) => {
-    const [editProfile] = useEditProfileMutation();
-    const { handleSubmit, register, reset, control, watch, setValue, errors } = useForm<EditProfileInput>({
-        defaultValues: { firstName, lastName, email, address, phone, introduction, sport },
+const TeamDetails = ({
+    name,
+    description,
+    teamID,
+    sport,
+    imgUrl,
+}: {
+    name: string;
+    description: string;
+    teamID: string;
+    sport: string;
+    imgUrl: string;
+}) => {
+    const router = useRouter();
+    const [editTeam] = useUpdateTeamMutation();
+    const defaultValues = { name, description, sport, teamID };
+    const { handleSubmit, register, reset, control, watch, setValue, errors } = useForm<MutationUpdateTeamArgs>({
+        defaultValues: { name, description, sport, teamID },
     });
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = useState<Color>("error");
@@ -30,16 +45,13 @@ const AccountDetails = ({ firstName, lastName, email, address, phone, introducti
         setOpen(false);
     };
     const [errorMessage, setErrorMessage] = React.useState([""]);
-    const submit = ({ firstName, lastName, sport, email, address, phone, introduction }: EditProfileInput) => {
-        editProfile({
+    const submit = ({ name, description, sport }: MutationUpdateTeamArgs) => {
+        editTeam({
             variables: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                address: address,
-                phone: phone,
-                introduction: introduction,
+                name: name,
+                description: description,
                 sport: sport,
+                teamID: teamID,
             },
         })
             .then(() => {
@@ -79,11 +91,11 @@ const AccountDetails = ({ firstName, lastName, email, address, phone, introducti
                             <Grid item md={6} xs={12}>
                                 <Controller
                                     control={control}
-                                    name={"firstName"}
+                                    name={"name"}
                                     as={
                                         <TextField
                                             fullWidth
-                                            label="First name"
+                                            label="Team Name"
                                             margin="dense"
                                             required
                                             variant="outlined"
@@ -94,59 +106,11 @@ const AccountDetails = ({ firstName, lastName, email, address, phone, introducti
                             <Grid item md={6} xs={12}>
                                 <Controller
                                     control={control}
-                                    name={"lastName"}
+                                    name={"description"}
                                     as={
                                         <TextField
                                             fullWidth
-                                            label="Last name"
-                                            margin="dense"
-                                            required
-                                            variant="outlined"
-                                        />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Controller
-                                    control={control}
-                                    name={"email"}
-                                    as={
-                                        <TextField fullWidth label="Email" margin="dense" required variant="outlined" />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Controller
-                                    control={control}
-                                    name={"phone"}
-                                    as={
-                                        <TextField fullWidth label="Phone" margin="dense" required variant="outlined" />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Controller
-                                    control={control}
-                                    name={"address"}
-                                    as={
-                                        <TextField
-                                            fullWidth
-                                            label="Address"
-                                            margin="dense"
-                                            required
-                                            variant="outlined"
-                                        />
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Controller
-                                    control={control}
-                                    name={"introduction"}
-                                    as={
-                                        <TextField
-                                            fullWidth
-                                            label="Introduction"
+                                            label="Description"
                                             margin="dense"
                                             required
                                             variant="outlined"
@@ -184,4 +148,4 @@ const AccountDetails = ({ firstName, lastName, email, address, phone, introducti
     );
 };
 
-export default AccountDetails;
+export default TeamDetails;

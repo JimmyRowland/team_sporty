@@ -2,7 +2,12 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import React, { useEffect } from "react";
 import { cloudinary, CloudinaryImageUpload } from "../../../lib/cloudinary";
-import { useMeQuery, useUploadAvatarMutation } from "../../../generated/graphql";
+import {
+    useGetTeamPageStaticQuery,
+    useMeQuery,
+    useUploadAvatarMutation,
+    useUploadTeamImageMutation,
+} from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,11 +26,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function AvatarUpload() {
-    //TODO move query to parent
-    const { data, loading, refetch } = useMeQuery();
+export default function ClubImageUpload(team) {
+    const teamID = team.teamID;
+    const imgUrl = team.imgUrl;
     const classes = useStyles();
-    const [updateAvatar] = useUploadAvatarMutation();
+    const [updateTeamImage] = useUploadTeamImageMutation();
+    const { data, refetch } = useGetTeamPageStaticQuery({
+        variables: {
+            teamID: teamID,
+        },
+    });
 
     const readURL = async (e: any) => {
         e.preventDefault();
@@ -41,30 +51,14 @@ export default function AvatarUpload() {
         }
     };
 
-    const dropURL = async (e: any) => {
-        e.preventDefault();
-        const reader = new FileReader();
-        if (e.dataTransfer.items) {
-            // Use DataTransferItemList interface to access the file(s)
-            const file = e.dataTransfer.items[0].getAsFile();
-            if (file && file.type.match("image.*")) {
-                reader.onloadend = () => {
-                    if (typeof reader.result === "string") {
-                        uploadImage(reader.result);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    };
-
     const uploadImage = async (base64EncodedImage: any) => {
         CloudinaryImageUpload(base64EncodedImage)
             .then((data: any) => {
                 const uploadedFileUrl = data.secure_url;
-                updateAvatar({
+                updateTeamImage({
                     variables: {
                         url: uploadedFileUrl,
+                        teamID: teamID,
                     },
                 }).then((res) => {
                     refetch();
@@ -79,13 +73,12 @@ export default function AvatarUpload() {
         e.preventDefault();
     };
 
-    return loading && data && data.me && data.me.avatarUrl ? null : (
+    return (
         <div className={classes.container}>
             <form>
-                <label htmlFor="fileupload" onDrop={(e) => dropURL(e)} onDragOver={(e) => dragover(e)}>
-                    <Avatar id="avatar" alt="user" src={data?.me?.avatarUrl} className={classes.avatar} />
+                <label htmlFor="fileupload" onDragOver={(e) => dragover(e)}>
+                    <Avatar id="avatar" alt="user" src={imgUrl} className={classes.avatar} />
                 </label>
-
                 <input
                     id="fileupload"
                     type="file"

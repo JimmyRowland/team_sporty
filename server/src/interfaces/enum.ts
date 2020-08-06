@@ -2,6 +2,7 @@ export enum SportEnum {
     football = "football",
     cricket = "cricket",
     basketball = "basketball",
+    others = "others",
     unspecified = "",
 }
 

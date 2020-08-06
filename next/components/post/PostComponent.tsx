@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         pin: {
             paddingLeft: theme.spacing(2),
-            paddingTop: theme.spacing(2),
+            paddingTop: theme.spacing(1.3),
             display: "flex",
         },
         pinElement: {
@@ -116,6 +116,10 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: theme.spacing(1),
             marginTop: theme.spacing(1),
         },
+        pinTest: {
+            display: "flex",
+            //flexWrap: "wrap",
+        },
     }),
 );
 
@@ -132,7 +136,21 @@ const PinMenu = ({
 }) => {
     return (
         <div>
-            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+            >
                 <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
             </Menu>
         </div>
@@ -177,11 +195,19 @@ const ImageDisplay = ({ imgUrls, classes }: { imgUrls: string[]; classes: any })
     ) : null;
 };
 
+// const PinDisplay = ({ isPinned, classes }: { isPinned: boolean; classes: any }) => {
+//     return isPinned ? (
+//         <div className={classes.pin}>
+//             <RoomIcon />
+//             <Typography className={classes.pinElement}> This post is pinned </Typography>
+//         </div>
+//     ) : null;
+// };
+
 const PinDisplay = ({ isPinned, classes }: { isPinned: boolean; classes: any }) => {
     return isPinned ? (
         <div className={classes.pin}>
             <RoomIcon />
-            <Typography className={classes.pinElement}> This post is pinned </Typography>
         </div>
     ) : null;
 };
@@ -271,12 +297,13 @@ export default function PostComponent({
 
     return (
         <Card className={classes.root}>
-            <PinDisplay isPinned={isPinned} classes={classes} />
+            {/* <PinDisplay isPinned={isPinned} classes={classes} /> */}
             <CardHeader
                 avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
                 title={<Typography> {firstName} </Typography>}
                 action={
-                    <div ref={divref}>
+                    <div ref={divref} className={classes.pinTest}>
+                        <PinDisplay isPinned={isPinned} classes={classes} />
                         <PinButton isCoach={isCoach} handleClick={handleClick} />
                         <PinMenu
                             isPinned={isPinned}
@@ -286,7 +313,7 @@ export default function PostComponent({
                         />
                     </div>
                 }
-                subheader={lastModifyDate}
+                subheader={new Date(lastModifyDate).toString()}
             />
             <CardContent>
                 <Typography variant="body2" color="textPrimary" component="p" className={classes.body}>

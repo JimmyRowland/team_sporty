@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Link from "next/link";
+import * as Yup from "yup";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,11 +60,20 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const SignupSchema = Yup.object().shape({
+    firstName: Yup.string().min(1, "Too Short!").max(50, "Too Long!").required("Required"),
+    lastName: Yup.string().min(1, "Too Short!").max(50, "Too Long!").required("Required"),
+    email: Yup.string().email("Please enter a valid email").required("Required"),
+    password: Yup.string()
+        .min(16, "Password must be at least 16 characters")
+        .max(50, "Password is too long")
+        .required("Required"),
+});
+
 export default function registerPage() {
     const classes = useStyles();
     const [register] = useRegisterMutation();
     return (
-        // <Layout title="Register page">
         <Card className={classes.body}>
             <CardMedia
                 component="img"
@@ -81,6 +91,7 @@ export default function registerPage() {
             <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
+                validationSchema={SignupSchema}
                 onSubmit={async (data, { setErrors }) => {
                     try {
                         const response = await register({
@@ -107,10 +118,10 @@ export default function registerPage() {
             >
                 {({ handleSubmit }) => (
                     <form onSubmit={handleSubmit} className={classes.form}>
-                        <Field name="firstName" placeholder="FirstName*" component={InputField} />
-                        <Field name="lastName" placeholder="LastName*" component={InputField} />
-                        <Field name="email" placeholder="Email*" component={InputField} />
-                        <Field name="password" placeholder="Password*" type="password" component={InputField} />
+                        <Field name="firstName" label="First Name *" component={InputField} />
+                        <Field name="lastName" label="Last Name *" component={InputField} />
+                        <Field name="email" label="Email *" component={InputField} />
+                        <Field name="password" label="Password *" type="password" component={InputField} />
                         <Button type="submit" variant="contained" color="secondary" className={classes.signup}>
                             SIGN UP
                         </Button>
@@ -123,6 +134,5 @@ export default function registerPage() {
                 </Link>
             </div>
         </Card>
-        // </Layout>
     );
 }
