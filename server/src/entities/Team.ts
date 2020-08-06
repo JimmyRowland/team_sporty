@@ -33,7 +33,7 @@ export class Team extends CreationAndModificationDate {
     events: Event[];
 
     @Field(() => SportEnum)
-    @prop({ default: SportEnum.unspecified })
+    @prop({ default: SportEnum.others })
     sport: SportEnum;
 
     @Field()
