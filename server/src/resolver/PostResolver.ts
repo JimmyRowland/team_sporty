@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx, UseMiddleware, FieldResolver, Root, Query, Int } from "type-graphql";
+import { Arg, Ctx, FieldResolver, Int, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { isCoach } from "../middleware/isCoach";
@@ -21,7 +21,7 @@ export class PostResolver {
         @Arg("teamID") teamID: string,
         @Arg("skip", () => Int) skip: number,
         @Arg("limit", () => Int) limit: number,
-        @Ctx() { res, payload }: ResReq,
+        @Ctx() { payload }: ResReq,
     ): Promise<Post[]> {
         let team: any;
         if (!payload.isMember) {
@@ -50,12 +50,7 @@ export class PostResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async pinPost(
-        @Arg("teamID") teamID: string,
-        @Arg("postID") postID: string,
-        @Arg("isPined") isPined: boolean,
-        @Ctx() { payload }: ResReq,
-    ) {
+    async pinPost(@Arg("teamID") teamID: string, @Arg("postID") postID: string, @Arg("isPined") isPined: boolean) {
         try {
             await TeamModel.findByIdAndUpdate(
                 teamID,
@@ -75,7 +70,6 @@ export class PostResolver {
         @Arg("teamID") teamID: string,
         @Arg("postID") postID: string,
         @Arg("isPrivate") isPrivate: boolean,
-        @Ctx() { payload }: ResReq,
     ) {
         try {
             await TeamModel.findByIdAndUpdate(
@@ -204,12 +198,7 @@ export class PostResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async editPost(
-        @Arg("teamID") teamID: string,
-        @Arg("postID") postID: string,
-        @Arg("content") content: string,
-        @Ctx() { payload }: ResReq,
-    ) {
+    async editPost(@Arg("teamID") teamID: string, @Arg("postID") postID: string, @Arg("content") content: string) {
         try {
             await TeamModel.findByIdAndUpdate(
                 teamID,
@@ -224,7 +213,7 @@ export class PostResolver {
     }
 
     @FieldResolver(() => User)
-    async user(@Root() post: Post, @Ctx() { payload }: ResReq): Promise<User> {
+    async user(@Root() post: Post): Promise<User> {
         const user = await UserModel.findById(post.user);
         if (user) {
             return user;

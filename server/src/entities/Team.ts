@@ -6,9 +6,8 @@ import { Event } from "./Event";
 import { SportEnum } from "../interfaces/enum";
 import { registerEnumType } from "type-graphql";
 import { defaultBannerUrl } from "../interfaces/const";
-import { LikesMapModel } from "./LikesMap";
 import { TeamMemberMapModel } from "./TeamMemberMap";
-import { TeamCoachMap, TeamCoachMapModel } from "./TeamCoachMap";
+import { TeamCoachMapModel } from "./TeamCoachMap";
 
 registerEnumType(SportEnum, {
     name: "Sport",

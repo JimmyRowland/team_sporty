@@ -1,11 +1,9 @@
 import { ObjectType, Field } from "type-graphql";
-import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
-import { User } from "./User";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import { registerEnumType } from "type-graphql";
 import { EventUserResEnum } from "../interfaces/enum";
-import { EventUserResponse, TeamUserResponse } from "../interfaces/responseType";
-import { eventUserObject, teamUserIdObject } from "../interfaces/interfaces";
-import { TeamCoachMap } from "./TeamCoachMap";
+import { EventUserResponse } from "../interfaces/responseType";
+import { eventUserObject } from "../interfaces/interfaces";
 
 registerEnumType(EventUserResEnum, {
     name: "EventUserResEnum",

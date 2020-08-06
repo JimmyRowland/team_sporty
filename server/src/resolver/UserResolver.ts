@@ -1,17 +1,15 @@
-// import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
-import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int, InputType } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import {
-    validPassword,
-    createRefreshToken,
-    sendRefreshToken,
-    genPassword,
     createAccessToken,
+    createRefreshToken,
+    genPassword,
     getGravatarUrl,
+    sendRefreshToken,
+    validPassword,
 } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
-import { verify } from "jsonwebtoken";
 import { EditProfileInput, RegisterInput } from "../interfaces/inputType";
 import { LoginResponse } from "../interfaces/responseType";
 import { getIDfromToken } from "../middleware/getIDfromToken";
@@ -94,7 +92,7 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async register(@Arg("input") { email, firstName, lastName, password }: RegisterInput, @Ctx() { res }: ResReq) {
+    async register(@Arg("input") { email, firstName, lastName, password }: RegisterInput) {
         const user = await UserModel.findOne({ email });
         if (user) {
             return false;
