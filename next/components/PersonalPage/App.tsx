@@ -4,7 +4,7 @@ import PersonalInfoTab from "../../components/PersonalInfoTab/PersonalInfoTab";
 import PersonalCalendar from "../../components/PersonalPage/PersonalCalendar";
 import PersonalTeamList from "../../components/PersonalPage/PersonalTeam";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         width: "90%",
         display: "flex",
@@ -12,11 +12,18 @@ const useStyles = makeStyles({
         justifyContent: "space-between",
         margin: "40px auto 0 auto",
         maxWidth: 1000,
+        [theme.breakpoints.down("sm")]: {
+            flexDirection: "column",
+        },
     },
     columnContainer: {
         width: "47%",
+        [theme.breakpoints.down("sm")]: {
+            width: "100%",
+            margin: "0 auto 40px auto",
+        },
     },
-});
+}));
 
 function PersonalPage() {
     const classes = useStyles();
