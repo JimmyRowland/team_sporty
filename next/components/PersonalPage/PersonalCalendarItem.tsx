@@ -5,7 +5,6 @@ import { DateAvatar } from "../PersonalPage/DateAvatarNew";
 
 //individual event items on the calendar card on profile page
 export default function CalendarItem(props: { name: string; date: string; address: string }) {
-
     //date to readable string
     const eventDate = new Date(props.date);
     function formatAMPM(date: Date) {

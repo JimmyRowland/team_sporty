@@ -46,7 +46,6 @@ const useStyles = makeStyles({
     },
 });
 
-
 function CalendarPage() {
     const classes = useStyles();
     //team state; which events to show

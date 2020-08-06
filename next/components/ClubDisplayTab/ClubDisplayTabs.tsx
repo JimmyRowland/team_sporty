@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "80%",
             width: "20%",
             margin: "auto",
-            minWidth: "120px"
+            minWidth: "120px",
         },
         clubIMG: {
             margin: "auto",
@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "20%",
             padding: theme.spacing(2),
             margin: "auto",
-            paddingRight: "50px"
+            paddingRight: "50px",
         },
         addButton: {
             position: "absolute",

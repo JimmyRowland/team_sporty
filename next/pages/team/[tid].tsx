@@ -17,7 +17,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPanel from "../../components/teamDisplayPanel/TeamDisplayPanel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     container: {
         paddingTop: 50,
         width: "90%",
@@ -27,6 +27,9 @@ const useStyles = makeStyles({
         justifyContent: "space-evenly",
         margin: "40px auto 0 auto",
         maxWidth: 1000,
+        [theme.breakpoints.down("sm")]: {
+            flexDirection: "column",
+        },
     },
     rosterAvatar: {
         padding: 7,
@@ -39,11 +42,24 @@ const useStyles = makeStyles({
         maxWidth: "30%",
         minWidth: "250px",
         minHeight: "650px",
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: "100%",
+            minHeight: "0px",
+            height: "auto",
+            position: "relative",
+        },
     },
     rightColumn: {
         marginLeft: "1em",
         flexBasis: "70%",
         maxWidth: "70%",
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: "100%",
+            minHeight: "0px",
+            height: "auto",
+            marginLeft: "0",
+            marginTop: theme.spacing(3),
+        },
     },
     columnItem: {
         marginBottom: 20,
@@ -64,7 +80,7 @@ const useStyles = makeStyles({
         marginTop: "4px",
         padding: 7,
     },
-});
+}));
 
 type Props = {
     id: string;

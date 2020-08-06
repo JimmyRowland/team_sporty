@@ -70,7 +70,7 @@ const TeamDetails = ({
             });
     };
     const classes = useStyles();
-    const options = ["football", "cricket", "basketball"];
+    const options = ["football", "cricket", "basketball", "other"];
     return (
         <Fragment>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

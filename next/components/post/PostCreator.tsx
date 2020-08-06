@@ -113,6 +113,7 @@ export default function PostCreator({
     };
 
     const uploadContent = async () => {
+        if (!(images.length || content)) return;
         const promises: Promise<any>[] = [];
         images.map((image) => {
             const promise = CloudinaryImageUpload(image.url);

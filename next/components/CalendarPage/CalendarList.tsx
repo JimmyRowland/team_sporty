@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 import { Avatar } from "@material-ui/core";
 import { ErrorComponent } from "../Error/Error";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 //styles
 const useStyles = makeStyles((theme: Theme) =>
