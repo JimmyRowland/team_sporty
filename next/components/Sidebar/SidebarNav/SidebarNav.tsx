@@ -75,24 +75,9 @@ const SidebarNav = () => {
     };
     const pages: ListItemProps[] = [
         {
-            title: "Performance (stretch)",
-            href: "/",
-            icon: <DashboardIcon />,
-        },
-        {
-            title: "Authentication (change password email)",
-            href: "/authentication",
-            icon: <LockOpenIcon />,
-        },
-        {
-            title: "Team change avatar, address sport and more",
+            title: "Personal Info",
             href: "/settings/account",
             icon: <AccountBoxIcon />,
-        },
-        {
-            title: "Place holder",
-            href: "/",
-            icon: <SettingsIcon />,
         },
     ];
 

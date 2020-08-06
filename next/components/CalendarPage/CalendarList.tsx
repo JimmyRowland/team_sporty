@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles, withStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import CalendarItem from "./CalendarItem";
 import { EventUserResEnum, useGetAllTeamsAndEventsQuery, useMeQuery } from "../../generated/graphql";
 import { useSelector } from "react-redux";

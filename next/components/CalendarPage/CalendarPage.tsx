@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CalendarList from "./CalendarList";
 import TeamDropDown from "../../components/teamDropDown/TeamDropDown";
 import { useSelector } from "react-redux";
