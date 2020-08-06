@@ -40,7 +40,10 @@ const useStyles = makeStyles({
         verticalAlign: "right",
         display: "flex",
         justifyContent: "flex-end",
-    }
+    },
+    fontLighter: {
+        fontWeight: "lighter",
+    },
 });
 
 
@@ -53,7 +56,7 @@ function CalendarPage() {
         <div className={classes.body}>
             <div className={classes.container}>
                 <div className={classes.columnContainer}>
-                    <h1>{team.name}</h1>
+                    <h1 className={classes.fontLighter}>{team.name}</h1>
                 </div>
                 <div className={classes.columnContainer}>
                     <br />

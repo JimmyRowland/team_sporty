@@ -1,7 +1,6 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Avatar, Card, Typography } from "@material-ui/core";
-//import { EventList } from "../eventList/EventList";
 import Link from "next/link";
 import React, { useState } from "react";
 import List from "@material-ui/core/List";
@@ -17,6 +16,7 @@ import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         leftCard: {
@@ -33,16 +33,21 @@ const useStyles = makeStyles((theme: Theme) =>
         text: {
             marginTop: theme.spacing(1),
         },
+        text2: {
+            marginTop: theme.spacing(3),
+            fontWeight: "lighter",
+            marginBottom: "0px",
+        },
         calendarContainer: {
             marginTop: theme.spacing(1),
             display: "block",
             padding: "1em",
-            height: "50%",
+            height: "60%",
             align: "center",
         },
         calendarItemsContainer: {
             height: "80%",
-            overflowY: "scroll",
+            //overflowY: "scroll",
         },
         teamContainer: {
             margin: "1em",
@@ -66,11 +71,12 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: "auto",
         },
         caption: {
-            float: "left",
+            float: "inherit",
         },
     }),
 );
 
+//Create Event Button
 const TeamMangementPortal = ({ tid, isCoach }: { tid: string; isCoach: boolean }) => {
     const classes = useStyles();
     return isCoach ? (
@@ -80,6 +86,7 @@ const TeamMangementPortal = ({ tid, isCoach }: { tid: string; isCoach: boolean }
     ) : null;
 };
 
+//panel on team page
 export default function TeamDisplayPannel({
     isCoach,
     imgUrl,
@@ -108,8 +115,8 @@ export default function TeamDisplayPannel({
         return isCoach ? (
             <ClubImageUpload teamID={id} imgUrl={imgUrl} />
         ) : (
-            <Avatar className={classes.avatar} src={imgUrl} />
-        );
+                <Avatar className={classes.avatar} src={imgUrl} />
+            );
     };
 
     const OnDescription = (e) => {
@@ -137,38 +144,39 @@ export default function TeamDisplayPannel({
 
     const ModifyDescription = () => {
         return desDisplay ? (
-            <Typography variant={"subtitle1"} className={classes.text} onClick={EditDescription}>
+            <Typography variant={"subtitle1"} className={classes.text2} onClick={EditDescription}>
                 {description}
             </Typography>
         ) : (
-            <div>
-                <TextField
-                    variant="outlined"
-                    placeholder={description}
-                    size="small"
-                    className={classes.text}
-                    onKeyDown={(e) => OnDescription(e)}
-                />
-                <Typography variant="caption" className={classes.caption}>
-                    Press enter to edit
+                <div>
+                    <TextField
+                        variant="outlined"
+                        placeholder={description}
+                        size="small"
+                        className={classes.text}
+                        onKeyDown={(e) => OnDescription(e)}
+                    />
+                    <Typography variant="caption" className={classes.caption}>
+                        Press enter to confirm edit.
                 </Typography>
-            </div>
-        );
+                </div>
+            );
     };
 
     const DescriptionDisplay = () => {
         return isCoach ? (
             <div>
                 <ModifyDescription />
-                <IconButton onClick={EditDescription} >
+                <Button onClick={EditDescription} >
+                    Edit description &nbsp;&nbsp;
                     <EditIcon />
-                </IconButton>
+                </Button>
             </div>
         ) : (
-            <Typography variant={"subtitle1"} className={classes.text}>
-                {description}
-            </Typography>
-        );
+                <Typography variant={"subtitle1"} className={classes.text}>
+                    {description}
+                </Typography>
+            );
     };
 
     return (
@@ -180,9 +188,9 @@ export default function TeamDisplayPannel({
                         {" "}
                         {name}{" "}
                     </Typography>
-                    <Typography variant="subtitle1" className={classes.text}>
+                    {/* <Typography variant="subtitle1" className={classes.text}>
                         Team Description:
-                    </Typography>
+                    </Typography> */}
                     <DescriptionDisplay />
                 </div>
                 <div className={classes.calendarContainer}>

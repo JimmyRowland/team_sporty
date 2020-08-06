@@ -5,6 +5,7 @@ import ClubDisplayTab from "../components/ClubDisplayTab/ClubDisplayTabs";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 
+//styles
 const useStyles = makeStyles({
     body: {
         paddingTop: 70,
@@ -22,8 +23,12 @@ const useStyles = makeStyles({
     teamtabContainer: {
         margin: "2em",
     },
+    fontLighter: {
+        fontWeight: "lighter",
+    }
 });
 
+//team list page to show all teams you're currently apart of
 function TeamListPage() {
     const classes = useStyles();
     const { data, loading, error } = useGetMyTeamListQuery({});
@@ -46,7 +51,7 @@ function TeamListPage() {
         <Layout title="TeamList">
             <div className={classes.body}>
                 <div className={classes.container}>
-                    <h1>My Teams</h1>
+                    <h1 className={classes.fontLighter}>My Teams</h1>
                 </div>
                 <div className={classes.container}>
                     {data?.getMyTeams.map((team, index) => {

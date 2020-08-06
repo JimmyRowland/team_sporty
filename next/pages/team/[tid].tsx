@@ -35,7 +35,7 @@ const useStyles = makeStyles({
         height: "87vh",
         position: "sticky",
         top: "8%",
-        flexBasis: "25%",
+        flexBasis: "30%",
         maxWidth: "30%",
         minWidth: "250px",
         minHeight: "650px",

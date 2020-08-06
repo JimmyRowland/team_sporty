@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -8,11 +8,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import ComputerIcon from "@material-ui/icons/Computer";
-//import SportsFootballIcon from "@material-ui/icons/SportsFootball";
 import { useGetTeamListAsMemberOrCoachQuery, useGetTeamListAsMemberQuery } from "../../generated/graphql";
-//import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
 import { useDispatch } from "react-redux";
 import { setTeam } from "../CalendarPage/CalendarPageSlicer";
+
+//customized Menu
 const StyledMenu = withStyles({
     paper: {
         border: "1px solid #d3d4d5",
@@ -33,6 +33,14 @@ const StyledMenu = withStyles({
     />
 ));
 
+//styles for span icon
+const useStyles = makeStyles({
+    toTheRight: {
+        display: "flex",
+        justifyContent: "flex-end",
+    },
+});
+
 const StyledMenuItem = withStyles((theme) => ({
     root: {
         "&:focus": {
@@ -44,7 +52,10 @@ const StyledMenuItem = withStyles((theme) => ({
     },
 }))(MenuItem);
 
+//team switching menu
 export default function CustomizedMenus() {
+    const classes = useStyles();
+    //drop down menu
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const { data, loading } = useGetTeamListAsMemberOrCoachQuery();
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -67,7 +78,7 @@ export default function CustomizedMenus() {
                     onClick={handleClick}
                 >
                     Switch Teams
-                    <ListItemIcon>
+                    <ListItemIcon className={classes.toTheRight}>
                         <ExpandMoreIcon fontSize="small" />
                     </ListItemIcon>
                 </Button>
