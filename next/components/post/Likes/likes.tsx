@@ -23,7 +23,7 @@ const useStyles = makeStyles((Theme: Theme) =>
 export default function Likes(postID) {
     postID = postID.postID;
     const classes = useStyles();
-    const { data, refetch } = useUserLikedPostQuery({ variables: { postID: postID } , pollInterval: 20000,});
+    const { data, refetch } = useUserLikedPostQuery({ variables: { postID: postID }, pollInterval: 20000 });
     const [likePost] = useLikePostMutation();
     const handleLikePost = () => {
         likePost({ variables: { postID: postID } }).then(() => {

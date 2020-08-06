@@ -90,8 +90,8 @@ const useStyles = makeStyles((theme) => ({
         height: 30,
     },
     leftPadding: {
-        paddingLeft: "9px"
-    }
+        paddingLeft: "9px",
+    },
 }));
 
 export default function App() {
