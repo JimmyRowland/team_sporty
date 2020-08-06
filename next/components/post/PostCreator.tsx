@@ -73,6 +73,27 @@ const useStyles = makeStyles({
     },
 });
 
+const ImageDisplay = ({ images, classes, OnRemoveImage }: { images: any; classes: any; OnRemoveImage: any }) => {
+    return (
+        <div className={classes.imageDisplayContainer}>
+            {images.map((image) => (
+                <Card className={classes.imageCard} key={image.id}>
+                    <IconButton className={classes.imageDelete} onClick={(e) => OnRemoveImage(image.id)}>
+                        <CloseIcon />
+                    </IconButton>
+                    <CardMedia
+                        component="img"
+                        alt="UploadedPhoto"
+                        image={image.url}
+                        title="UploadedPhoto"
+                        className={classes.image}
+                    />
+                </Card>
+            ))}
+        </div>
+    );
+};
+
 export default function PostCreator({
     teamID,
     setHasNext,
@@ -97,7 +118,7 @@ export default function PostCreator({
     const redirectButton = () => {
         document.getElementById("postimage").click();
     };
-    const readURL = async (e: any) => {
+    const readURL = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const reader = new FileReader();
         const file = e.target.files[0];
@@ -110,6 +131,7 @@ export default function PostCreator({
             };
             reader.readAsDataURL(file);
         }
+        e.target.value = "";
     };
 
     const uploadContent = async () => {
@@ -156,26 +178,6 @@ export default function PostCreator({
         );
     };
 
-    const ImageDisplay = () => {
-        return (
-            <div className={classes.imageDisplayContainer}>
-                {images.map((image) => (
-                    <Card className={classes.imageCard} key={image.id}>
-                        <IconButton className={classes.imageDelete} onClick={(e) => OnRemoveImage(image.id)}>
-                            <CloseIcon />
-                        </IconButton>
-                        <CardMedia
-                            component="img"
-                            alt="UploadedPhoto"
-                            image={image.url}
-                            title="UploadedPhoto"
-                            className={classes.image}
-                        />
-                    </Card>
-                ))}
-            </div>
-        );
-    };
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>
@@ -193,7 +195,7 @@ export default function PostCreator({
                     rows={6}
                 />
                 <div>
-                    <ImageDisplay />
+                    <ImageDisplay classes={classes} images={images} OnRemoveImage={OnRemoveImage} />
                 </div>
             </CardContent>
             <CardActions className={classes.action}>
