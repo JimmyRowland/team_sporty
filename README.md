@@ -18,9 +18,10 @@ Managers, coaches, players, sport-related public
 The target audience for this project is aimed at the sports-related public, such as managers, coaches, and players. The goal is a web app that allows individuals to manage their teams/sports organization, and also allow players to connect with other players within their own team or with teams outside their own. With team pages, personal schedules, and personal pages, we aim to make it easier for users to stay in touch and be updated with their team.
 #
 
-## Project Task Requirements
+## Project Task Requirements (Updated)
+After we evaluated our progress on the project, we have reimagined our plan. As a result, we decided to reallocate goals that were underestimated or overestimated in difficulty and removed some goals that are either overly time-consuming or less relevant. Correspondingly, we have added multiple new goals to standard and stretch goals with the achievability in mind and broken down some of the more generic goals into more specific ones.
 
-Minimal Requirements
+Minimal Goals
 - Create teams ✅
 - View teams ✅
 - Create events ✅
@@ -28,24 +29,41 @@ Minimal Requirements
 - Team message board ✅
 - Login/authentication ✅
 
-Standard Requirements
-- Search function for teams / players ✅/❌ (search function for teams is implemented)
-- Direct messages to individuals ❌
-- Add Google calendar support (using Google Calendar API) ❌
-- Sprucing up the team page, announcements on team page ✅
+Standard Goals
 - Ability to add profile image and cover image ✅
 - Manage teams - promote players to coaches/managers; kick players ✅
-- Join teams/team portal ✅
 - Mark off availability for events ✅
+- Dynamic routing ✅
 
-Stretch
+Stretch Goals
 - Server Side Rendering (NextJS) ✅
 - Search function for teams ✅
+- Search function for players ❌
+- Image posts ✅
+- Direct messages to individuals ❌
 - Managing Clubs (can have more than one team in a club) ❌
 - Social media feeds ❌
 - Sports Statistics (individual and team) - eg. W/L record, goals/assists, etc. ❌
 
-#
+## Project Task Requirements (Original)
+Minimal Requirements
+
+Create, view, and manage teams
+Manage schedules and availiability
+Customized Home pages for the individual
+Team message board
+Standard Requirements
+
+Search function for teams / players
+Direct messages to individuals
+Add Google calendar support (using Google Calendar API)
+Recruiting / team portal
+Sprucing up the team page, announcements on team page
+Stretch
+
+Managing Clubs (can have more than one team in a club)
+Social media feeds
+Sports Statistics (individual and team)
 
 ## 2 minimal requirements broken down
 
