@@ -8,12 +8,13 @@ import List from "@material-ui/core/List";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import GroupIcon from "@material-ui/icons/Group";
 import { useGetMyTeamListQuery } from "../../generated/graphql";
-import TeamItem from "../../components/teamList/TeamItem";
+import TeamItem from "./TeamItem";
 import { ErrorComponent } from "../Error/Error";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Link from "next/link";
 
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -29,12 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+//modified card header
 const CardHeader2 = withStyles((theme: Theme) => ({
     root: {
         paddingBottom: 1,
     },
 }))(CardHeader);
 
+//modified card content
 const CardContent2 = withStyles((theme: Theme) => ({
     root: {
         paddingTop: 0,
@@ -42,7 +45,8 @@ const CardContent2 = withStyles((theme: Theme) => ({
     },
 }))(CardContent);
 
-function PersonalCalendar() {
+//team card on profile page
+function PersonalTeam() {
     const classes = useStyles();
 
     const { data, loading, error } = useGetMyTeamListQuery({});
@@ -51,7 +55,7 @@ function PersonalCalendar() {
         return <ErrorComponent />;
     }
 
-    //drop down
+    //drop down menu from top right of card
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -120,4 +124,4 @@ function PersonalCalendar() {
         </Card>
     );
 }
-export default PersonalCalendar;
+export default PersonalTeam;

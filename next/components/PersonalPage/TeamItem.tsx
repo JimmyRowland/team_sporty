@@ -6,8 +6,8 @@ import Avatar from "@material-ui/core/Avatar";
 import ImageIcon from "@material-ui/icons/Image";
 import { Button } from "@material-ui/core";
 import Link from "next/link";
-import { Team } from "../../generated/graphql";
 
+//team item for team card on profile page
 function TeamItem({
     name,
     _id,

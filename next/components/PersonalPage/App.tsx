@@ -4,6 +4,7 @@ import PersonalInfoTab from "../../components/PersonalInfoTab/PersonalInfoTab";
 import PersonalCalendar from "../../components/PersonalPage/PersonalCalendar";
 import PersonalTeamList from "../../components/PersonalPage/PersonalTeam";
 
+//styles
 const useStyles = makeStyles((theme) => ({
     container: {
         width: "90%",
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+//profile page
 function PersonalPage() {
     const classes = useStyles();
     return (

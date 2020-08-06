@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -7,13 +7,13 @@ import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
-import { CircularProgress } from "@material-ui/core";
 import { useGetEventsOfAllTeamsQuery } from "../../generated/graphql";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Link from "next/link";
 
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -36,12 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+//calendar card on profile page
 function PersonalCalendar() {
     const classes = useStyles();
 
+    //get first 3 events
     const { data } = useGetEventsOfAllTeamsQuery({ variables: { skip: 0, limit: 3 } });
 
-    //drop down
+    //drop down menu from top right of card
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
