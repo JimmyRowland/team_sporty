@@ -88,6 +88,7 @@ function TeamSearchPage() {
                                     variant="outlined"
                                     className={classes.searchbar}
                                     placeholder="Search Team"
+                                    onChange={(e) => handleSearch(e, e.target.value)}
                                 />
                             )}
                         />

@@ -22,7 +22,7 @@ export class CommentResolver {
     }
 
     @Query(() => [Comment])
-    @UseMiddleware(isAuth, isCoach)
+    @UseMiddleware(isAuth)
     async getComments(
         @Arg("teamID") teamID: string,
         @Arg("postID") postID: string,
