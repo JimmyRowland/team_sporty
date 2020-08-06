@@ -2,7 +2,6 @@ import { Arg, FieldResolver, Query, Resolver, Root, UseMiddleware } from "type-g
 import { Comment } from "../entities/Comment";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
-import { isCoach } from "../middleware/isCoach";
 import { TeamModel } from "../entities/Team";
 import { ObjectID } from "mongodb";
 
@@ -20,11 +19,7 @@ export class CommentResolver {
 
     @Query(() => [Comment])
     @UseMiddleware(isAuth)
-    async getComments(
-        @Arg("teamID") teamID: string,
-        @Arg("postID") postID: string,
-        @Ctx() { payload }: ResReq,
-    ): Promise<Comment[]> {
+    async getComments(@Arg("teamID") teamID: string, @Arg("postID") postID: string): Promise<Comment[]> {
         try {
             const comments0 = await TeamModel.aggregate([
                 { $match: { _id: new ObjectID(teamID) } },
