@@ -234,6 +234,7 @@ export default function PostComponent({
     const { startPolling, stopPolling, data: commentQuery } = useGetCommentsQuery({
         variables: { postID: postID, teamID: teamID },
         skip: !expanded,
+        //For demo
         pollInterval: 1000,
     });
     const handleExpandClick = () => {
