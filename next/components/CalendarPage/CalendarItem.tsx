@@ -125,6 +125,13 @@ export default function CalendarItem({
 
     //date to readable time
     const eventDate = new Date(date);
+    const eventDateString = eventDate.toDateString();
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const eventMonth = monthNames[eventDate.getMonth()];
+    const eventYear = eventDate.getFullYear();
+    const eventDay = eventDateString.slice(8, 11);
     function formatAMPM(date: Date) {
         let hours = date.getHours();
         const minutes = date.getMinutes();
@@ -143,7 +150,7 @@ export default function CalendarItem({
                 <ExpansionPanelSummary aria-label="Expand" aria-controls="additional-actions1-content">
                     <div className={classes.heading}>
                         <h3>{name}</h3>
-                        <p>{timeString}</p>
+                        <p>{timeString + ". " + eventMonth + " " + eventDay + ", " + eventYear}</p>
                         <p>{address}</p>
                     </div>
                     <div className={classes.secondaryHeading}>
