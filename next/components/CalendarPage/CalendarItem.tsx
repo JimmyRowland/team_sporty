@@ -8,6 +8,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useSetGoingMutation } from "../../generated/graphql";
+
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -22,16 +24,17 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: "84.00%",
+            flexBasis: "30.00%",
             flexShrink: 0,
             align: "left",
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "16.00%",
+            flexBasis: "70.00%",
             flexShrink: 0,
-            align: "right",
+            display: "flex",
+            justifyContent: "flex-end",
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
@@ -59,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+//custom expansion panel
 const ExpansionPanelSummary = withStyles({
     root: {
         backgroundColor: "rgba(0,0,0,.03)",
@@ -77,6 +81,7 @@ const ExpansionPanelSummary = withStyles({
     expanded: {},
 })((props) => <MuiExpansionPanelSummary {...props} />);
 
+//custon expansion panel
 const ExpansionPanelDetailsUpdated = withStyles((theme: Theme) => ({
     root: {
         backgroundColor: "rgba(255,255,255,.1)",
@@ -107,6 +112,8 @@ export default function CalendarItem({
     refetch: () => Promise<any>;
 }) {
     const classes = useStyles();
+
+    //event availability handler
     const [selectedValue, setSelectedValue] = React.useState(isGoing);
     const [setGoing] = useSetGoingMutation();
     const handleChangeAvailability = (e: any) => {
@@ -116,6 +123,7 @@ export default function CalendarItem({
         });
     };
 
+    //date to readable time
     const eventDate = new Date(date);
     function formatAMPM(date: Date) {
         let hours = date.getHours();

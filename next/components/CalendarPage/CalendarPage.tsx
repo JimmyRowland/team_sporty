@@ -2,10 +2,10 @@ import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CalendarList from "./CalendarList";
 import TeamDropDown from "../../components/teamDropDown/TeamDropDown";
-import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 import { selectTeamState } from "./CalendarPageSlicer";
 
+//styles
 const useStyles = makeStyles({
     body: {
         paddingTop: 50,
@@ -38,13 +38,15 @@ const useStyles = makeStyles({
     },
     teamDropDownDiv: {
         verticalAlign: "right",
-        align: "right",
-        float: "right"
+        display: "flex",
+        justifyContent: "flex-end",
     }
 });
 
+
 function CalendarPage() {
     const classes = useStyles();
+    //team state; which events to show
     const team = useSelector(selectTeamState);
 
     return (
