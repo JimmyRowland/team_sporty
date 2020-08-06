@@ -112,6 +112,7 @@ function TeamPage({ id, errors }: Props) {
         },
         partialRefetch: true,
         notifyOnNetworkStatusChange: true,
+        pollInterval: 20000,
     });
     const [{ hasNext, skip }, setHasNext] = useState({ hasNext: true, skip: 10 });
     const posts = !loading && postsQuery && postsQuery.getPosts ? postsQuery.getPosts : data.getPosts;
