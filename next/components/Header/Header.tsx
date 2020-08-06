@@ -61,7 +61,7 @@ export default function Header() {
                 </Hidden>
                 <Hidden smDown>
                     <Tabs
-                        value={tabValue === -1 ? false : tabValue}
+                        value={tabValue === -1 || tabValue > 3 ? false : tabValue}
                         onChange={handleTabClick}
                         indicatorColor="secondary"
                         textColor="secondary"

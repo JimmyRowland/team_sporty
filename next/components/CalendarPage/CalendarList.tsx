@@ -88,7 +88,7 @@ export default function ControlledExpansionPanels() {
                 for (const response of event.usersResponse) {
                     if (response.isGoing === EventUserResEnum.NoResponse) {
                         usersNoResponse.push(
-                            <BlackTooltip title={response.user.name} placement="top">
+                            <BlackTooltip title={response.user.name} placement="top" key={response.user._id}>
                                 <Avatar className={classes.avatar} src={response.user.avatarUrl}>
                                     {response.user.name[0].toUpperCase()}
                                 </Avatar>
@@ -96,7 +96,7 @@ export default function ControlledExpansionPanels() {
                         );
                     } else if (response.isGoing === EventUserResEnum.Going) {
                         usersGoing.push(
-                            <BlackTooltip title={response.user.name} placement="top">
+                            <BlackTooltip title={response.user.name} placement="top" key={response.user._id}>
                                 <Avatar className={classes.avatar} src={response.user.avatarUrl}>
                                     {response.user.name[0].toUpperCase()}
                                 </Avatar>
@@ -107,7 +107,7 @@ export default function ControlledExpansionPanels() {
                         }
                     } else {
                         usersNotGoing.push(
-                            <BlackTooltip title={response.user.name} placement="top">
+                            <BlackTooltip title={response.user.name} placement="top" key={response.user._id}>
                                 <Avatar className={classes.avatar} src={response.user.avatarUrl}>
                                     {response.user.name[0].toUpperCase()}
                                 </Avatar>
@@ -121,7 +121,6 @@ export default function ControlledExpansionPanels() {
                 return (
                     <div className={classes.eventContainer} key={index}>
                         <CalendarItem
-                            key={index}
                             name={event.name}
                             type={event.eventType}
                             date={event.startDate}
