@@ -33,6 +33,7 @@ Standard Goals
 - Ability to add profile image and cover image ✅
 - Manage teams - promote players to coaches/managers; kick players ✅
 - Mark off availability for events ✅
+- Edit team information ✅
 - Dynamic routing ✅
 
 Stretch Goals
