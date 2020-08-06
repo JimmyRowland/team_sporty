@@ -1,25 +1,18 @@
 # SPORTY
 
-## Team Name
-SeeGeeDoubleYu
+Team Name: SeeGeeDoubleYu
 
-## Team Members
-Collin Eng, William Ji, Geordie Parappilly, Yu Tian
+Team Members: Collin Eng, Geordie Parappilly, William Ji, Yu Tian
 
-## App Name
-SPORTY
-
-
-## Target Audience:
-Managers, coaches, players, sport-related public
+App Name: SPORTY
 
 
 ## Project Description
-The target audience for this project is aimed at the sports-related public, such as managers, coaches, and players. The goal is a web app that allows individuals to manage their teams/sports organization, and also allow players to connect with other players within their own team or with teams outside their own. With team pages, personal schedules, and personal pages, we aim to make it easier for users to stay in touch and be updated with their team.
+The target audience for this project is aimed at the sports-related public, such as managers, coaches, and players. SPORTY is a web app that allows individuals to manage their teams/sports organization, and also allow players to connect with other players within their own team or with teams outside their own. With team pages, personal schedules, and personal pages, we aim to make it easier for users to stay in touch and be updated with their team.
 #
 
 ## Project Task Requirements (Updated)
-After we evaluated our progress on the project, we have reimagined our plan. As a result, we decided to reallocate goals that were underestimated or overestimated in difficulty and removed some goals that are either overly time-consuming or less relevant. Correspondingly, we have added multiple new goals to standard and stretch goals with the achievability in mind and broken down some of the more generic goals into more specific ones.
+After we evaluated our progress on the project, we have reimagined our plan. As a result, we decided to reallocate goals that were underestimated or overestimated in difficulty and removed some goals that were either overly time-consuming or less relevant. Correspondingly, we have added multiple new goals to standard and stretch goals with the achievability in mind and broken down some of the more generic goals into more specific ones.
 
 Minimal Goals
 - Create teams ✅
