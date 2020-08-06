@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         calendarItemsContainer: {
             height: "80%",
-            //overflowY: "scroll",
+            overflowY: "auto",
         },
         teamContainer: {
             margin: "1em",
