@@ -485,7 +485,7 @@ export class TeamResolver {
         const newTeam = new TeamModel({
             name: name,
             sport: sport,
-            description: "team description",
+            description: "No team description",
         });
         const newKeyPair = new TeamCoachMapModel({
             _id: {

@@ -101,7 +101,7 @@ export default function App() {
     const back = () => {
         router.back();
     };
-    const options = ["football", "cricket", "basketball"];
+    const options = ["football", "cricket", "basketball", "others"];
 
     return (
         <Paper className={classes.paper}>
