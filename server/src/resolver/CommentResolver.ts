@@ -19,8 +19,12 @@ export class CommentResolver {
     }
 
     @Query(() => [Comment])
-    @UseMiddleware(isAuth, isCoach)
-    async getComments(@Arg("teamID") teamID: string, @Arg("postID") postID: string): Promise<Comment[]> {
+    @UseMiddleware(isAuth)
+    async getComments(
+        @Arg("teamID") teamID: string,
+        @Arg("postID") postID: string,
+        @Ctx() { payload }: ResReq,
+    ): Promise<Comment[]> {
         try {
             const comments0 = await TeamModel.aggregate([
                 { $match: { _id: new ObjectID(teamID) } },
