@@ -36,6 +36,11 @@ const useStyles = makeStyles({
         height: 120,
         width: 120,
     },
+    teamDropDownDiv: {
+        verticalAlign: "right",
+        align: "right",
+        float: "right"
+    }
 });
 
 function CalendarPage() {
@@ -50,9 +55,9 @@ function CalendarPage() {
                 </div>
                 <div className={classes.columnContainer}>
                     <br />
-                    <Typography align="right">
+                    <div className={classes.teamDropDownDiv}>
                         <TeamDropDown />
-                    </Typography>
+                    </div>
                 </div>
             </div>
             <div className={classes.container2}>
