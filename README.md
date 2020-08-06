@@ -46,24 +46,23 @@ Stretch Goals
 - Sports Statistics (individual and team) - eg. W/L record, goals/assists, etc. ❌
 
 ## Project Task Requirements (Original)
-Minimal Requirements
+Minimal Requirements:
+- Create, view, and manage teams
+- Manage schedules and availiability
+- Customized Home pages for the individual
+- Team message board
 
-Create, view, and manage teams
-Manage schedules and availiability
-Customized Home pages for the individual
-Team message board
-Standard Requirements
+Standard Requirements:
+- Search function for teams / players
+- Direct messages to individuals
+- Add Google calendar support (using Google Calendar API)
+- Recruiting / team portal
+- Sprucing up the team page, announcements on team page
 
-Search function for teams / players
-Direct messages to individuals
-Add Google calendar support (using Google Calendar API)
-Recruiting / team portal
-Sprucing up the team page, announcements on team page
-Stretch
-
-Managing Clubs (can have more than one team in a club)
-Social media feeds
-Sports Statistics (individual and team)
+Stretch:
+- Managing Clubs (can have more than one team in a club)
+- Social media feeds
+- Sports Statistics (individual and team)
 
 ## 2 minimal requirements broken down
 
