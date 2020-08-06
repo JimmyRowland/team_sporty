@@ -15,9 +15,8 @@ import {
     GetPostsDocument,
     usePinPostMutation,
     useAddPostCommentMutation,
-    useUserLikedPostQuery,
-    useGetCommentsLazyQuery,
     useGetCommentsQuery,
+    useDeletePostMutation,
 } from "../../generated/graphql";
 import RoomIcon from "@material-ui/icons/Room";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -128,11 +127,13 @@ const PinMenu = ({
     handlePin,
     isPinned,
     handleClose,
+    handleDelete,
 }: {
     anchorEl: any;
     handlePin: any;
     isPinned: boolean;
     handleClose: any;
+    handleDelete: any;
 }) => {
     return (
         <div>
@@ -152,6 +153,7 @@ const PinMenu = ({
                 }}
             >
                 <MenuItem onClick={handlePin}>{isPinned ? "Unpin" : "Pin"}</MenuItem>
+                <MenuItem onClick={handleDelete}>{"Delete"}</MenuItem>
             </Menu>
         </div>
     );
@@ -195,15 +197,6 @@ const ImageDisplay = ({ imgUrls, classes }: { imgUrls: string[]; classes: any })
     ) : null;
 };
 
-// const PinDisplay = ({ isPinned, classes }: { isPinned: boolean; classes: any }) => {
-//     return isPinned ? (
-//         <div className={classes.pin}>
-//             <RoomIcon />
-//             <Typography className={classes.pinElement}> This post is pinned </Typography>
-//         </div>
-//     ) : null;
-// };
-
 const PinDisplay = ({ isPinned, classes }: { isPinned: boolean; classes: any }) => {
     return isPinned ? (
         <div className={classes.pin}>
@@ -238,6 +231,7 @@ export default function PostComponent({
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [pinPost] = usePinPostMutation();
+    const [deletePost] = useDeletePostMutation();
     const divref = React.useRef<any>();
     const [expanded, setExpanded] = useState(false);
     const [addComment] = useAddPostCommentMutation();
@@ -267,18 +261,39 @@ export default function PostComponent({
 
     const handlePin = () => {
         setAnchorEl(null);
+        const limit = (Math.floor(index / 10) + 1) * 10;
         pinPost({
             variables: { teamID: teamID, isPined: !isPinned, postID: postID },
-            optimisticResponse: { pinPost: true },
             update: (proxy, { data: { pinPost } }) => {
                 const data: any = proxy.readQuery({
                     query: GetPostsDocument,
-                    variables: { teamID: teamID, limit: 10, skip: 0 },
+                    variables: { teamID: teamID, limit: limit, skip: limit - 10 },
                 });
                 data.getPosts[index].isPined = !isPinned;
                 proxy.writeQuery({
                     query: GetPostsDocument,
-                    variables: { teamID: teamID, limit: 10, skip: 0 },
+                    variables: { teamID: teamID, limit: limit, skip: limit - 10 },
+                    data: { ...data },
+                });
+            },
+        });
+    };
+
+    const handleDelete = () => {
+        setAnchorEl(null);
+        const limit = (Math.floor(index / 10) + 1) * 10;
+        deletePost({
+            variables: { teamID: teamID, postID: postID },
+            optimisticResponse: { deletePost: true },
+            update: (proxy, { data: { deletePost } }) => {
+                const data: any = proxy.readQuery({
+                    query: GetPostsDocument,
+                    variables: { teamID: teamID, limit: limit, skip: limit - 10 },
+                });
+                data.getPosts.splice(index, 1);
+                proxy.writeQuery({
+                    query: GetPostsDocument,
+                    variables: { teamID: teamID, limit: limit, skip: limit - 10 },
                     data: { ...data },
                 });
             },
@@ -297,7 +312,6 @@ export default function PostComponent({
 
     return (
         <Card className={classes.root}>
-            {/* <PinDisplay isPinned={isPinned} classes={classes} /> */}
             <CardHeader
                 avatar={<Avatar aria-label="recipe" className={classes.avatar} src={avatarUrl} />}
                 title={<Typography> {firstName} </Typography>}
@@ -310,6 +324,7 @@ export default function PostComponent({
                             anchorEl={anchorEl}
                             handlePin={handlePin}
                             handleClose={handleClose}
+                            handleDelete={handleDelete}
                         />
                     </div>
                 }

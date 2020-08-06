@@ -58,7 +58,7 @@ const AccountDetails = ({ firstName, lastName, email, address, phone, introducti
             });
     };
     const classes = useStyles();
-    const options = ["football", "cricket", "basketball"];
+    const options = ["football", "cricket", "basketball", "others"];
     return (
         <Fragment>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

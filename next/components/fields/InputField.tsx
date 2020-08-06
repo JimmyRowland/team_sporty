@@ -18,8 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-// @ts-ignore
-export const InputField = ({ field, form: { errors, touched }, type, label }: FieldProps & InputProps) => {
+export const InputField = ({
+    field,
+    form: { errors, touched },
+    type,
+    label,
+}: FieldProps & InputProps & { label: string }) => {
     const errorMessage = touched[field.name] && errors[field.name];
     const classes = useStyles();
     return (

@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Ctx, UseMiddleware, FieldResolver, Root, Query
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { isCoach } from "../middleware/isCoach";
-import { Team, TeamModel } from "../entities/Team";
+import { TeamModel } from "../entities/Team";
 import { Post } from "../entities/Post";
 import { Comment } from "../entities/Comment";
 import { ObjectID } from "mongodb";
@@ -11,8 +11,6 @@ import { LikesMapModel } from "../entities/LikesMap";
 import { isCoachPayload } from "../middleware/isCoachPayload";
 import { getIDfromToken } from "../middleware/getIDfromToken";
 import { User, UserModel } from "../entities/User";
-import { GetTeamResponse } from "../interfaces/responseType";
-import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
 import { isMemberPayload } from "../middleware/isMemberPayload";
 
 @Resolver(() => Post)
@@ -184,7 +182,13 @@ export class PostResolver {
         try {
             let deleted;
             if (payload && payload._id && payload.isCoach) {
-                deleted = await TeamModel.findByIdAndUpdate(teamID, { $pull: { "posts._id": new ObjectID(postID) } });
+                deleted = await TeamModel.findByIdAndUpdate(
+                    teamID,
+                    {
+                        $pull: { posts: { _id: new ObjectID(postID) } },
+                    },
+                    { new: true },
+                );
             } else {
                 deleted = await TeamModel.findByIdAndUpdate(teamID, {
                     $pull: { posts: { _id: new ObjectID(postID), user: new ObjectID(payload._id) } },

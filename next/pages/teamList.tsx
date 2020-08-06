@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     },
     fontLighter: {
         fontWeight: "lighter",
-    }
+    },
 });
 
 //team list page to show all teams you're currently apart of

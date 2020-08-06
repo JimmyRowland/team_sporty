@@ -7,14 +7,8 @@ import List from "@material-ui/core/List";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 import ClubImageUpload from "../ImageUpload/ClubImageUpload/ClubImageUpload";
 import EditIcon from "@material-ui/icons/Edit";
-import {
-    useGetTeamPageStaticQuery,
-    useUpdateDescriptionMutation,
-    useUpdateTeamMutation,
-} from "../../generated/graphql";
-import Input from "@material-ui/core/Input";
+import { useGetTeamPageStaticQuery, useUpdateDescriptionMutation } from "../../generated/graphql";
 import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
 
 //styles
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,21 +23,27 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "1em",
             align: "center",
             textAlign: "center",
+            [theme.breakpoints.down("sm")]: {
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+            },
         },
-        text: {
-            marginTop: theme.spacing(1),
-        },
+        text: {},
         text2: {
-            marginTop: theme.spacing(3),
             fontWeight: "lighter",
-            marginBottom: "0px",
         },
         calendarContainer: {
-            marginTop: theme.spacing(1),
             display: "block",
-            padding: "1em",
             height: "60%",
             align: "center",
+            [theme.breakpoints.down("sm")]: {
+                width: "300px",
+                height: "auto",
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: theme.spacing(3),
+            },
         },
         calendarItemsContainer: {
             height: "80%",
@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme: Theme) =>
             left: "50%",
             transform: "translateX(-50%)",
             textAlign: "center",
+            [theme.breakpoints.down("sm")]: {
+                marginBottom: theme.spacing(1),
+            },
         },
         eventButton: {
             margin: "auto",
@@ -73,8 +76,31 @@ const useStyles = makeStyles((theme: Theme) =>
         caption: {
             float: "inherit",
         },
+        descriptionContainer: {
+            display: "flex",
+            alignItems: "center",
+            marginTop: theme.spacing(1),
+        },
     }),
 );
+
+const ImageUpload = ({
+    isCoach,
+    teamID,
+    imgUrl,
+    classes,
+}: {
+    isCoach: boolean;
+    teamID: string;
+    imgUrl: string;
+    classes: any;
+}) => {
+    return isCoach ? (
+        <ClubImageUpload teamID={teamID} imgUrl={imgUrl} />
+    ) : (
+        <Avatar className={classes.avatar} src={imgUrl} />
+    );
+};
 
 //Create Event Button
 const TeamMangementPortal = ({ tid, isCoach }: { tid: string; isCoach: boolean }) => {
@@ -84,6 +110,74 @@ const TeamMangementPortal = ({ tid, isCoach }: { tid: string; isCoach: boolean }
             <Button className={classes.eventButton}> Create Event </Button>
         </Link>
     ) : null;
+};
+
+const ModifyDescription = ({
+    desDisplay,
+    classes,
+    description,
+    onDescription,
+    editDescription,
+}: {
+    desDisplay: boolean;
+    classes: any;
+    description: string;
+    onDescription: any;
+    editDescription: any;
+}) => {
+    return desDisplay ? (
+        <Typography variant={"subtitle1"} className={classes.text2} onClick={editDescription}>
+            {description}
+        </Typography>
+    ) : (
+        <div>
+            <TextField
+                variant="outlined"
+                placeholder={description}
+                size="small"
+                className={classes.text}
+                onKeyDown={(e) => onDescription(e)}
+            />
+            <Typography variant="caption" className={classes.caption}>
+                Press enter to confirm edit.
+            </Typography>
+        </div>
+    );
+};
+
+const DescriptionDisplay = ({
+    desDisplay,
+    classes,
+    description,
+    onDescription,
+    editDescription,
+    isCoach,
+}: {
+    desDisplay: boolean;
+    classes: any;
+    description: string;
+    onDescription: any;
+    editDescription: any;
+    isCoach: boolean;
+}) => {
+    return isCoach ? (
+        <div className={classes.descriptionContainer}>
+            <ModifyDescription
+                desDisplay={desDisplay}
+                classes={classes}
+                description={description}
+                editDescription={editDescription}
+                onDescription={onDescription}
+            />
+            <Button onClick={editDescription}>
+                <EditIcon />
+            </Button>
+        </div>
+    ) : (
+        <Typography variant={"subtitle1"} className={classes.text}>
+            {description}
+        </Typography>
+    );
 };
 
 //panel on team page
@@ -110,16 +204,9 @@ export default function TeamDisplayPannel({
             teamID: id,
         },
     });
-    if (description === "") description = "No Description";
-    const ImageUpload = () => {
-        return isCoach ? (
-            <ClubImageUpload teamID={id} imgUrl={imgUrl} />
-        ) : (
-                <Avatar className={classes.avatar} src={imgUrl} />
-            );
-    };
+    if (description === "" && isCoach) description = "No Description";
 
-    const OnDescription = (e) => {
+    const onDescription = (e) => {
         let description = e.target.value;
         if (!description) description = "No Description";
         if (e.keyCode == 13) {
@@ -130,68 +217,35 @@ export default function TeamDisplayPannel({
                 },
             }).then(() => {
                 refetch();
-                EditDescription();
+                editDescription();
             });
         }
         if (e.keyCode == 27) {
-            EditDescription();
+            editDescription();
         }
     };
 
-    const EditDescription = () => {
+    const editDescription = () => {
         setDesDisplay(!desDisplay);
-    };
-
-    const ModifyDescription = () => {
-        return desDisplay ? (
-            <Typography variant={"subtitle1"} className={classes.text2} onClick={EditDescription}>
-                {description}
-            </Typography>
-        ) : (
-                <div>
-                    <TextField
-                        variant="outlined"
-                        placeholder={description}
-                        size="small"
-                        className={classes.text}
-                        onKeyDown={(e) => OnDescription(e)}
-                    />
-                    <Typography variant="caption" className={classes.caption}>
-                        Press enter to confirm edit.
-                </Typography>
-                </div>
-            );
-    };
-
-    const DescriptionDisplay = () => {
-        return isCoach ? (
-            <div>
-                <ModifyDescription />
-                <Button onClick={EditDescription} >
-                    Edit description &nbsp;&nbsp;
-                    <EditIcon />
-                </Button>
-            </div>
-        ) : (
-                <Typography variant={"subtitle1"} className={classes.text}>
-                    {description}
-                </Typography>
-            );
     };
 
     return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>
                 <div className={classes.teamContainer}>
-                    <ImageUpload />
+                    <ImageUpload teamID={id} imgUrl={imgUrl} classes={classes} isCoach={isCoach} />
                     <Typography variant={"h4"} className={classes.text}>
                         {" "}
                         {name}{" "}
                     </Typography>
-                    {/* <Typography variant="subtitle1" className={classes.text}>
-                        Team Description:
-                    </Typography> */}
-                    <DescriptionDisplay />
+                    <DescriptionDisplay
+                        desDisplay={desDisplay}
+                        classes={classes}
+                        description={description}
+                        editDescription={editDescription}
+                        onDescription={onDescription}
+                        isCoach={isCoach}
+                    />
                 </div>
                 <div className={classes.calendarContainer}>
                     <Typography variant={"h6"} align="center">
