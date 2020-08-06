@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import List from "@material-ui/core/List";
 import PersonalCalendarItem from "../PersonalPage/PersonalCalendarItem";
 import ClubImageUpload from "../ImageUpload/ClubImageUpload/ClubImageUpload";
+import EditIcon from "@material-ui/icons/Edit";
 import {
     useGetTeamPageStaticQuery,
     useUpdateDescriptionMutation,
@@ -14,6 +15,7 @@ import {
 } from "../../generated/graphql";
 import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,8 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             display: "block",
             padding: "1em",
-            height: "60%",
+            height: "50%",
             align: "center",
+        },
+        calendarItemsContainer: {
+            height: "80%",
+            overflowY: "scroll",
         },
         teamContainer: {
             margin: "1em",
@@ -144,7 +150,7 @@ export default function TeamDisplayPannel({
                     onKeyDown={(e) => OnDescription(e)}
                 />
                 <Typography variant="caption" className={classes.caption}>
-                    Press enter to edit/ ESC cancel
+                    Press enter to edit
                 </Typography>
             </div>
         );
@@ -152,13 +158,19 @@ export default function TeamDisplayPannel({
 
     const DescriptionDisplay = () => {
         return isCoach ? (
-            <ModifyDescription />
+            <div>
+                <ModifyDescription />
+                <IconButton onClick={EditDescription} >
+                    <EditIcon />
+                </IconButton>
+            </div>
         ) : (
             <Typography variant={"subtitle1"} className={classes.text}>
                 {description}
             </Typography>
         );
     };
+
     return (
         <Card raised={true} className={classes.leftCard}>
             <div className={classes.leftInnerContainer}>
@@ -173,12 +185,11 @@ export default function TeamDisplayPannel({
                     </Typography>
                     <DescriptionDisplay />
                 </div>
-                <br></br>
                 <div className={classes.calendarContainer}>
                     <Typography variant={"h6"} align="center">
                         Upcoming Events
                     </Typography>
-                    <div>
+                    <div className={classes.calendarItemsContainer}>
                         {events ? (
                             <List>
                                 {events.map((c: any) => (
