@@ -26,21 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
             flexBasis: "33.33%",
             flexShrink: 0,
         },
+        cardHeader2: {
+            paddingBottom: 1,
+        },
+        cardContent2: {
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
     }),
 );
-
-const CardHeader2 = withStyles((theme: Theme) => ({
-    root: {
-        paddingBottom: 1,
-    },
-}))(CardHeader);
-
-const CardContent2 = withStyles((theme: Theme) => ({
-    root: {
-        paddingTop: 0,
-        paddingBottom: 0,
-    },
-}))(CardContent);
 
 function PersonalCalendar() {
     const classes = useStyles();
@@ -58,7 +52,8 @@ function PersonalCalendar() {
 
     return (
         <Card className={classes.root}>
-            <CardHeader2
+            <CardHeader
+                classes={{ root: classes.cardHeader2 }}
                 className={classes.heading}
                 avatar={<CalendarTodayIcon />}
                 action={
@@ -95,13 +90,13 @@ function PersonalCalendar() {
                 titleTypographyProps={{ variant: "h5" }}
                 title="Your Upcoming Events"
             />
-            <CardContent2>
+            <CardContent classes={{ root: classes.cardContent2 }}>
                 <List className={classes.root}>
                     {data?.getEventsOfAllTeams?.map((c) => (
                         <PersonalCalendarItem key={c._id} name={c.name} date={c.startDate} address={c.address} />
                     ))}
                 </List>
-            </CardContent2>
+            </CardContent>
         </Card>
     );
 }

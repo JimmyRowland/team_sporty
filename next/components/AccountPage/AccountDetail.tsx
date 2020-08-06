@@ -1,12 +1,10 @@
 import React, { useState, Fragment } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { Card, CardHeader, CardContent, CardActions, Divider, Grid, Button, TextField } from "@material-ui/core";
 import { Controller, useForm } from "react-hook-form";
 import { EditProfileInput, useEditProfileMutation } from "../../generated/graphql";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { useRouter } from "next/router";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { Color } from "@material-ui/lab";
@@ -17,17 +15,12 @@ function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 const AccountDetails = ({ firstName, lastName, email, address, phone, introduction, sport }: EditProfileInput) => {
-    const router = useRouter();
     const [editProfile] = useEditProfileMutation();
-    const defaultValues = { firstName, lastName, email, address, phone, introduction, sport };
     const { handleSubmit, register, reset, control, watch, setValue, errors } = useForm<EditProfileInput>({
         defaultValues: { firstName, lastName, email, address, phone, introduction, sport },
     });
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = useState<Color>("error");
-    const handleClick = () => {
-        setOpen(true);
-    };
 
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === "clickaway") {

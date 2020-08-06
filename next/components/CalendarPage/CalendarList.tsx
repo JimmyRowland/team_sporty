@@ -101,7 +101,7 @@ export default function ControlledExpansionPanels() {
                     }
                 }
                 return (
-                    <div className={classes.eventContainer}>
+                    <div className={classes.eventContainer} key={index}>
                         <CalendarItem
                             key={index}
                             name={event.name}

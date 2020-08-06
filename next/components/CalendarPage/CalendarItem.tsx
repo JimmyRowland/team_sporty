@@ -1,22 +1,13 @@
 import React, { ReactNode } from "react";
-import { makeStyles, Theme, createStyles, withStyles, createMuiTheme } from "@material-ui/core/styles";
-import { green, red, grey } from "@material-ui/core/colors";
-//import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import { makeStyles, Theme, createStyles, withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-//import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-//import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Typography from "@material-ui/core/Typography";
-import Radio, { RadioProps } from "@material-ui/core/Radio";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Event, EventUserResEnum, useMeQuery, useSetGoingMutation } from "../../generated/graphql";
-import { Avatar } from "@material-ui/core";
-import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
+import { useSetGoingMutation } from "../../generated/graphql";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -68,34 +59,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const GreenRadio = withStyles({
-    root: {
-        color: green[400],
-        "&$checked": {
-            color: green[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-const RedRadio = withStyles({
-    root: {
-        color: red[400],
-        "&$checked": {
-            color: red[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-const GreyRadio = withStyles({
-    root: {
-        color: grey[400],
-        "&$checked": {
-            color: grey[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
 const ExpansionPanelSummary = withStyles({
     root: {
         backgroundColor: "rgba(0,0,0,.03)",
@@ -146,13 +109,6 @@ export default function CalendarItem({
     const classes = useStyles();
     const [selectedValue, setSelectedValue] = React.useState(isGoing);
     const [setGoing] = useSetGoingMutation();
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedValue(+e.target.value);
-        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
-            refetch();
-        });
-    };
-    const [availability, setAvailability] = React.useState(isGoing);
     const handleChangeAvailability = (e: any) => {
         setSelectedValue(+e.target.value);
         setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
@@ -176,11 +132,7 @@ export default function CalendarItem({
     return (
         <div className={classes.root}>
             <ExpansionPanel>
-                <ExpansionPanelSummary
-                    //expandIcon={<ExpandMoreIcon />}
-                    aria-label="Expand"
-                    aria-controls="additional-actions1-content"
-                >
+                <ExpansionPanelSummary aria-label="Expand" aria-controls="additional-actions1-content">
                     <div className={classes.heading}>
                         <h3>{name}</h3>
                         <p>{timeString}</p>
@@ -199,7 +151,6 @@ export default function CalendarItem({
                             >
                                 <MenuItem value={1}>Going</MenuItem>
                                 <MenuItem value={0}>Not Going</MenuItem>
-                                {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
                             </Select>
                         </FormControl>
                     </div>
@@ -209,12 +160,12 @@ export default function CalendarItem({
                         <p>Going: {usersGoing.length}</p>
                         <div className={classes.roster}>{usersGoing}</div>
                     </div>
-                    <Typography className={classes.spacing}></Typography>
+                    <div className={classes.spacing} />
                     <div className={classes.tertiaryHeading}>
                         <p>Not Going: {usersNotGoing.length}</p>
                         <div className={classes.roster}>{usersNotGoing}</div>
                     </div>
-                    <Typography className={classes.spacing}></Typography>
+                    <div className={classes.spacing} />
                     <div className={classes.tertiaryHeading}>
                         <p>Not Responded: {usersNoResponse.length}</p>
                         <div className={classes.roster}>{usersNoResponse}</div>
