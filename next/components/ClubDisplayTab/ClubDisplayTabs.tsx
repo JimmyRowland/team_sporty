@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "80%",
             width: "20%",
             margin: "auto",
+            minWidth: "120px"
         },
         clubIMG: {
             margin: "auto",
@@ -42,13 +43,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         infoLine1items: {
             display: "inline",
-            padding: "00px",
+            padding: "3px",
             fontSize: "24px",
             fontWeight: "bold",
         },
         infoLine2items: {
             display: "inline",
-            padding: "0px",
+            padding: "5px",
             fontWeight: 300,
             fontSize: "12px",
         },
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         infoLine4: {
             marginTop: "5px",
-            textAlign: "center",
+            textAlign: "left",
         },
         infoLine4items: {
             padding: "5px",
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: "20%",
             padding: theme.spacing(2),
             margin: "auto",
+            paddingRight: "50px"
         },
         addButton: {
             position: "absolute",
