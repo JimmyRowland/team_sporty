@@ -102,7 +102,11 @@ export function initializeApollo(initialState: NormalizedCacheObject | null = nu
     // get hydrated here
     if (initialState) {
         if (apolloClient) {
-            _apolloClient.cache.restore({ ...apolloClient.cache.extract(), ...initialState });
+            const prevState = _apolloClient.extract();
+            if (prevState.ROOT_QUERY && initialState.ROOT_QUERY) {
+                prevState.ROOT_QUERY = { ...prevState.ROOT_QUERY, ...initialState.ROOT_QUERY };
+            }
+            _apolloClient.cache.restore({ ...initialState, ...prevState });
         } else {
             _apolloClient.cache.restore(initialState);
         }
@@ -111,7 +115,6 @@ export function initializeApollo(initialState: NormalizedCacheObject | null = nu
     if (typeof window === "undefined") return _apolloClient;
     // Create the Apollo Client once in the client
     if (!apolloClient) apolloClient = _apolloClient;
-
     return apolloClient;
 }
 
