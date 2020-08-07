@@ -33,7 +33,6 @@ const useStyles = makeStyles({
         display: "flex",
     },
 });
-// TODO: Find a dateTime object.
 export function DateAvatar({ date, month }: { date: number; month: string }) {
     const classes = useStyles();
     return (

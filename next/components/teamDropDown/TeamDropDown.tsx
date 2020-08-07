@@ -8,7 +8,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import ComputerIcon from "@material-ui/icons/Computer";
-import { useGetTeamListAsMemberOrCoachQuery, useGetTeamListAsMemberQuery } from "../../generated/graphql";
+import { useGetTeamListAsMemberOrCoachQuery } from "../../generated/graphql";
 import { useDispatch } from "react-redux";
 import { setTeam } from "../CalendarPage/CalendarPageSlicer";
 

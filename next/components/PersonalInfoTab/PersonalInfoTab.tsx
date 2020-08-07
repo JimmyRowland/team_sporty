@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 //top tab on profile page
 export default function PersonalInfoTab() {
     const info = useSelector(selectPersonal);
-    const { data, loading, refetch } = useMeQuery();
+    const { data, loading } = useMeQuery();
     const classes = useStyles();
     return loading && data && data.me ? null : (
         <Card className={classes.body}>

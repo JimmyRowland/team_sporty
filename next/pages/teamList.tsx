@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 //team list page to show all teams you're currently apart of
 function TeamListPage() {
     const classes = useStyles();
-    const { data, loading, error } = useGetMyTeamListQuery({});
+    const { data } = useGetMyTeamListQuery({});
     const TeamDisplay = (team) => {
         return (
             <ClubDisplayTab
