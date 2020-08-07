@@ -1,17 +1,10 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem, Button } from "@material-ui/core";
-import {
-    useGetTeamListAsCoachQuery,
-    useGetTeamListAsMemberOrCoachQuery,
-    useLogoutMutation,
-} from "../../../generated/graphql";
+import { Button, List, ListItem } from "@material-ui/core";
+import { useGetTeamListAsMemberOrCoachQuery, useLogoutMutation } from "../../../generated/graphql";
 import PeopleIcon from "@material-ui/icons/People";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import SettingsIcon from "@material-ui/icons/Settings";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";

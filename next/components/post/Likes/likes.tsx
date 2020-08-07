@@ -1,8 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-
-import TextField from "@material-ui/core/TextField";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import { IconButton } from "@material-ui/core";
 import { useLikePostMutation, UserLikedPostDocument, useUserLikedPostQuery } from "../../../generated/graphql";

@@ -1,13 +1,8 @@
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
-import React, { useEffect } from "react";
-import { cloudinary, CloudinaryImageUpload } from "../../../lib/cloudinary";
-import {
-    useGetTeamPageStaticQuery,
-    useMeQuery,
-    useUploadAvatarMutation,
-    useUploadTeamImageMutation,
-} from "../../../generated/graphql";
+import React from "react";
+import { CloudinaryImageUpload } from "../../../lib/cloudinary";
+import { useGetTeamPageStaticQuery, useUploadTeamImageMutation } from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
