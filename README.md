@@ -85,6 +85,10 @@ We are happy with our final product, but we do acknowledge that we can definitel
 - contributed heavily to the visual design of the app - aligning content, prettying up features, and creating custom Material-UI components
 - helped with testing, cleaning up code, and removing unneccesary inputs
 
+#### Collin Eng
+- organized most meetings and created timelines for project production
+- helped with cleaning up code, adding finishing touches and stylistic tweaks to components
+
 #
 
 ## Screenshots
