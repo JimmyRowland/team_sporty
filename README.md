@@ -64,18 +64,25 @@ Our GraphQL server is actually deployed to Heroku. Our app, however, is built on
 #
 
 ## Above and Beyond functionality
-For one, instead of building a simple React app and only using what we learned in class, we wanted to challenge ourselves by aiming for a significantly more production-ready app. We wrote our entire app, both the front and back-end in Typescript, and also we built our GraphQL server to handle requests. When combining both TypeScript and GraphQL, we can leverage the benefits of having a client-driven api, type-safe interface, and the ability to avoid under and over-fetching issues. 
+For one, instead of building a simple React app and only using what we learned in class, we wanted to challenge ourselves by aiming for a significantly more production-ready app. We wrote our entire app, both the front and back-end in Typescript, and also we built our GraphQL server to handle requests. When combining both TypeScript, GraphQL, and Graphql generator, we can leverage the benefits of having a client-driven api, type-safe interface, and the ability to avoid under and over-fetching issues. 
 
-Secondly, we wanted to develop our app on NextJS. NextJS is a framework that that supports pre-rendering. Instead of having the browser render everything from scratch, Next.js can serve pre-rendered HTML. The benefit of this is that our site should appear fast as possible to not only our users, but also to Google. Our site essentially becomes more search engine friendly. As well, NextJS provides true code splitting. Each route is considered a unique entry point into the app and only loads the dependencies that are needed on that route. So theoretically, if we were to demo our teampage on a slow 3g network, only 10 public posts along with team info would be preloaded. Other features such as likes, comments, and the pin toggle would be loaded after the user has been authenticated.
+Secondly, we wanted to develop our app on NextJS. NextJS is a framework that that supports pre-rendering. Instead of having the browser render everything from scratch, Next.js can serve pre-rendered HTML. The benefit of this is that our site should appear fast as possible to not only our users, but also to Google. Our site essentially becomes more search engine friendly. As well, NextJS provides true code splitting. Each route is considered a unique entry point into the app and only loads the dependencies that are needed on that route. So theoretically, if we were to demo our teampage on a slow 3g network, only 10 public posts along with team info would be preloaded. Other features such as likes, comments, and the pin toggle would be loaded after the user has been authenticated. Thanks to nextJS pre-rendering and Apollo's efficient caching, our site is blazing fast. There is virtually no loading time when users swtich between route with caching in place.
 
-Security and authentication is another challenge we tackled head-on with our registration and login page. None of our passwords are stored in plain-text, and instead hashed using Bcrypt. We have both front and back-end validation checks on things like email type and password length. We store json web tokens in a cookie and authentication header. Different users, depending on their priviledge, have access to different features. We don't simply hide certain components; we have authentication middleware to guard the database.
+Security and authentication is another challenge we tackled head-on with our registration and login page. None of our passwords are stored in plain-text, and instead hashed with unique salt using crypto. We have both front and back-end validation checks on things like email type and password length. We store json web tokens in a cookie and authentication header. Different users, depending on their privilege, have access to different features. We don't simply hide certain components; we have authentication middleware to guard the database.
 
+We fully make use of gravatar and cloudinary API, serve pictures through CDN, and provide smooth user experience. We compress pictures upon upload and convert them into webp format to reduce payload. 
+
+Although we do not have time to implement direct messaging, we did finish the live comments update. New comments will be populated every fill second and users can have interactive discussion on a post. 
 #
 
 ## Next Steps...?
 
 We are happy with our final product, but we do acknowledge that we can definitely build upon it. Some ideas would maybe include a recruiting portal where you could search for players or even list your team as being open to new members. We could add google maps integration to our locations. As well, the option to add statistics so users can record scores for games and even add individual stats would be a great feature to have. The possibilities are almost endless, but we are really happy with the final product we accomplished in this much time. 
 
+#
+
+## Challenges
+Dealing with young technologies comes with unique challenges.We need to fix problems such caching bugs that comes with apollo and nextjs integration, [Open issue link](https://github.com/vercel/next.js/discussions/11957), [counter-intuitive type coercion that comes with typegoose](https://github.com/typegoose/typegoose/issues/323), and [dependencies that only work together in some specific versions](https://github.com/react-hook-form/react-hook-form/issues/2105)
 #
 
 ## Individual Contributions
@@ -89,6 +96,14 @@ We are happy with our final product, but we do acknowledge that we can definitel
 - organized most meetings and created timelines for project production
 - helped with cleaning up code, adding finishing touches and stylistic tweaks to components
 
+#### Yu Tian
+- Set up NextJS and Graphql Server Boilerplate
+- Set up the authentication and wrote authentication middlewares
+- Created database schemas and wrote many resolvers.
+- Deployed the app on heroku and vercel 
+- Helped with some layout issues
+- Distributed YouTube videos
+
 #
 
 ## Screenshots
@@ -98,7 +113,15 @@ We are happy with our final product, but we do acknowledge that we can definitel
 ![Team Search Page](public/sporty4.jpg?raw=true)
 
 #
+## Reference
+- https://github.com/benawad/jwt-auth-example
+- https://github.com/benawad/typescript-nextjs-graphql-series/tree/1_apollo_setup
+- https://www.youtube.com/watch?v=8yZImm2A1KE&list=PLN3n1USn4xlma1bBu3Tloe4NyYn9Ko8Gs
+- https://www.youtube.com/watch?v=z7872Nki5FY&list=PLYQSCk-qyTW2ewJ05f_GKHtTIzjynDgjK
+- https://github.com/devias-io/react-material-dashboard
 
+
+#
 ## OLD
 
 
