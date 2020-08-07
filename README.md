@@ -45,18 +45,18 @@ Stretch Goals
 
 #### Unit 1: HTML, JS, CSS, React
 
-Insteading of using JavaScript, we opted to use Typescript for type-checking to help avoid bugs. Our front-end is all written in React components, and consequently encorporate HTML. We used Material-UI, custom CSS, and inline styles to help with general styling and ui/ux.
+Insteading of using JavaScript, we opted to use Typescript for type-checking to help avoid bugs. Our front-end is all written in React components, and consequently encorporate HTML. We used Material-UI, JSS, and inline styles to help with general styling and ui/ux.
  
 
 #### Unit 2: React and Redux
 
-As stated above, our front-end is all just React components. We use Redux to help manage state for several components such as the team selector on the event page and our user tables. We also used React Hooks and the Apollo store for other cases like menus and event user maps.
+As stated above, our front-end is all just React components. We use Redux to help manage state for deeply nested components such as the team selector on the event page and our user tables. We also used hooks for data fetching and state management.
 
 #### Unit 3: MongoDB
-All our data is stored on MongoDB. We have seven different collections of documents to manage our complex data schema. Instead of using a RESTful API though, we opted to use GraphQL to help with scalability and performance.
+All our data is stored on MongoDB. We have seven different collections of documents to manage our complex data schema. We use Nested Documents and Sub Documents to model 1:N relationship. Instead of using subDocument to handle n:m relationship, we use ObjectID maps to keep data integrity and improve performance.
 
 #### Unit 4: Node and Express
-Our backend is also written completely in TypeScript. We used NodeJS to help handle connections and Express as the framework. We also had to use other packages like TypeGraphQL and Typegoose to make use of Typescript decorators to define both our GraphQL types, queries, mutations and the MongoDB schema.
+Our backend is also written completely in TypeScript. We used NodeJS to help handle connections and Express as the framework. We also had to use other packages like TypeGraphQL and Typegoose to make use of Typescript decorators to generate GraphQL types, Typescript Types, and MongoDB schemas.
 
 #### Unit 5: Release Engineering
 Our GraphQL server is actually deployed to Heroku. Our app, however, is built on NextJS, and consequently, we deployed it on Vercel instead. Vercel is primarily built for NextJS apps and is dedicated to support server-side rendering, which is why we opted to use NextJS in the first place.
@@ -64,7 +64,7 @@ Our GraphQL server is actually deployed to Heroku. Our app, however, is built on
 #
 
 ## Above and Beyond functionality
-For one, instead of building a simple React app and only using what we learned in class, we wanted to challenge ourselves by aiming for a significantly more production-ready app. We wrote our entire app, both the front and back-end in Typescript, and also used a GraphQL server for requests. When combining both TypeScript and GraphQL, we can leverage the benefits of having a client-driven api, static typing, and the ability to avoid under and over-fetching issues. 
+For one, instead of building a simple React app and only using what we learned in class, we wanted to challenge ourselves by aiming for a significantly more production-ready app. We wrote our entire app, both the front and back-end in Typescript, and also we built our GraphQL server to handle requests. When combining both TypeScript and GraphQL, we can leverage the benefits of having a client-driven api, type-safe interface, and the ability to avoid under and over-fetching issues. 
 
 Secondly, we wanted to develop our app on NextJS. NextJS is a framework that that supports pre-rendering. Instead of having the browser render everything from scratch, Next.js can serve pre-rendered HTML. The benefit of this is that our site should appear fast as possible to not only our users, but also to Google. Our site essentially becomes more search engine friendly. As well, NextJS provides true code splitting. Each route is considered a unique entry point into the app and only loads the dependencies that are needed on that route. So theoretically, if we were to demo our teampage on a slow 3g network, only 10 public posts along with team info would be preloaded. Other features such as likes, comments, and the pin toggle would be loaded after the user has been authenticated.
 
