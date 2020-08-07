@@ -3,8 +3,7 @@ import React from "react";
 import { getAccessToken } from "../../lib/accessToken";
 import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
-import classes from "*.module.css";
-import Typography from "@material-ui/core/Typography";
+import Account from "../../components/AccountPage/Account";
 
 const useStyles = makeStyles({
     container: {
@@ -27,12 +26,7 @@ const SettingPage = () => {
     }
     return (
         <Layout>
-            <div className={classes.container}>
-                <Typography align="center" variant="h6">
-                    On the settings panel to your left, you can manage your account and teams here. If you would like to
-                    leave your team, click on the members list of your team.
-                </Typography>
-            </div>
+            <Account />
         </Layout>
     );
 };

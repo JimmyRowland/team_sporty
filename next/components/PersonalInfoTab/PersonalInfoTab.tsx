@@ -5,7 +5,6 @@ import { selectPersonal } from "./EditPopUp/EditPersonalInfoSlice";
 import { useMeQuery } from "../../generated/graphql";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Avatar } from "@material-ui/core";
-import AvatarUpload from "../ImageUpload/AvatarUpload/AvatarUpload";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 //top tab on profile page
 export default function PersonalInfoTab() {
     const info = useSelector(selectPersonal);
-    const { data, loading, refetch } = useMeQuery();
+    const { data, loading } = useMeQuery();
     const classes = useStyles();
     return loading && data && data.me ? null : (
         <Card className={classes.body}>

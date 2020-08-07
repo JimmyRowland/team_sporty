@@ -33,7 +33,6 @@ const useStyles = makeStyles({
         minWidth: "18vw",
     },
 });
-// TODO use appbar to handle small screen
 export default function Header() {
     const classes = useStyles();
     const router = useRouter();
@@ -61,7 +60,7 @@ export default function Header() {
                 </Hidden>
                 <Hidden smDown>
                     <Tabs
-                        value={tabValue === -1 ? false : tabValue}
+                        value={tabValue === -1 || tabValue > 3 ? false : tabValue}
                         onChange={handleTabClick}
                         indicatorColor="secondary"
                         textColor="secondary"

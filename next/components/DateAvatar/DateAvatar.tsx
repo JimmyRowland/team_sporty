@@ -1,8 +1,9 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import red from "@material-ui/core/colors/red";
+
 const secondary = red[500];
 const useStyles = makeStyles({
     avatar: {
@@ -32,7 +33,6 @@ const useStyles = makeStyles({
         display: "flex",
     },
 });
-// TODO: Find a dateTime object.
 export function DateAvatar({ date, month }: { date: number; month: string }) {
     const classes = useStyles();
     return (

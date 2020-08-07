@@ -1,13 +1,11 @@
-import { ObjectType, Field, Int, Root } from "type-graphql";
-import { index, prop, Ref } from "@typegoose/typegoose";
-import { User, UserModel } from "./User";
+import { ObjectType, Field, Root } from "type-graphql";
+import { index, prop } from "@typegoose/typegoose";
+import { UserModel } from "./User";
 import { CreationAndModificationDate } from "./CreationAndModificationDate";
 import { registerEnumType } from "type-graphql";
 import { EventTypeEnum, EventUserResEnum } from "../interfaces/enum";
-import { LikesMapModel } from "./LikesMap";
 import { UsersResponseToEvent } from "../interfaces/responseType";
 import { Team } from "./Team";
-import { TeamMemberMap, TeamMemberMapModel } from "./TeamMemberMap";
 import { EventUserMap, EventUserMapModel } from "./EventUserMap";
 
 registerEnumType(EventUserResEnum, {

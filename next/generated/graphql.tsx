@@ -403,6 +403,7 @@ export enum Sport {
     Football = "football",
     Cricket = "cricket",
     Basketball = "basketball",
+    Others = "others",
     Unspecified = "unspecified",
 }
 

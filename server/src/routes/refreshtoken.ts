@@ -4,7 +4,6 @@ import { UserModel } from "../entities/User";
 import { createAccessToken, createRefreshToken, sendRefreshToken } from "../lib/utils";
 import { join } from "path";
 import { readFileSync } from "fs";
-
 const router = Router();
 const pathToPubKey = join(__dirname, "..", "id_rsa_pub.pem");
 const PUB_KEY = readFileSync(pathToPubKey, "utf8");
@@ -37,7 +36,6 @@ const PUB_KEY = readFileSync(pathToPubKey, "utf8");
         if (user.tokenVersion !== payload.tokenVersion) {
             return res.send({ success: false, accessToken: "" });
         }
-        // console.log("refresh");
         sendRefreshToken(res, createRefreshToken(user));
 
         return res.send({ ok: true, accessToken: createAccessToken(user) });

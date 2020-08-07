@@ -1,7 +1,7 @@
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
-import React, { useEffect } from "react";
-import { cloudinary, CloudinaryImageUpload } from "../../../lib/cloudinary";
+import React from "react";
+import { CloudinaryImageUpload } from "../../../lib/cloudinary";
 import { useMeQuery, useUploadAvatarMutation } from "../../../generated/graphql";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function AvatarUpload() {
-    //TODO move query to parent
     const { data, loading, refetch } = useMeQuery();
     const classes = useStyles();
     const [updateAvatar] = useUploadAvatarMutation();

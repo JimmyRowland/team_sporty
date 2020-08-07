@@ -1,10 +1,8 @@
-import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Comment } from "../entities/Comment";
-import { User, UserModel } from "../entities/User";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { LikesMapModel } from "../entities/LikesMap";
-import { post } from "@typegoose/typegoose";
 import { LikedPostResponse } from "../interfaces/responseType";
 
 @Resolver(() => Comment)

@@ -1,17 +1,15 @@
-// import { Resolver, Query, Mutation, Arg, ObjectType, Field, Ctx, UseMiddleware, Int } from "type-graphql";
-import { Resolver, Mutation, Query, Arg, ObjectType, Field, Ctx, UseMiddleware, Int, InputType } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import {
-    validPassword,
-    createRefreshToken,
-    sendRefreshToken,
-    genPassword,
     createAccessToken,
+    createRefreshToken,
+    genPassword,
     getGravatarUrl,
+    sendRefreshToken,
+    validPassword,
 } from "../lib/utils";
 import { ResReq } from "../interfaces/interfaces";
 import { User, UserModel } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
-import { verify } from "jsonwebtoken";
 import { EditProfileInput, RegisterInput } from "../interfaces/inputType";
 import { LoginResponse } from "../interfaces/responseType";
 import { getIDfromToken } from "../middleware/getIDfromToken";
@@ -35,7 +33,6 @@ export class UserResolver {
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async logout(@Ctx() { res, payload }: ResReq) {
-        // console.log(payload);
         const user = await UserModel.findOne({ _id: payload?._id });
         if (!user) {
             res.status(409).json({ success: false, msg: "Error" });
@@ -77,7 +74,6 @@ export class UserResolver {
                 sendRefreshToken(res, createRefreshToken(user));
             }
         }
-        console.log(req.connection.remoteAddress);
         if (req.connection.remoteAddress && !user.ip.includes(req.connection.remoteAddress)) {
             user.ip.push(req.connection.remoteAddress);
         }
@@ -94,7 +90,7 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async register(@Arg("input") { email, firstName, lastName, password }: RegisterInput, @Ctx() { res }: ResReq) {
+    async register(@Arg("input") { email, firstName, lastName, password }: RegisterInput) {
         const user = await UserModel.findOne({ email });
         if (user) {
             return false;
@@ -131,7 +127,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -144,12 +139,10 @@ export class UserResolver {
     async uploadBanner(@Arg("bannerUrl") bannerUrl: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
         const _id = payload._id;
         try {
-            console.log(bannerUrl);
             const message = await UserModel.updateOne({ _id }, { bannerUrls: bannerUrl });
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -166,7 +159,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -197,7 +189,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });

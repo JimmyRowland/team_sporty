@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { makeStyles, Theme, createStyles, withStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
@@ -126,8 +126,19 @@ export default function CalendarItem({
     //date to readable time
     const eventDate = new Date(date);
     const eventDateString = eventDate.toDateString();
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ];
     const eventMonth = monthNames[eventDate.getMonth()];
     const eventYear = eventDate.getFullYear();

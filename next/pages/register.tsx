@@ -97,7 +97,6 @@ export default function registerPage() {
                         const response = await register({
                             variables: data,
                         });
-                        console.log(response);
                         Router.push("/login");
                     } catch (err) {
                         const errors: { [key: string]: string } = {};

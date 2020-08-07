@@ -1,8 +1,5 @@
 import { ObjectType, Field } from "type-graphql";
-import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
-import { PostUserResponse } from "../interfaces/responseType";
-import { postUserIdObject } from "../interfaces/interfaces";
-import { User } from "./User";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 @ObjectType()
 export class LikesMap {
     @Field()

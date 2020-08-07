@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import CloseIcon from "@material-ui/icons/Close";
 import { IconButton } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPersonal, changeintro } from "./EditPersonalInfoSlice";
 import AvatarUpload from "../../ImageUpload/AvatarUpload/AvatarUpload";
 import { useMeQuery, useUploadIntroMutation } from "../../../generated/graphql";
 import BannerUpload from "../../ImageUpload/BannerUpload/BannerUpload";
 import Card from "@material-ui/core/Card";
-import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

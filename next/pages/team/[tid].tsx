@@ -1,12 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { LinearProgress, CircularProgress } from "@material-ui/core";
 import PostComponent from "../../components/post/PostComponent";
 import PostCreator from "../../components/post/PostCreator";
 import Layout from "../../components/layouts/index/Layout";
 import { Waypoint } from "react-waypoint";
 import {
-    GetPostsDocument,
     GetTeamPageStaticDocument,
     useGetPostsQuery,
     useGetTeamPageFirstFetchQuery,
@@ -16,6 +14,7 @@ import { initializeApollo } from "../../lib/apollo";
 import { GetStaticPaths, GetStaticProps } from "next";
 import TeamDisplayPanel from "../../components/teamDisplayPanel/TeamDisplayPanel";
 import { getAllTeamStaticPaths } from "../../lib/staticPaths";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -89,7 +88,6 @@ type Props = {
 
 function TeamPage({ id, errors }: Props) {
     if (errors) {
-        console.log(errors);
         return "Error component";
     }
     const classes = useStyles();
@@ -110,11 +108,12 @@ function TeamPage({ id, errors }: Props) {
             limit: 10,
             skip: 0,
         },
+        fetchPolicy: "network-only",
         partialRefetch: true,
         notifyOnNetworkStatusChange: true,
     });
     const [{ hasNext, skip }, setHasNext] = useState({ hasNext: true, skip: 10 });
-    const posts = !loading && postsQuery && postsQuery.getPosts ? postsQuery.getPosts : data.getPosts;
+    const posts = postsQuery && postsQuery.getPosts ? postsQuery.getPosts : data.getPosts;
     return (
         <Layout title={data?.getTeam.team.name}>
             <div className={classes.container}>
@@ -203,7 +202,7 @@ function TeamPage({ id, errors }: Props) {
                             </Fragment>
                         );
                     })}
-                    {networkStatus === 3 && <LinearProgress className={classes.columnItem} />}
+                    {networkStatus === 3 && <Skeleton width={"100%"} height={"50px"} />}
                 </div>
             </div>
         </Layout>
@@ -222,7 +221,7 @@ export const getStaticProps: GetStaticProps = async (url) => {
             query: GetTeamPageStaticDocument,
             variables: { teamID: tid },
         });
-        return { props: { id: tid, initialApolloState: apolloClient.cache.extract() } };
+        return { props: { id: tid, initialApolloState: apolloClient.extract() } };
     } catch (err) {
         return { props: { errors: err.message } };
     }

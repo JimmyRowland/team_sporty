@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ColoredPaper } from "../components/coloredPaper/ColoredPaper";
 import { DateAvatar } from "../DateAvatar/DateAvatar";
 import Typography from "@material-ui/core/Typography";

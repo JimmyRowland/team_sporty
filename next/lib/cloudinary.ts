@@ -4,8 +4,8 @@ export const cloudinary = {
     api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
-const avatarPreset = "ax8ca8dq";
-const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/df51z9s92/image/upload";
+const avatarPreset = "vc8tskd9";
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfxanglyc/image/upload";
 
 export const CloudinaryImageUpload = async (base64EncodedImage: string) => {
     return new Promise((resolve, reject) => {
