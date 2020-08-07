@@ -10,11 +10,11 @@ App Name: SPORTY
 
 
 ## Project Description
-Whether it be the abundant email spam or numerous apps being used to manage a single sports team, organizing can be a hassle. Our app, Sporty, aims to change that by being the one-stop web app for all your sports team management needs.
+Whether it be the abundant email spam or the numerous apps being used, manging even a single sports team can be a hassle. Our app, Sporty, aims to change that by being the one-stop web app for all your sports team management needs.
 #
 
 ## Project Task Requirements (Updated)
-Along the course of the term and further re-evaluation of our project, we felt it was neccessary to restructure our goals and requirements. Some of our initial goals were underestimated or overestimated in difficulty. We also removed goals that were either overly time-consuming or less relevant, and broke some of the more generic goals into more specific ones. Our new goals now significantly more concise and reflect a more accurate level of achievability we could aspire to hit. 
+Along the course of the term and further re-evaluation of our project, we felt it was neccessary to restructure our goals and requirements. Some of our initial goals were underestimated or overestimated in difficulty. We also removed goals that were either overly time-consuming or less relevant, and broke some of the more generic goals into more specific ones. Our new goals now significantly more concise and reflect a more accurate level of achievability we aspired to hit. 
 
 Minimal Goals
 - Create teams ✅
@@ -45,12 +45,12 @@ Stretch Goals
 
 #### Unit 1: HTML, JS, CSS, React
 
-Instead of using JavaScript, we opted to use TypeScript for type-checking to help avoid bugs. Our front-end is all written in React components, and consequently encorporate HTML. We used Material-UI, JSS, and inline styles to help with general styling and ui/ux.
+Instead of using JavaScript, we opted to use TypeScript for type-checking to help avoid bugs. Our front-end is all written in React components, and consequently incorporate HTML. We used Material-UI, JSS, and inline styles to help with general styling and UI/UX.
  
 
 #### Unit 2: React and Redux
 
-As stated above, our front-end is all just React components. We use Redux to help manage state for deeply nested components such as the team selector on the event page and our user tables. We also used hooks for data fetching and state management.
+As stated above, our front-end is all just React components. We use Redux to help manage state for deeply nested components such as the team selector on the event page and our user tables. We also used Hooks for data fetching and state management.
 
 #### Unit 3: MongoDB
 All our data is stored on MongoDB. We have seven different collections of documents to manage our complex data schema. We use Nested Documents and Sub Documents to model a one-to-many relationship. Instead of using subDocument to handle a many-to-many relationship, we use ObjectID maps to keep data integrity and improve performance.
