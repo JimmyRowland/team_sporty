@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "team_sporty",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
-    "lint:fix": "./node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "type-check": "tsc"
+    "start": "ts-node server/src/index.ts",
+    "lint:fix": "./node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "dependencies": {
     "@typegoose/typegoose": "^7.3.0",
@@ -20,7 +19,17 @@
     "mongoose": "^5.7.14",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.10",
-    "type-graphql": "^1.0.0-rc.3"
+    "type-graphql": "^1.0.0-rc.3",
+    "ts-node": "8.10.2",
+    "typescript": "3.9.6",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.1",
+    "@types/graphql": "^14.5.0",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/mongoose": "^5.7.29",
+    "@types/node": "^14.0.14"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -37,9 +46,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "nodemon": "^2.0.4",
-    "prettier": "^2.0.5",
-    "ts-node": "8.10.2",
-    "typescript": "3.9.6"
+    "prettier": "^2.0.5"
   },
   "author": "",
   "license": "ISC"
