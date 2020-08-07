@@ -89,7 +89,6 @@ type Props = {
 
 function TeamPage({ id, errors }: Props) {
     if (errors) {
-        console.log(errors);
         return "Error component";
     }
     const classes = useStyles();

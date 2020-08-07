@@ -103,6 +103,9 @@ export function initializeApollo(initialState: NormalizedCacheObject | null = nu
     if (initialState) {
         if (apolloClient) {
             const prevState = _apolloClient.extract();
+            if (prevState.ROOT_QUERY && initialState.ROOT_QUERY) {
+                prevState.ROOT_QUERY = { ...prevState.ROOT_QUERY, ...initialState.ROOT_QUERY };
+            }
             _apolloClient.cache.restore({ ...initialState, ...prevState });
         } else {
             _apolloClient.cache.restore(initialState);
