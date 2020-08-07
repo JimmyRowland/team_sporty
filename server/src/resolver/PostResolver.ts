@@ -119,6 +119,7 @@ export class PostResolver {
             const post = new Post();
             post.content = content;
             post.user = new ObjectID(payload._id);
+            post.lastModifyDate = new Date();
             if (isPrivate) {
                 post.isPrivate = isPrivate;
             }
