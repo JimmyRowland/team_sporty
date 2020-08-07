@@ -89,6 +89,12 @@ We are happy with our final product, but we do acknowledge that we can definitel
 - organized most meetings and created timelines for project production
 - helped with cleaning up code, adding finishing touches and stylistic tweaks to components
 
+#### William Ji
+- Contributed to the visual design throughout the project, including early prototypes, layouts and component appearances.
+- Developed various front-end features and integrated them into pages, including editing and displaying personal profile, sending and showing team posts and searching teams, etc.
+- Achieved Cloudinary image management library intergration.
+- Implemented several back-end resolvers mainly for handling post and comment requests.
+
 #
 
 ## Screenshots
