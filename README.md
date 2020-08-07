@@ -102,6 +102,7 @@ We are happy with our final product, but we do acknowledge that we can definitel
 ![Team Home Page](public/sporty2.jpg?raw=true)
 ![Calendar Page](public/sporty3.jpg?raw=true)
 ![Team Search Page](public/sporty4.jpg?raw=true)
+![Team Page](public/TeamPage.PNG?raw=true)
 
 #
 
