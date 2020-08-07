@@ -131,6 +131,7 @@ export default function PostCreator({
             };
             reader.readAsDataURL(file);
         }
+        e.target.value = "";
     };
 
     const uploadContent = async () => {
