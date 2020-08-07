@@ -74,7 +74,8 @@ Schedules and availability
 
 #
 
-## Mockups 
-![Event page](public/Event%20Page.png?raw=true)
-![Team Home Page](public/Team%20Home%20Page.png?raw=true)
-![Personal Home Page](public/Personal%20Home%20Page.png?raw=true)
+## Screenshots
+![Personal Home page](public/sporty1.jpg?raw=true)
+![Team Home Page](public/sporty2.jpg?raw=true)
+![Calendar Page](public/sporty3.jpg?raw=true)
+![Team Search Page](public/sporty4.jpg?raw=true)
