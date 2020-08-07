@@ -118,7 +118,7 @@ export default function App() {
                 description,
                 address,
                 teamID: tid.tid.toString(),
-                isPrivate,
+                isPrivate: false,
                 eventType,
             },
         })
@@ -216,11 +216,6 @@ export default function App() {
                                 name="eventType"
                                 control={control}
                             />
-                        </section>
-
-                        <section className={classes.leftPadding}>
-                            <label>Private</label>
-                            <Controller as={Checkbox} name="isPrivate" control={control} />
                         </section>
                     </div>
                     <div className={classes.buttonContainer}>
