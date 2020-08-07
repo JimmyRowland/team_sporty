@@ -104,6 +104,12 @@ Dealing with young technologies comes with unique challenges.We need to fix prob
 - Helped with some layout issues
 - Distributed YouTube videos
 
+#### William Ji
+- Contributed to the visual design throughout the project, including early prototypes, layouts and component appearances.
+- Developed various front-end features and integrated them into pages, including editing and displaying personal profile, sending and showing team posts and searching teams, etc.
+- Achieved Cloudinary image management library intergration.
+- Implemented several back-end resolvers mainly for handling post and comment requests.
+
 #
 
 ## Screenshots
@@ -111,6 +117,7 @@ Dealing with young technologies comes with unique challenges.We need to fix prob
 ![Team Home Page](public/sporty2.jpg?raw=true)
 ![Calendar Page](public/sporty3.jpg?raw=true)
 ![Team Search Page](public/sporty4.jpg?raw=true)
+![Team Page](public/TeamPage.PNG?raw=true)
 
 #
 ## Reference
