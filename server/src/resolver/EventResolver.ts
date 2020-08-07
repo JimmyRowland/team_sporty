@@ -14,7 +14,6 @@ import { isMemberPayload } from "../middleware/isMemberPayload";
 
 @Resolver()
 export class EventResolver {
-    //TODO filter nested documents using mongoose.
     @Query(() => [Event])
     @UseMiddleware(isAuth)
     async getEventsOfAllTeams(
@@ -41,7 +40,6 @@ export class EventResolver {
         return teams.map(({ events }: { events: Event; _id: string }) => events);
     }
 
-    // TODO filter Event on startDate in aggregate
     @Query(() => [Event])
     @UseMiddleware(getIDfromToken, isMemberPayload)
     async getEventsOfOneTeam(

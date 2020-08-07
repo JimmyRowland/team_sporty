@@ -33,7 +33,6 @@ export class UserResolver {
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async logout(@Ctx() { res, payload }: ResReq) {
-        // console.log(payload);
         const user = await UserModel.findOne({ _id: payload?._id });
         if (!user) {
             res.status(409).json({ success: false, msg: "Error" });
@@ -75,7 +74,6 @@ export class UserResolver {
                 sendRefreshToken(res, createRefreshToken(user));
             }
         }
-        console.log(req.connection.remoteAddress);
         if (req.connection.remoteAddress && !user.ip.includes(req.connection.remoteAddress)) {
             user.ip.push(req.connection.remoteAddress);
         }
@@ -129,7 +127,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -142,12 +139,10 @@ export class UserResolver {
     async uploadBanner(@Arg("bannerUrl") bannerUrl: string, @Ctx() { res, payload }: ResReq): Promise<boolean> {
         const _id = payload._id;
         try {
-            console.log(bannerUrl);
             const message = await UserModel.updateOne({ _id }, { bannerUrls: bannerUrl });
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -164,7 +159,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });
@@ -195,7 +189,6 @@ export class UserResolver {
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });

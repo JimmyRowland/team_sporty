@@ -504,13 +504,11 @@ export class TeamResolver {
         @Arg("teamID") teamID: string,
         @Ctx() { res }: ResReq,
     ): Promise<boolean> {
-        console.log(teamID);
         try {
             const message = await TeamModel.updateOne({ _id: teamID }, { imgUrl: imgUrl });
             if (!message) {
                 res.status(503).json({ success: false, message: "Server error" });
             }
-            console.log(message);
         } catch (err) {
             console.log(err);
             res.status(500).json({ success: false, message: err });

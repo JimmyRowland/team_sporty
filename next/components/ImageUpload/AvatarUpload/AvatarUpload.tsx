@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function AvatarUpload() {
-    //TODO move query to parent
     const { data, loading, refetch } = useMeQuery();
     const classes = useStyles();
     const [updateAvatar] = useUploadAvatarMutation();

@@ -33,7 +33,6 @@ const useStyles = makeStyles({
         minWidth: "18vw",
     },
 });
-// TODO use appbar to handle small screen
 export default function Header() {
     const classes = useStyles();
     const router = useRouter();
