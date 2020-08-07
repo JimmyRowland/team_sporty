@@ -2,10 +2,9 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-// import red from "@material-ui/core/colors/red";
 import { grey } from "@material-ui/core/colors";
 
-// const secondary = red[500];
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         avatar: {
@@ -38,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+//date avatar for calendar card on profile page - the square with dates on them
 export function DateAvatar(props: { date: string }) {
     const classes = useStyles();
 

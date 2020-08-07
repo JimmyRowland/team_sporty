@@ -1,0 +1,15 @@
+query GetPosts($teamID: String!,$limit:Int!,$skip:Int!) {
+    getPosts(teamID:$teamID, limit:$limit, skip:$skip){
+        content
+        _id
+        isPined
+        imgUrls
+        numberOfLikes
+        lastModifyDate
+        user{
+            name
+            avatarUrl
+        }
+    }
+}
+

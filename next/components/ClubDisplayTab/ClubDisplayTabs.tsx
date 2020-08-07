@@ -1,41 +1,48 @@
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import { Button } from "@material-ui/core";
-import { GTranslate } from "@material-ui/icons";
-import { Team, useApplyTeamMutation } from "../../generated/graphql";
+import { useApplyTeamMutation } from "../../generated/graphql";
 import Card from "@material-ui/core/Card";
+import Link from "next/link";
 
-const useStyles = makeStyles((Theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         body: {
-            width: "800px",
+            width: "100%",
+            maxWidth: "1000px",
             height: "150px",
             borderRadius: "15px",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
             display: "flex",
+            justifyContent: "auto",
             margin: "auto",
         },
         clubIMGContainer: {
+            position: "relative",
             height: "80%",
-            width: "15%",
+            width: "20%",
             margin: "auto",
+            minWidth: "120px",
         },
         clubIMG: {
-            margin: "10px auto",
-            height: "80%",
-            width: "80%",
+            margin: "auto",
+            width: theme.spacing(13),
+            height: theme.spacing(13),
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
         },
         infoContainer: {
-            height: "80%",
-            width: "60%",
+            height: "70%",
+            width: "70%",
             margin: "auto",
+            paddingLeft: theme.spacing(0),
             display: "block",
         },
-        infocontainer: {},
         infoLine1items: {
             display: "inline",
-            padding: "5px",
+            padding: "3px",
             fontSize: "24px",
             fontWeight: "bold",
         },
@@ -45,22 +52,32 @@ const useStyles = makeStyles((Theme: Theme) =>
             fontWeight: 300,
             fontSize: "12px",
         },
-        infoLine3: {
-            marginTop: "5px",
-            textAlign: "center",
-        },
         infoLine3items: {
+            display: "inline",
+            padding: "20px",
+            fontWeight: 300,
+            fontSize: "12px",
+        },
+        infoLine4: {
+            marginTop: "5px",
+            textAlign: "left",
+        },
+        infoLine4items: {
             padding: "5px",
             fontSize: "16px",
         },
         addButtonContainer: {
+            position: "relative",
             height: "80%",
-            width: "15%",
+            width: "20%",
+            padding: theme.spacing(2),
             margin: "auto",
+            paddingRight: "50px",
         },
         addButton: {
-            position: "relative",
-            margin: "50%",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
             transform: "translate(-50%, -50%)",
             borderRadius: "20px",
         },
@@ -76,6 +93,7 @@ export default function ClubDisplayTab({
     isMember,
     teamimage,
     isPending,
+    isDisplayOnly,
 }: {
     name: string;
     sport: string;
@@ -85,47 +103,63 @@ export default function ClubDisplayTab({
     isMember: boolean;
     teamimage: string;
     isPending: boolean;
+    isDisplayOnly: boolean;
 }) {
     const classes = useStyles();
     const [joinTeam, loading] = useApplyTeamMutation({ variables: { teamID: teamID } });
+    const [applied, setApplied] = useState(isPending);
     const handleJoinTeam = () => {
         setApplied(true);
         joinTeam();
     };
-    const [applied, setApplied] = useState(isPending);
+
+    const JoinButton = () => {
+        if (isMember && isDisplayOnly)
+            return (
+                <Button disabled variant="contained" color="secondary" className={classes.addButton}>
+                    Joined
+                </Button>
+            );
+        else if (isMember)
+            return (
+                <Link href={"/team/[tid]"} as={`/team/${teamID}`}>
+                    <Button variant="contained" color="secondary" className={classes.addButton}>
+                        Open
+                    </Button>
+                </Link>
+            );
+        else if (applied)
+            return (
+                <Button disabled variant="contained" color="secondary" className={classes.addButton}>
+                    Pending
+                </Button>
+            );
+        return (
+            <Button onClick={handleJoinTeam} variant="contained" color="secondary" className={classes.addButton}>
+                Join
+            </Button>
+        );
+    };
+
     return (
         <Card className={classes.body}>
             <div className={classes.clubIMGContainer}>
                 <Avatar className={classes.clubIMG} src={teamimage}></Avatar>
             </div>
             <div className={classes.infoContainer}>
-                <div className={classes.infocontainer}>
-                    {/*<div className={classes.infoLine1items}>Club Name</div>*/}
+                <div>
                     <div className={classes.infoLine1items}>{name}</div>
                 </div>
-                <div className={classes.infocontainer}>
+                <div>
                     <div className={classes.infoLine2items}> {sport} </div>
-                    <div className={classes.infoLine2items}> {numberMembers} members </div>
+                    <div className={classes.infoLine3items}> {numberMembers} members </div>
                 </div>
-                <div className={classes.infoLine3}>
-                    <div className={classes.infoLine3items}> {description} </div>
+                <div className={classes.infoLine4}>
+                    <div className={classes.infoLine4items}> {description} </div>
                 </div>
             </div>
             <div className={classes.addButtonContainer}>
-                {isMember || applied ? (
-                    <Button disabled variant="contained" color="primary" className={classes.addButton}>
-                        {isMember ? "Joined" : "Pending"}
-                    </Button>
-                ) : (
-                    <Button
-                        onClick={handleJoinTeam}
-                        variant="contained"
-                        color="secondary"
-                        className={classes.addButton}
-                    >
-                        Join
-                    </Button>
-                )}
+                <JoinButton />
             </div>
         </Card>
     );

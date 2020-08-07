@@ -2,11 +2,13 @@ import React, { ReactNode, useState } from "react";
 import { makeStyles, useTheme, Theme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import { getAccessToken } from "../../../lib/accessToken";
-import { useMediaQuery } from "@material-ui/core";
+import { Hidden, useMediaQuery } from "@material-ui/core";
 import Header from "../../Header/Header";
 import clsx from "clsx";
 import Sidebar from "../../Sidebar/Sidebar";
 import Layout from "../Layout";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 type Props = {
     children?: ReactNode;
@@ -25,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         height: "100%",
+    },
+    fab: {
+        position: "absolute",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
     },
 }));
 
@@ -61,6 +68,17 @@ export default function Settings({ children }: { children: ReactNode }) {
                 })}
             >
                 <Header />
+                <Hidden lgUp>
+                    <Fab
+                        color="primary"
+                        className={classes.fab}
+                        onClick={() => {
+                            setOpenSidebar((open) => !open);
+                        }}
+                    >
+                        <AddIcon />
+                    </Fab>
+                </Hidden>
                 <Sidebar
                     onClose={handleSidebarClose}
                     open={shouldOpenSidebar}

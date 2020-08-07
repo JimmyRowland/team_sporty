@@ -4,7 +4,8 @@
   "description": "team_sporty",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
-    "lint:fix": "./node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint:fix": "./node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "type-check": "tsc"
   },
   "dependencies": {
     "@typegoose/typegoose": "^7.3.0",

@@ -1,15 +1,13 @@
 import React, { Fragment } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem, Button } from "@material-ui/core";
-import { GetTeamResponse } from "../../../generated/graphql";
+import { Button, List, ListItem } from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { SportsSoccer } from "@material-ui/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import findOutermostIntrinsic from "@material-ui/core/test-utils/findOutermostIntrinsic";
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -90,16 +88,28 @@ const NestedTeamItem = ({ _id, name, isCoach }: { _id: string; name: string; isC
                         </Link>
                     </ListItem>
                     {isCoach ? (
-                        <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
-                            <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${_id}`}>
-                                <Button className={classes.button}>
-                                    <div className={classes.icon}>
-                                        <SportsSoccer />
-                                    </div>
-                                    Pending request
-                                </Button>
-                            </Link>
-                        </ListItem>
+                        <Fragment>
+                            <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
+                                <Link href={"/settings/pending/[tid]"} as={`/settings/pending/${_id}`}>
+                                    <Button className={classes.button}>
+                                        <div className={classes.icon}>
+                                            <SportsSoccer />
+                                        </div>
+                                        Pending request
+                                    </Button>
+                                </Link>
+                            </ListItem>
+                            <ListItem className={clsx(classes.item, classes.nested)} disableGutters>
+                                <Link href={"/settings/team/[tid]"} as={`/settings/team/${_id}`}>
+                                    <Button className={classes.button}>
+                                        <div className={classes.icon}>
+                                            <SportsSoccer />
+                                        </div>
+                                        Team Info
+                                    </Button>
+                                </Link>
+                            </ListItem>
+                        </Fragment>
                     ) : null}
                 </List>
             </Collapse>

@@ -5,12 +5,13 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { useAddPostMutation } from "../../generated/graphql";
+import { GetPostsDocument, useAddPostMutation } from "../../generated/graphql";
 import CardMedia from "@material-ui/core/CardMedia";
 import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { CloudinaryImageUpload } from "../../lib/cloudinary";
+import { TextField } from "@material-ui/core";
 
 const useStyles = makeStyles({
     root: {
@@ -31,14 +32,13 @@ const useStyles = makeStyles({
     },
     field: {
         display: "block",
-        width: "80%",
+        width: "95%",
         height: "150px",
         borderRadius: 15,
         resize: "none",
         margin: "auto",
         padding: "1em",
         marginTop: "1em",
-        fontSize: 18,
     },
     imageDrop: {
         display: "none",
@@ -73,7 +73,36 @@ const useStyles = makeStyles({
     },
 });
 
-export default function PostCreator({ teamID }: { teamID: string }) {
+const ImageDisplay = ({ images, classes, OnRemoveImage }: { images: any; classes: any; OnRemoveImage: any }) => {
+    return (
+        <div className={classes.imageDisplayContainer}>
+            {images.map((image) => (
+                <Card className={classes.imageCard} key={image.id}>
+                    <IconButton className={classes.imageDelete} onClick={(e) => OnRemoveImage(image.id)}>
+                        <CloseIcon />
+                    </IconButton>
+                    <CardMedia
+                        component="img"
+                        alt="UploadedPhoto"
+                        image={image.url}
+                        title="UploadedPhoto"
+                        className={classes.image}
+                    />
+                </Card>
+            ))}
+        </div>
+    );
+};
+
+export default function PostCreator({
+    teamID,
+    setHasNext,
+    refetch,
+}: {
+    teamID: string;
+    setHasNext: any;
+    refetch: any;
+}) {
     const classes = useStyles();
     const [content, setContent] = useState("");
     const [images, setImages] = useState<{ id: number; url: string }[]>([]);
@@ -89,7 +118,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
     const redirectButton = () => {
         document.getElementById("postimage").click();
     };
-    const readURL = async (e: any) => {
+    const readURL = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         const reader = new FileReader();
         const file = e.target.files[0];
@@ -105,6 +134,7 @@ export default function PostCreator({ teamID }: { teamID: string }) {
     };
 
     const uploadContent = async () => {
+        if (!(images.length || content)) return;
         const promises: Promise<any>[] = [];
         images.map((image) => {
             const promise = CloudinaryImageUpload(image.url);
@@ -116,7 +146,23 @@ export default function PostCreator({ teamID }: { teamID: string }) {
                 res.map((img) => {
                     imgUrls.push(img.secure_url.toString());
                 });
-                submitPost({ variables: { teamID: teamID, content: content, imgUrls: imgUrls } });
+                submitPost({
+                    variables: { teamID: teamID, content: content, imgUrls: imgUrls },
+                    update: (proxy, { data: { addPost } }) => {
+                        const data: any = proxy.readQuery({
+                            query: GetPostsDocument,
+                            variables: { teamID: teamID, limit: 10, skip: 0 },
+                        });
+                        proxy.writeQuery({
+                            query: GetPostsDocument,
+                            variables: { teamID: teamID, limit: 10, skip: 0 },
+                            data: { getPosts: [addPost, ...data.getPosts] },
+                        });
+                        setHasNext((state) => {
+                            return { skip: state.skip + 1, hasNext: state.hasNext };
+                        });
+                    },
+                });
             })
             .catch((err) => {
                 console.log(err);
@@ -131,35 +177,24 @@ export default function PostCreator({ teamID }: { teamID: string }) {
         );
     };
 
-    const ImageDisplay = () => {
-        return (
-            <div className={classes.imageDisplayContainer}>
-                {images.map((image) => (
-                    <Card className={classes.imageCard} key={image.id}>
-                        <IconButton className={classes.imageDelete} onClick={(e) => OnRemoveImage(image.id)}>
-                            <CloseIcon />
-                        </IconButton>
-                        <CardMedia
-                            component="img"
-                            alt="UploadedPhoto"
-                            image={image.url}
-                            title="UploadedPhoto"
-                            className={classes.image}
-                        />
-                    </Card>
-                ))}
-            </div>
-        );
-    };
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>
                 <Typography color="textPrimary" className={classes.title}>
                     New Post
                 </Typography>
-                <textarea className={classes.field} onChange={(e) => setContent(e.target.value)} value={content} />
+                <TextField
+                    className={classes.field}
+                    onChange={(e) => setContent(e.target.value)}
+                    value={content}
+                    variant={"outlined"}
+                    multiline
+                    fullWidth
+                    placeholder="Post Something"
+                    rows={6}
+                />
                 <div>
-                    <ImageDisplay />
+                    <ImageDisplay classes={classes} images={images} OnRemoveImage={OnRemoveImage} />
                 </div>
             </CardContent>
             <CardActions className={classes.action}>

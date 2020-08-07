@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, createStyles, createMuiTheme, Theme, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles, createStyles, createMuiTheme, Theme, ThemeProvider, withStyles } from "@material-ui/core/styles";
 import SportsSoccerIcon from "@material-ui/icons/SportsSoccer";
 import SportsBasketballIcon from "@material-ui/icons/SportsBasketball";
 import SportsBaseballIcon from "@material-ui/icons/SportsBaseball";
@@ -25,14 +25,13 @@ const useStyles = makeStyles((theme: Theme) =>
         body: {
             width: "100%",
             height: "100vh",
-            backgroundColor: "rgb(32, 35, 48)",
         },
         logo: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            animation: "$fill 1.5s ease forwards 3s",
+            animation: "$fill 1.5s ease forwards 2.6s",
         },
         brand: {
             position: "absolute",
@@ -40,47 +39,48 @@ const useStyles = makeStyles((theme: Theme) =>
             left: "50%",
             transform: "translate(-50%, -50%)",
         },
-        sportIcon: { fontSize: 100, fill: "rgb(32, 35, 48)" },
+        sportIcon: { fontSize: 100, fill: "rgb(0, 0, 0)" },
         soccer: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-250%, +75%)",
-            animation: "$fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.0s",
         },
         basketball: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-155%, +75%)",
-            animation: "$fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.0s",
         },
         baseball: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-60%, +75%)",
-            animation: "$fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.0s",
         },
         football: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(+35%, +75%)",
-            animation: "$fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.0s",
         },
         cricket: {
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(+130%, +75%)",
-            animation: "$fill 1.5s ease forwards 3.5s",
+            animation: "$fill 1.5s ease forwards 3.0s",
         },
         buttons: {
             top: "50%",
             left: "50%",
             transform: "translate(0%, +410%)",
-            animation: "$fill 0.5s ease forwards 3s",
+            //animation: "$fill 0.5s ease forwards 3s",
+            contrasttext: "#fff",
         },
         logo_path_nth_child_1: {
             strokeDasharray: "493px",
@@ -90,29 +90,31 @@ const useStyles = makeStyles((theme: Theme) =>
         logo_path_nth_child_2: {
             strokeDasharray: "310px",
             strokeDashoffset: "310px",
-            animation: "$line-anim 2s ease forwards 0.3s",
+            animation: "$line-anim 2s ease forwards 0.2s",
         },
         logo_path_nth_child_3: {
             strokeDasharray: "322px",
             strokeDashoffset: "322px",
-            animation: "$line-anim 2s ease forwards 0.6s",
+            animation: "$line-anim 2s ease forwards 0.4s",
         },
         logo_path_nth_child_4: {
             strokeDasharray: "408px",
             strokeDashoffset: "408px",
-            animation: "$line-anim 2s ease forwards 0.9s",
+            animation: "$line-anim 2s ease forwards 0.6s",
         },
         logo_path_nth_child_5: {
             strokeDasharray: "337px",
             strokeDashoffset: "337px",
-            animation: "$line-anim 2s ease forwards 1.2s",
+            animation: "$line-anim 2s ease forwards 0.8s",
         },
         logo_path_nth_child_6: {
             strokeDasharray: "373px",
             strokeDashoffset: "373px",
-            animation: "$line-anim 2s ease forwards 1.5s",
+            animation: "$line-anim 2s ease forwards 1.0s",
         },
-
+        button2: {
+            contrastText: "#fff",
+        },
         "@keyframes line-anim": {
             to: {
                 strokeDashoffset: 0,
@@ -126,6 +128,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
+
+const GreenButton = withStyles((theme: Theme) => ({
+    root: {
+        color: theme.palette.getContrastText(green[900]),
+    },
+}))(Button);
 
 function CalendarPage() {
     const classes = useStyles();
@@ -188,7 +196,7 @@ function CalendarPage() {
 
                     <div className={classes.buttons}>
                         <ThemeProvider theme={theme}>
-                            <Button
+                            <GreenButton
                                 variant="contained"
                                 color="primary"
                                 className={classNames(classes.margin)}
@@ -197,7 +205,7 @@ function CalendarPage() {
                                 }}
                             >
                                 Login
-                            </Button>
+                            </GreenButton>
                             <Button
                                 id="button2"
                                 variant="contained"

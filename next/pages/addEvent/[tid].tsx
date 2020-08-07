@@ -89,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
         width: 200,
         height: 30,
     },
+    leftPadding: {
+        paddingLeft: "9px",
+    },
 }));
 
 export default function App() {
@@ -110,7 +113,7 @@ export default function App() {
         addEvent({
             variables: {
                 startDate: startDate.toDate(),
-                endDate: endDate.toDate(),
+                endDate: startDate.toDate(),
                 name,
                 description,
                 address,
@@ -192,29 +195,10 @@ export default function App() {
                                     control={control}
                                 />
                             </section>
-
-                            <section>
-                                <Controller
-                                    name={"endDate"}
-                                    as={
-                                        <KeyboardDateTimePicker
-                                            variant="inline"
-                                            ampm={false}
-                                            label="End Date"
-                                            value={endDate}
-                                            onChange={(e, date) => {
-                                                setValue("endDate", date ? moment(date) : moment());
-                                            }}
-                                            disablePast
-                                            className={classes.field}
-                                        />
-                                    }
-                                    control={control}
-                                />
-                            </section>
+                            <br></br>
                         </MuiPickersUtilsProvider>
 
-                        <section>
+                        <section className={classes.leftPadding}>
                             <label>Event Type</label>
                             <Controller
                                 as={
@@ -234,7 +218,7 @@ export default function App() {
                             />
                         </section>
 
-                        <section>
+                        <section className={classes.leftPadding}>
                             <label>Private</label>
                             <Controller as={Checkbox} name="isPrivate" control={control} />
                         </section>

@@ -1,16 +1,72 @@
-import { Resolver, Mutation, Query, Arg, Field, Ctx, UseMiddleware, ObjectType, Root } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
 import { Event } from "../entities/Event";
 import { ResReq } from "../interfaces/interfaces";
 import { isCoach } from "../middleware/isCoach";
 import { EventTypeEnum, EventUserResEnum } from "../interfaces/enum";
-import { Team, TeamModel } from "../entities/Team";
+import { TeamModel } from "../entities/Team";
 import { TeamMemberMap, TeamMemberMapModel } from "../entities/TeamMemberMap";
 import { EventUserMapModel } from "../entities/EventUserMap";
 import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
+import { getIDfromToken } from "../middleware/getIDfromToken";
+import { ObjectID } from "mongodb";
+import { isMemberPayload } from "../middleware/isMemberPayload";
 
 @Resolver()
 export class EventResolver {
+    //TODO filter nested documents using mongoose.
+    @Query(() => [Event])
+    @UseMiddleware(isAuth)
+    async getEventsOfAllTeams(
+        @Arg("skip", () => Int) skip: number,
+        @Arg("limit", () => Int) limit: number,
+        @Ctx() { payload }: ResReq,
+    ): Promise<Event[]> {
+        const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
+        const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
+        const coachTeamIDs = coachTeamPair.map((pair) => new ObjectID(pair._id.team));
+        const memberTeamIDs = memberTeamPair.map((pair) => new ObjectID(pair._id.team));
+        const teamIDs = coachTeamIDs.concat(memberTeamIDs);
+        const startOfTheDay = new Date();
+        startOfTheDay.setHours(0, 0, 0, 0);
+        const teams = await TeamModel.aggregate([
+            { $match: { _id: { $in: teamIDs } } },
+            { $project: { events: 1 } },
+            { $unwind: "$events" },
+            { $match: { "events.startDate": { $gte: startOfTheDay } } },
+            { $sort: { "events.startDate": 1 } },
+            { $skip: skip },
+            { $limit: limit },
+        ]);
+        return teams.map(({ events }: { events: Event; _id: string }) => events);
+    }
+
+    // TODO filter Event on startDate in aggregate
+    @Query(() => [Event])
+    @UseMiddleware(getIDfromToken, isMemberPayload)
+    async getEventsOfOneTeam(
+        @Arg("teamID") teamID: string,
+        @Arg("skip", () => Int) skip: number,
+        @Arg("limit", () => Int) limit: number,
+        @Ctx() { payload }: ResReq,
+    ): Promise<Event[]> {
+        if (!payload.isMember) {
+            return [];
+        }
+        const startOfTheDay = new Date();
+        startOfTheDay.setHours(0, 0, 0, 0);
+        const team = await TeamModel.aggregate([
+            { $match: { _id: new ObjectID(teamID) } },
+            { $project: { events: 1 } },
+            { $unwind: "$events" },
+            { $match: { "events.startDate": { $gte: startOfTheDay } } },
+            { $sort: { "events.startDate": 1 } },
+            { $skip: skip },
+            { $limit: limit },
+        ]);
+        return team.map(({ events }: { events: Event; _id: string }) => events);
+    }
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
     async addEvent(
@@ -21,7 +77,6 @@ export class EventResolver {
         @Arg("startDate") startDate: Date,
         @Arg("isPrivate") isPrivate: boolean,
         @Arg("address") address: string,
-        @Ctx() { payload }: ResReq,
         @Arg("endDate") endDate?: Date,
     ) {
         const team = await TeamModel.findById(teamID);
@@ -36,6 +91,7 @@ export class EventResolver {
             event.name = name;
             event.eventType = eventType;
             event.address = address;
+            event.isPrivate = isPrivate;
             team.events.push(event);
             await team.save();
             const memberTeamPairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
@@ -97,7 +153,6 @@ export class EventResolver {
         @Arg("eventType") eventType: EventTypeEnum,
         @Arg("startDate") startDate: Date,
         @Arg("isPrivate") isPrivate: boolean,
-        @Ctx() { payload }: ResReq,
         @Arg("endDate", { nullable: true }) endDate: Date,
     ) {
         try {

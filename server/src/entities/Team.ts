@@ -6,8 +6,8 @@ import { Event } from "./Event";
 import { SportEnum } from "../interfaces/enum";
 import { registerEnumType } from "type-graphql";
 import { defaultBannerUrl } from "../interfaces/const";
-import { LikesMapModel } from "./LikesMap";
 import { TeamMemberMapModel } from "./TeamMemberMap";
+import { TeamCoachMapModel } from "./TeamCoachMap";
 
 registerEnumType(SportEnum, {
     name: "Sport",
@@ -41,8 +41,9 @@ export class Team extends CreationAndModificationDate {
 
     @Field(() => Int, { complexity: 4 })
     async numberMembers(@Root() team: Team): Promise<number> {
-        const pairs = await TeamMemberMapModel.find({ "_id.team": team._id.toHexString() });
-        return pairs.length;
+        const memberpairs = await TeamMemberMapModel.find({ "_id.team": team._id.toHexString() });
+        const coachpairs = await TeamCoachMapModel.find({ "_id.team": team._id.toHexString() });
+        return memberpairs.length + coachpairs.length;
     }
 }
 export const TeamModel = getModelForClass(Team);

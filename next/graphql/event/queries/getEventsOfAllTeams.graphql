@@ -1,0 +1,9 @@
+query GetEventsOfAllTeams($skip: Int!, $limit: Int!) {
+    getEventsOfAllTeams(limit:$limit, skip:$skip) {
+        _id
+        name
+        startDate
+        address
+    }
+}
+

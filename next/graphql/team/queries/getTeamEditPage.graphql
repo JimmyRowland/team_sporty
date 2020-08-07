@@ -1,0 +1,11 @@
+query GetTeamEditPage($teamID: String!) {
+    getTeam(teamID:$teamID) {
+        team{
+            name
+            imgUrl
+            description
+            sport
+        }
+    }
+}
+

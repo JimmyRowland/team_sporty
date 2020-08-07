@@ -1,11 +1,6 @@
 import React from "react";
-
-import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export function LoadingMembers() {
-    return (
-        <Typography variant={"h5"} component={"p"}>
-            Loading Members
-        </Typography>
-    );
+    return <CircularProgress />;
 }

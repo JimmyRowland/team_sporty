@@ -1,0 +1,3 @@
+mutation UploadAvatar($url: String!) {
+    uploadAvatar(avatarUrl: $url)
+}

@@ -53,7 +53,7 @@ export class User extends CreationAndModificationDate {
     ip: string[];
 
     @Field(() => [SportEnum])
-    @prop({ default: [] })
+    @prop({ default: [], items: String })
     sport?: SportEnum[];
 
     @Field()

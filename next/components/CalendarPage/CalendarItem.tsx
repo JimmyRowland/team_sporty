@@ -1,47 +1,44 @@
 import React, { ReactNode } from "react";
-import { makeStyles, Theme, createStyles, withStyles, createMuiTheme } from "@material-ui/core/styles";
-import { green, red, grey } from "@material-ui/core/colors";
-//import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-//import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-//import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import Typography from "@material-ui/core/Typography";
-import Radio, { RadioProps } from "@material-ui/core/Radio";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Event, EventUserResEnum, useMeQuery, useSetGoingMutation } from "../../generated/graphql";
-import { Avatar } from "@material-ui/core";
-import { LoadingMembers } from "../components/loadingComponents/LoadingMembers";
+import { useSetGoingMutation } from "../../generated/graphql";
+
+//styles
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: "100%",
-            border: "1px solid rgba(0, 0, 0, .125)",
+            border: "1px solid rgba(50, 50, 50, 1)",
+            borderRadius: "5px",
         },
-        roaster: {
+        roster: {
             display: "flex",
+            flexWrap: "wrap",
+            height: "100px",
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: "84.00%",
+            flexBasis: "30.00%",
             flexShrink: 0,
             align: "left",
         },
         secondaryHeading: {
             fontSize: theme.typography.pxToRem(15),
             color: theme.palette.text.secondary,
-            flexBasis: "16.00%",
+            flexBasis: "70.00%",
             flexShrink: 0,
-            align: "right",
+            display: "flex",
+            justifyContent: "flex-end",
         },
         tertiaryHeading: {
             fontSize: theme.typography.pxToRem(15),
-            color: theme.palette.text.secondary,
+            color: theme.palette.text.primary,
             flexBasis: "27%",
             flexShrink: 0,
             align: "left",
@@ -65,34 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const GreenRadio = withStyles({
-    root: {
-        color: green[400],
-        "&$checked": {
-            color: green[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-const RedRadio = withStyles({
-    root: {
-        color: red[400],
-        "&$checked": {
-            color: red[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-const GreyRadio = withStyles({
-    root: {
-        color: grey[400],
-        "&$checked": {
-            color: grey[600],
-        },
-    },
-    checked: {},
-})((props: RadioProps) => <Radio color="default" {...props} />);
-
+//custom expansion panel
 const ExpansionPanelSummary = withStyles({
     root: {
         backgroundColor: "rgba(0,0,0,.03)",
@@ -110,7 +80,14 @@ const ExpansionPanelSummary = withStyles({
     },
     expanded: {},
 })((props) => <MuiExpansionPanelSummary {...props} />);
-let renders = 0;
+
+//custon expansion panel
+const ExpansionPanelDetailsUpdated = withStyles((theme: Theme) => ({
+    root: {
+        backgroundColor: "rgba(255,255,255,.1)",
+    },
+}))(ExpansionPanelDetails);
+
 export default function CalendarItem({
     name,
     type,
@@ -127,41 +104,64 @@ export default function CalendarItem({
     type: string;
     date: string;
     address: string;
-    event: Event;
+    event: any;
     isGoing: number;
     usersNotGoing: ReactNode[];
     usersGoing: ReactNode[];
     usersNoResponse: ReactNode[];
     refetch: () => Promise<any>;
 }) {
-    console.log(renders++);
     const classes = useStyles();
+
+    //event availability handler
     const [selectedValue, setSelectedValue] = React.useState(isGoing);
     const [setGoing] = useSetGoingMutation();
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedValue(+e.target.value);
-        setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
-            refetch();
-        });
-    };
-    const [availability, setAvailability] = React.useState(isGoing);
     const handleChangeAvailability = (e: any) => {
         setSelectedValue(+e.target.value);
         setGoing({ variables: { eventID: event._id, isGoing: +e.target.value } }).then(() => {
             refetch();
         });
     };
+
+    //date to readable time
+    const eventDate = new Date(date);
+    const eventDateString = eventDate.toDateString();
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+    const eventMonth = monthNames[eventDate.getMonth()];
+    const eventYear = eventDate.getFullYear();
+    const eventDay = eventDateString.slice(8, 11);
+    function formatAMPM(date: Date) {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "pm" : "am";
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        const minutesString = minutes < 10 ? "0" + minutes : minutes;
+        const strTime = hours + ":" + minutesString + " " + ampm;
+        return strTime;
+    }
+    const timeString = formatAMPM(eventDate);
+
     return (
         <div className={classes.root}>
             <ExpansionPanel>
-                <ExpansionPanelSummary
-                    //expandIcon={<ExpandMoreIcon />}
-                    aria-label="Expand"
-                    aria-controls="additional-actions1-content"
-                >
+                <ExpansionPanelSummary aria-label="Expand" aria-controls="additional-actions1-content">
                     <div className={classes.heading}>
                         <h3>{name}</h3>
-                        <p>{date}</p>
+                        <p>{timeString + ". " + eventMonth + " " + eventDay + ", " + eventYear}</p>
                         <p>{address}</p>
                     </div>
                     <div className={classes.secondaryHeading}>
@@ -177,63 +177,26 @@ export default function CalendarItem({
                             >
                                 <MenuItem value={1}>Going</MenuItem>
                                 <MenuItem value={0}>Not Going</MenuItem>
-                                {/* <MenuItem value="notResponded">Not Responded</MenuItem> */}
                             </Select>
                         </FormControl>
-                        {/* <div align="right">
-                            Going
-                            <GreenRadio
-                                checked={selectedValue === 1}
-                                onChange={handleChange}
-                                value={1}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "A" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div>
-                        <div align="right">
-                            Not going
-                            <RedRadio
-                                checked={selectedValue === 0}
-                                onChange={handleChange}
-                                value={0}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "B" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div>
-                        <div align="right">
-                            Not Responded
-                            <GreyRadio
-                                checked={selectedValue === 2}
-                                onChange={handleChange}
-                                value={2}
-                                name="radio-button-demo"
-                                inputProps={{ "aria-label": "C" }}
-                                onClick={(event) => event.stopPropagation()}
-                                onFocus={(event) => event.stopPropagation()}
-                            />
-                        </div> */}
                     </div>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetailsUpdated>
                     <div className={classes.tertiaryHeading}>
                         <p>Going: {usersGoing.length}</p>
-                        <div className={classes.roaster}>{usersGoing}</div>
+                        <div className={classes.roster}>{usersGoing}</div>
                     </div>
-                    <Typography className={classes.spacing}></Typography>
+                    <div className={classes.spacing} />
                     <div className={classes.tertiaryHeading}>
                         <p>Not Going: {usersNotGoing.length}</p>
-                        <div className={classes.roaster}>{usersNotGoing}</div>
+                        <div className={classes.roster}>{usersNotGoing}</div>
                     </div>
-                    <Typography className={classes.spacing}></Typography>
+                    <div className={classes.spacing} />
                     <div className={classes.tertiaryHeading}>
                         <p>Not Responded: {usersNoResponse.length}</p>
-                        <div className={classes.roaster}>{usersNoResponse}</div>
+                        <div className={classes.roster}>{usersNoResponse}</div>
                     </div>
-                </ExpansionPanelDetails>
+                </ExpansionPanelDetailsUpdated>
             </ExpansionPanel>
         </div>
     );

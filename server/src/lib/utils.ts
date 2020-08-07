@@ -3,7 +3,6 @@ import { sign } from "jsonwebtoken";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { Response } from "express";
-// import { User } from "../entities/User";
 import { salthash } from "../interfaces/interfaces";
 import { User } from "../entities/User";
 
@@ -68,7 +67,6 @@ export function createRefreshToken(user: User): string {
 }
 
 export function sendRefreshToken(res: Response, token: string): void {
-    // console.log("jid");
     res.cookie("jid", token, {
         httpOnly: true,
         path: "/refresh_token",
@@ -77,13 +75,11 @@ export function sendRefreshToken(res: Response, token: string): void {
 
 export const createAccessToken = (user: User) => {
     return sign({ _id: user._id, tokenVersion: user.tokenVersion }, process.env.ACCESS_TOKEN_SECRET!, {
-        // TODO fix expiredInt
-        expiresIn: "15d",
+        expiresIn: "1d",
     });
 };
 
 export const getGravatarUrl = (email: string) => {
     const hash = createHash("md5").update(email).digest("hex");
-    // default options :identicon monsterid wavatar retro https://en.gravatar.com/site/implement/images/
     return `https://res.cloudinary.com/dfxanglyc/image/gravatar/d_monsterid/${hash}`;
 };

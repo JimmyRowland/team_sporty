@@ -1,28 +1,16 @@
-import {
-    Resolver,
-    Mutation,
-    Query,
-    Arg,
-    Ctx,
-    UseMiddleware,
-    FieldResolver,
-    Root,
-    ObjectType,
-    Field,
-} from "type-graphql";
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
 import { ResReq } from "../interfaces/interfaces";
 import { isAuth } from "../middleware/isAuth";
 import { Team, TeamModel } from "../entities/Team";
 import { isCoach } from "../middleware/isCoach";
 import { hasTeam } from "../middleware/hasTeam";
 import { TeamCoachMap, TeamCoachMapModel } from "../entities/TeamCoachMap";
-import { ObjectID } from "mongodb";
 import { hasUser } from "../middleware/hasUser";
 import { TeamMemberMap, TeamMemberMapModel } from "../entities/TeamMemberMap";
 import { User, UserModel } from "../entities/User";
 import { Post } from "../entities/Post";
 import { getIDfromToken } from "../middleware/getIDfromToken";
-import { EventTypeEnum, SportEnum } from "../interfaces/enum";
+import { SportEnum } from "../interfaces/enum";
 import { Event } from "../entities/Event";
 import { GetMembersResponse, GetTeamResponse, GetTeamsResponse, TeamUserResponse } from "../interfaces/responseType";
 import { TeamApplicationPendingList, TeamApplicationPendingListModel } from "../entities/TeamApplicationPendingList";
@@ -30,7 +18,7 @@ import { TeamInvitationPendingListModel } from "../entities/TeamInvitationPendin
 import { isMember } from "../middleware/isMember";
 import { isCoachPayload } from "../middleware/isCoachPayload";
 
-@Resolver((of) => Team)
+@Resolver(() => Team)
 export class TeamResolver {
     private static async isMember(userID: string, teamID: string) {
         const teamMemberPair = await TeamMemberMapModel.findOne({ "_id.team": teamID, "_id.user": userID });
@@ -43,7 +31,7 @@ export class TeamResolver {
 
     @Query(() => [GetTeamsResponse])
     @UseMiddleware(getIDfromToken)
-    async getTeams(@Ctx() { res, payload }: ResReq) {
+    async getTeams(@Ctx() { payload }: ResReq) {
         const teams: Team[] = await TeamModel.find();
         const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
         const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
@@ -77,11 +65,21 @@ export class TeamResolver {
         @Arg("sport") sport: SportEnum,
         @Arg("name") name: string,
         @Arg("description") description: string,
-        @Ctx()
-        { res, payload }: ResReq,
     ) {
         try {
             await TeamModel.findByIdAndUpdate(teamID, { name: name, sport: sport, description: description });
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async updateDescription(@Arg("teamID") teamID: string, @Arg("description") description: string) {
+        try {
+            await TeamModel.findByIdAndUpdate(teamID, { description: description });
         } catch (e) {
             console.log(e);
             return false;
@@ -102,7 +100,7 @@ export class TeamResolver {
 
     @Query(() => GetMembersResponse)
     @UseMiddleware(isAuth, isMember, isCoachPayload)
-    async getCoaches(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetMembersResponse> {
+    async getCoaches(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq): Promise<GetMembersResponse> {
         const pairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.team": teamID,
         });
@@ -119,7 +117,7 @@ export class TeamResolver {
 
     @Query(() => GetMembersResponse)
     @UseMiddleware(isAuth, isMember, isCoachPayload)
-    async getMembers(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetMembersResponse> {
+    async getMembers(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq): Promise<GetMembersResponse> {
         const pairs: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.team": teamID });
         const users = await UserModel.find({
             _id: {
@@ -134,7 +132,7 @@ export class TeamResolver {
 
     @Query(() => [Team])
     @UseMiddleware(isAuth)
-    async getMyTeams(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+    async getMyTeams(@Ctx() { payload }: ResReq): Promise<Team[]> {
         const memberPairs: TeamMemberMap[] = await TeamMemberMapModel.find({
             "_id.user": payload._id,
         });
@@ -151,7 +149,7 @@ export class TeamResolver {
 
     @Query(() => [Team])
     @UseMiddleware(isAuth)
-    async getTeamsAsCoach(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+    async getTeamsAsCoach(@Ctx() { payload }: ResReq): Promise<Team[]> {
         const coachPairs: TeamCoachMap[] = await TeamCoachMapModel.find({
             "_id.user": payload._id,
         });
@@ -165,7 +163,7 @@ export class TeamResolver {
 
     @Query(() => [Team])
     @UseMiddleware(isAuth)
-    async getTeamsAsMember(@Ctx() { res, payload }: ResReq): Promise<Team[]> {
+    async getTeamsAsMember(@Ctx() { payload }: ResReq): Promise<Team[]> {
         const memberPairs: TeamMemberMap[] = await TeamMemberMapModel.find({
             "_id.user": payload._id,
         });
@@ -177,14 +175,17 @@ export class TeamResolver {
         });
     }
 
+    //TODO filter nested documents using mongoose.
     @Query(() => [GetTeamResponse])
     @UseMiddleware(isAuth)
-    async getTeamsAsMemberOrCoach(@Ctx() { res, payload }: ResReq): Promise<GetTeamResponse[]> {
+    async getTeamsAsMemberOrCoach(@Ctx() { payload }: ResReq): Promise<GetTeamResponse[]> {
         const memberTeamPair: TeamMemberMap[] = await TeamMemberMapModel.find({ "_id.user": payload._id });
         const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
         const coachTeamIDs = coachTeamPair.map((pair) => pair._id.team);
         const memberTeamIDs = memberTeamPair.map((pair) => pair._id.team);
         const teamIDs = coachTeamIDs.concat(memberTeamIDs);
+        const startOfTheDay = new Date();
+        startOfTheDay.setHours(0, 0, 0, 0);
         const teams: Team[] = await TeamModel.find({
             _id: {
                 $in: teamIDs,
@@ -193,6 +194,9 @@ export class TeamResolver {
         const response: GetTeamResponse[] = [];
         for (const team of teams) {
             const getTeamResponse = new GetTeamResponse();
+            team.events = team.events.filter((event) => {
+                return event.startDate.getTime() > startOfTheDay.getTime();
+            });
             getTeamResponse.team = team;
             getTeamResponse.isCoach = coachTeamIDs.includes(team._id.toHexString());
             response.push(getTeamResponse);
@@ -202,7 +206,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, hasUser, hasTeam, isCoach)
-    async addMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async addMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string) {
         try {
             const input = new TeamUserResponse();
             input.team = teamID;
@@ -223,11 +227,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async addMembers(
-        @Arg("userIDs", () => [String]) userIDs: string[],
-        @Arg("teamID") teamID: string,
-        @Ctx() { res, payload }: ResReq,
-    ) {
+    async addMembers(@Arg("userIDs", () => [String]) userIDs: string[], @Arg("teamID") teamID: string) {
         try {
             for (const userID of userIDs) {
                 const input = new TeamUserResponse();
@@ -250,11 +250,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async rejectMembers(
-        @Arg("userIDs", () => [String]) userIDs: string[],
-        @Arg("teamID") teamID: string,
-        @Ctx() { res, payload }: ResReq,
-    ) {
+    async rejectMembers(@Arg("userIDs", () => [String]) userIDs: string[], @Arg("teamID") teamID: string) {
         try {
             const ids = userIDs.map((userID) => {
                 return { team: teamID, user: userID };
@@ -269,7 +265,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async applyTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async applyTeam(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq) {
         try {
             const input = new TeamUserResponse();
             input.team = teamID;
@@ -287,7 +283,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async inviteMember(@Arg("teamID") teamID: string, @Arg("userID") userID: string, @Ctx() { res, payload }: ResReq) {
+    async inviteMember(@Arg("teamID") teamID: string, @Arg("userID") userID: string) {
         try {
             const input = new TeamUserResponse();
             input.team = teamID;
@@ -305,7 +301,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async acceptInvitation(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async acceptInvitation(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq) {
         try {
             const input = new TeamUserResponse();
             input.team = teamID;
@@ -326,7 +322,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async removeMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async removeMember(@Arg("userID") userID: string, @Arg("teamID") teamID: string) {
         try {
             await TeamMemberMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": userID });
         } catch (err) {
@@ -338,7 +334,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async quitTeamAsMember(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async quitTeamAsMember(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq) {
         try {
             await TeamMemberMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": payload._id });
         } catch (err) {
@@ -350,11 +346,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async removeMembers(
-        @Arg("userIDs", () => [String]) userIDs: string[],
-        @Arg("teamID") teamID: string,
-        @Ctx() { res, payload }: ResReq,
-    ) {
+    async removeMembers(@Arg("userIDs", () => [String]) userIDs: string[], @Arg("teamID") teamID: string) {
         try {
             const ids = userIDs.map((userID) => {
                 return { team: teamID, user: userID };
@@ -369,7 +361,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async removeCoach(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async removeCoach(@Arg("userID") userID: string, @Arg("teamID") teamID: string) {
         try {
             const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
             if (pairs.length > 1) {
@@ -386,14 +378,12 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async quitTeamAsCoach(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async quitTeamAsCoach(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq) {
         try {
-            const pairs = await TeamCoachMapModel.find({ "_id.team": teamID });
-            if (pairs.length > 1) {
-                await TeamCoachMapModel.findOneAndRemove({ "_id.team": teamID, "_id.user": payload._id });
-            } else {
-                return false;
-            }
+            await TeamCoachMapModel.remove({
+                "_id.team": teamID,
+                "_id.user": payload._id,
+            });
         } catch (err) {
             console.log(err);
             return false;
@@ -403,7 +393,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, hasUser, hasTeam, isCoach)
-    async addCoach(@Arg("userID") userID: string, @Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq) {
+    async addCoach(@Arg("userID") userID: string, @Arg("teamID") teamID: string) {
         try {
             const teamCoachPair = new TeamCoachMapModel({
                 _id: {
@@ -421,11 +411,7 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth, isCoach)
-    async addCoaches(
-        @Arg("userIDs", () => [String]) userIDs: string[],
-        @Arg("teamID") teamID: string,
-        @Ctx() { res, payload }: ResReq,
-    ) {
+    async addCoaches(@Arg("userIDs", () => [String]) userIDs: string[], @Arg("teamID") teamID: string) {
         try {
             for (const userID of userIDs) {
                 const teamCoachPair = new TeamCoachMapModel({
@@ -445,7 +431,7 @@ export class TeamResolver {
 
     @Query(() => GetTeamResponse)
     @UseMiddleware(getIDfromToken)
-    async getTeam(@Arg("teamID") teamID: string, @Ctx() { res, payload }: ResReq): Promise<GetTeamResponse> {
+    async getTeam(@Arg("teamID") teamID: string, @Ctx() { payload }: ResReq): Promise<GetTeamResponse> {
         const team = await TeamModel.findById(teamID);
         const coachTeamPair: TeamCoachMap[] = await TeamCoachMapModel.find({ "_id.user": payload._id });
         const result = new GetTeamResponse();
@@ -459,14 +445,11 @@ export class TeamResolver {
 
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
-    async newTeam(
-        @Arg("name") name: string,
-        @Ctx() { payload, res }: ResReq,
-        @Arg("imgUrl", { nullable: true }) imgUrl: string,
-        @Arg("sport", { nullable: true }) sport: SportEnum,
-    ) {
+    async newTeam(@Arg("name") name: string, @Ctx() { payload }: ResReq, @Arg("sport") sport: SportEnum) {
         const newTeam = new TeamModel({
             name: name,
+            sport: sport,
+            description: "No team description",
         });
         const newKeyPair = new TeamCoachMapModel({
             _id: {
@@ -512,5 +495,26 @@ export class TeamResolver {
             })
             .sort((event1, event2) => event2.lastModifyDate.getTime() - event1.lastModifyDate.getTime());
         return result;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth, isCoach)
+    async uploadTeamImage(
+        @Arg("imgUrl") imgUrl: string,
+        @Arg("teamID") teamID: string,
+        @Ctx() { res }: ResReq,
+    ): Promise<boolean> {
+        console.log(teamID);
+        try {
+            const message = await TeamModel.updateOne({ _id: teamID }, { imgUrl: imgUrl });
+            if (!message) {
+                res.status(503).json({ success: false, message: "Server error" });
+            }
+            console.log(message);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: err });
+        }
+        return true;
     }
 }

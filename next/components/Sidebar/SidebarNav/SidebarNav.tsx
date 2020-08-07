@@ -1,19 +1,19 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem, Button } from "@material-ui/core";
-import { useGetTeamListAsCoachQuery, useGetTeamListAsMemberOrCoachQuery } from "../../../generated/graphql";
+import { Button, List, ListItem } from "@material-ui/core";
+import { useGetTeamListAsMemberOrCoachQuery, useLogoutMutation } from "../../../generated/graphql";
 import PeopleIcon from "@material-ui/icons/People";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import SettingsIcon from "@material-ui/icons/Settings";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import { ListItemProps } from "../../../interfaces/Interface";
 import NestedTeamItem from "./NestedTeamItem";
 import Link from "next/link";
+import { setAccessToken } from "../../../lib/accessToken";
+import Router from "next/router";
+import { ExitToApp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -59,26 +59,18 @@ const SidebarNav = () => {
     const handleClick = () => {
         setOpen(!open);
     };
+    const [logout, { client }] = useLogoutMutation();
+    const handleLogout = async () => {
+        await logout();
+        setAccessToken("");
+        await Router.push("/");
+        await client?.resetStore();
+    };
     const pages: ListItemProps[] = [
         {
-            title: "Performance (stretch)",
-            href: "/",
-            icon: <DashboardIcon />,
-        },
-        {
-            title: "Authentication (change password email)",
-            href: "/authentication",
-            icon: <LockOpenIcon />,
-        },
-        {
-            title: "Account change avatar, address sport and more",
-            href: "/account",
+            title: "Personal Info",
+            href: "/settings/account",
             icon: <AccountBoxIcon />,
-        },
-        {
-            title: "Place holder",
-            href: "/",
-            icon: <SettingsIcon />,
         },
     ];
 
@@ -119,6 +111,14 @@ const SidebarNav = () => {
                         : null}
                 </List>
             </Collapse>
+            <ListItem className={classes.item} disableGutters onClick={handleLogout}>
+                <Button className={classes.button}>
+                    <div className={classes.icon}>
+                        <ExitToApp />
+                    </div>
+                    Log Out
+                </Button>
+            </ListItem>
         </List>
     );
 };
