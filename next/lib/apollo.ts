@@ -102,7 +102,7 @@ export function initializeApollo(initialState: NormalizedCacheObject | null = nu
     // get hydrated here
     if (initialState) {
         if (apolloClient) {
-            _apolloClient.cache.restore({ ...apolloClient.cache.extract(), ...initialState });
+            _apolloClient.cache.restore({ ...initialState, ...apolloClient.cache.extract() });
         } else {
             _apolloClient.cache.restore(initialState);
         }
