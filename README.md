@@ -77,7 +77,7 @@ Although we do not have time to implement direct messaging, we did finish the li
 
 ## Next Steps...?
 
-We are happy with our final product, but we do acknowledge that we can definitely build upon it. Some possible next sterps include a recruiting portal where a user could search for players or even list their team as being open to new members. We can finish the search functionality under setting page. We plan to add Google Maps integration to our locations. In addition, the option to add statistics so users can record scores for games and even add individual stats would be a great feature to have. The possibilities are almost endless, but we are really happy with the final product we accomplished in this much time. 
+We are happy with our final product, but we do acknowledge that we can definitely build upon it. Some possible next steps include a recruiting portal where a user could search for players or even list their team as being open to new members. We can finish the search functionality under setting page. We plan to add Google Maps integration to our locations. In addition, the option to add statistics so users can record scores for games and even add individual stats would be a great feature to have. Switch all pollings to subscription. The possibilities are almost endless, but we are really happy with the final product we accomplished in this much time. 
 
 #
 
