@@ -8,6 +8,44 @@ App Name: SPORTY
 
 #
 
+## Deployment guide
+#### Deploy Graphql server on Heroku:
+- Add your domains under server/src/index
+```javascript
+app.use(
+        cors({
+            origin: process.env.PORT
+                ? [
+                      /^https:\/\/teamsporty.*\.vercel\.app$/,
+                      /^https:\/\/teamsporty-\w{9}\.vercel\.app$/,
+                      /^https:\/\/teamsp0rty.*\.vercel\.app$/,
+                      // replace the domains
+                  ]
+                : "http://localhost:3000",
+            credentials: true,
+        }),
+    );
+```
+- run `node ./server/src/generateKeypair.js`
+- switch to deployHeroku branch and pull from your dev branch. 
+- Change your access token private key and mongoDB URI under ./env
+```
+DB_STRING=mongodb+srv://username:password@cluster0.nrqzs.mongodb.net/databaseName?retryWrites=true&w=majority
+DB_STRING_PROD=your-production-mongodb-uri
+ACCESS_TOKEN_SECRET=access-token-private-key
+```
+- install heroku cli
+https://devcenter.heroku.com/articles/heroku-cli
+- run following command to deploy on heroku
+heroku create
+git remote rename heroku your-graphql-server-name
+git push heroku deployApollo:master
+
+#### Deploy NextJs app on Vercel:
+- Go to your dev branch, change your graphql server endpoint under ./next/lib/serveruri.ts
+```
+export const HEROKU = "https://heroku-app-name.herokuapp.com"
+```
 
 ## Project Description
 Whether it be the abundant email spam or the numerous apps being used, manging even a single sports team can be a hassle. Our app, Sporty, aims to change that by being the one-stop web app for all your sports team management needs.
