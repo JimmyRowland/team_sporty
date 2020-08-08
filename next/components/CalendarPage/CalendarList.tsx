@@ -77,7 +77,6 @@ export default function ControlledExpansionPanels() {
 
     //sorting events by earliest date
     events.sort((event1, event2) => new Date(event1.startDate).getTime() - new Date(event2.startDate).getTime());
-
     return (
         <div className={classes.root}>
             {events.map((event, index: number) => {

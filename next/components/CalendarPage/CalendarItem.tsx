@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -112,9 +112,11 @@ export default function CalendarItem({
     refetch: () => Promise<any>;
 }) {
     const classes = useStyles();
-
     //event availability handler
     const [selectedValue, setSelectedValue] = React.useState(isGoing);
+    useEffect(() => {
+        setSelectedValue(isGoing);
+    }, [isGoing]);
     const [setGoing] = useSetGoingMutation();
     const handleChangeAvailability = (e: any) => {
         setSelectedValue(+e.target.value);
@@ -171,7 +173,6 @@ export default function CalendarItem({
                                 value={selectedValue}
                                 onChange={handleChangeAvailability}
                                 label="Availability"
-                                defaultValue="notResponded"
                                 onClick={(event) => event.stopPropagation()}
                                 onFocus={(event) => event.stopPropagation()}
                             >
