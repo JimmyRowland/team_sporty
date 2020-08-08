@@ -8,7 +8,37 @@ App Name: SPORTY
 
 #
 
+## Deployment guide
+#### Deploy Graphql server on Heroku:
+- Add your domains under server/src/index
+```javascript
+app.use(
+        cors({
+            origin: process.env.PORT
+                ? [
+                      /^https:\/\/teamsporty.*\.vercel\.app$/,
+                      /^https:\/\/teamsporty-\w{9}\.vercel\.app$/,
+                      /^https:\/\/teamsp0rty.*\.vercel\.app$/,
+                      // replace the domains
+                  ]
+                : "http://localhost:3000",
+            credentials: true,
+        }),
+    );
+```
+- run `node ./server/src/generateKeypair.js`
+- switch to deployHeroku branch and pull from your dev branch. 
+- Change your access token private key and mongoDB URI under ./env
+`DB_STRING=mongodb+srv://CGWY:cgwyteam123@cluster0.nrqzs.mongodb.net/teamsporty?retryWrites=true&w=majority
+ DB_STRING_PROD=localhost
+ ACCESS_TOKEN_SECRET=tsXs4DuCSxpkCndCAw2GgjUFHyhEIoJKabX0l8iBUnl7d70YB4YPJ3bP1h2p4GKe`
+- install heroku cli
+https://devcenter.heroku.com/articles/heroku-cli
+- run following command to deploy on heroku
+```
+heroku create
 
+```
 ## Project Description
 Whether it be the abundant email spam or the numerous apps being used, manging even a single sports team can be a hassle. Our app, Sporty, aims to change that by being the one-stop web app for all your sports team management needs.
 #
