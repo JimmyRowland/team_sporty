@@ -29,16 +29,21 @@ app.use(
 - run `node ./server/src/generateKeypair.js`
 - switch to deployHeroku branch and pull from your dev branch. 
 - Change your access token private key and mongoDB URI under ./env
-`DB_STRING=mongodb+srv://CGWY:cgwyteam123@cluster0.nrqzs.mongodb.net/teamsporty?retryWrites=true&w=majority
- DB_STRING_PROD=localhost
- ACCESS_TOKEN_SECRET=tsXs4DuCSxpkCndCAw2GgjUFHyhEIoJKabX0l8iBUnl7d70YB4YPJ3bP1h2p4GKe`
+`DB_STRING=mongodb+srv://username:password@cluster0.nrqzs.mongodb.net/databaseName?retryWrites=true&w=majority
+ DB_STRING_PROD=your-production-mongodb-uri
+ ACCESS_TOKEN_SECRET=access-token-private-key`
 - install heroku cli
 https://devcenter.heroku.com/articles/heroku-cli
 - run following command to deploy on heroku
 ```
 heroku create
-
+git remote rename heroku your-graphql-server-name
+git push heroku deployApollo:master
 ```
+#### Deploy NextJs app on Vercel:
+- Go to your dev branch, change your graphql server endpoint under ./next/lib/serveruri.ts
+```export const HEROKU = "https://heroku-app-name.herokuapp.com"```
+
 ## Project Description
 Whether it be the abundant email spam or the numerous apps being used, manging even a single sports team can be a hassle. Our app, Sporty, aims to change that by being the one-stop web app for all your sports team management needs.
 #
